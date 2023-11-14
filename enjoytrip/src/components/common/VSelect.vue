@@ -1,0 +1,43 @@
+<script setup>
+import { ref } from "vue";
+defineProps({ selectOption: Array });
+const emit = defineEmits(["onKeySelect"]);
+
+const key = ref("");
+
+const onSelect = () => {
+  console.log(key.value + "선택!!!");
+  emit("onKeySelect", key.value);
+};
+</script>
+
+<template>
+  <select
+    v-model="key"
+    class="form-select form-select-sm ms-5 me-1 w-50"
+    @change="onSelect"
+  >
+    <option
+      v-for="option in selectOption"
+      :key="option.value"
+      :value="option.value"
+      :disabled="option.value === '' ? true : false"
+    >
+      {{ option.text }}
+    </option>
+  </select>
+</template>
+
+<style scoped>
+select {
+  border: 2px solid;
+  border-radius: 13px;
+  height: 35px;
+  padding: 5px 5px;
+  margin-right: 10px;
+}
+
+select:focus {
+  outline-color: #d20000;
+}
+</style>
