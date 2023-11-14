@@ -14,7 +14,8 @@
       <router-link :to="{ name: 'board-qna' }"> | Q&A</router-link>
       <a href="" class="user"> | 마이페이지</a>
       <a href="" class="user"> | 로그아웃</a>
-      <a href="" class="user"> | 로그인</a>
+      <router-link :to="{ name: 'user' }"> | 로그인</router-link>
+      <!-- <a href="" class="user"> | 로그인</a> -->
     </div>
   </nav>
 </template>
