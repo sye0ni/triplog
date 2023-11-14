@@ -1,9 +1,17 @@
-<script setup></script>
+<script setup>
+// import AccountLogin from "../components/user/AccountLogin.vue";
+</script>
 
 <template>
   <div>
-    <router-link></router-link>
+    <div class="container">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.container {
+  height: 100%;
+}
+</style>
