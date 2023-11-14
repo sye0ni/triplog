@@ -5,39 +5,39 @@ var map;
 const positions = ref([]);
 const markers = ref([]);
 
-const props = defineProps({ stations: Array, selectStation: Object });
+// const props = defineProps({ stations: Array, selectStation: Object });
 
-watch(
-  () => props.selectStation.value,
-  () => {
-    // 이동할 위도 경도 위치를 생성합니다
-    var moveLatLon = new kakao.maps.LatLng(props.selectStation.lat, props.selectStation.lng);
+// watch(
+//   () => props.selectStation.value,
+//   () => {
+//     // 이동할 위도 경도 위치를 생성합니다
+//     var moveLatLon = new kakao.maps.LatLng(props.selectStation.lat, props.selectStation.lng);
 
-    // 지도 중심을 부드럽게 이동시킵니다
-    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-    map.panTo(moveLatLon);
-  },
-  { deep: true }
-);
+//     // 지도 중심을 부드럽게 이동시킵니다
+//     // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+//     map.panTo(moveLatLon);
+//   },
+//   { deep: true }
+// );
 
-watch(
-  // 충전소 목록이 바뀌면..
-  () => props.stations.value,
-  () => {
-    // positions에다가 담아라
-    positions.value = [];
-    props.stations.forEach((station) => {
-      let obj = {};
-      obj.latlng = new kakao.maps.LatLng(station.lat, station.lng);
-      obj.title = station.statNm;
+// watch(
+//   // 충전소 목록이 바뀌면..
+//   () => props.stations.value,
+//   () => {
+//     // positions에다가 담아라
+//     positions.value = [];
+//     props.stations.forEach((station) => {
+//       let obj = {};
+//       obj.latlng = new kakao.maps.LatLng(station.lat, station.lng);
+//       obj.title = station.statNm;
 
-      positions.value.push(obj);
-    });
-    loadMarkers();
-  },
-  // 객체나 배열 안의 내용이 바뀔 때는 깊은 감시 해야함!!!!!!!
-  { deep: true }
-);
+//       positions.value.push(obj);
+//     });
+//     loadMarkers();
+//   },
+//   // 객체나 배열 안의 내용이 바뀔 때는 깊은 감시 해야함!!!!!!!
+//   { deep: true }
+// );
 
 onMounted(() => {
   // kakao라는 객체가 있으면 만들어라
