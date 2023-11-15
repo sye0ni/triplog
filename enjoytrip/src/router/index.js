@@ -56,24 +56,24 @@ const router = createRouter({
       path: "/plan",
       name: "plan",
       component: PlanView,
-      redirect: { name: "plan-create" },
-      children: [
-        {
-          path: "",
-          name: "plan-create",
-          component: () => import("@/components/plan/PlanCreate.vue"),
-        },
-        {
-          path: "wishlist",
-          name: "plan-wishlist",
-          component: () => import("@/components/plan/PlanWishlist.vue"),
-        },
-        {
-          path: "detail",
-          name: "plan-detail",
-          component: () => import("@/components/plan/PlanDetail.vue"),
-        },
-      ],
+      // redirect: { name: "plan-create" },
+      // children: [
+      //   {
+      //     path: "",
+      //     name: "plan-create",
+      //     component: () => import("@/components/plan/PlanCreate.vue"),
+      //   },
+      //   {
+      //     path: "wishlist",
+      //     name: "plan-wishlist",
+      //     component: () => import("@/components/plan/PlanWishlist.vue"),
+      //   },
+      //   {
+      //     path: "detail",
+      //     name: "plan-detail",
+      //     component: () => import("@/components/plan/PlanDetail.vue"),
+      //   },
+      // ],
     },
     {
       path: "/board/photo",

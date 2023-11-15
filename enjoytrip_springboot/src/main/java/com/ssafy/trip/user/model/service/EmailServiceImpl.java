@@ -8,7 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.trip.user.model.User;
+import com.ssafy.trip.user.model.UserDto;
 import com.ssafy.trip.user.model.mapper.UserMapper;
 import com.ssafy.trip.util.RandomString;
 
@@ -43,7 +43,7 @@ public class EmailServiceImpl implements EmailService{
 
 	// 패스워드 재설정 
 	@Override
-	public void sendPwdReset(User user) throws MessagingException {
+	public void sendPwdReset(UserDto user) throws MessagingException {
 	    String randomToken = RandomString.generateRandomString(20);
 	    userMapper.setRandomToken(user.getUserId(), randomToken); // 사용자의 랜덤토큰 저장
 

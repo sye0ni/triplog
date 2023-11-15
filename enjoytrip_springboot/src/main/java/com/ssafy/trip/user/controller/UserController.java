@@ -1,7 +1,9 @@
 package com.ssafy.trip.user.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -19,8 +21,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.trip.user.model.User;
+import com.ssafy.trip.user.model.UserDto;
 import com.ssafy.trip.user.model.service.UserService;
+import com.ssafy.trip.util.JWTUtil;
 
 
 @RestController
@@ -31,10 +34,12 @@ public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	private UserService userService;
+	private JWTUtil jwtUtil;
 
 	@Autowired
-	public UserController(UserService userService) {
+	public UserController(UserService userService, JWTUtil jwtUtil) {
 		this.userService = userService;
+		this.jwtUtil = jwtUtil;
 	}
 	
 	// 아이디, 이메일 중복 검사
@@ -54,7 +59,7 @@ public class UserController {
 	
 	// 회원가입
 	@PostMapping
-	public ResponseEntity<?> join(@RequestBody User user) throws Exception{
+	public ResponseEntity<?> join(@RequestBody UserDto user) throws Exception{
 		logger.debug("join userDto : {}",user);
 		
 		int result;
@@ -72,20 +77,70 @@ public class UserController {
 	}
 	
 	// 로그인
-	@PostMapping("/login")	// 임시 
+	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody Map<String,String> map, HttpSession session) throws Exception{
 		logger.debug("login userId : {}", map.get("userId"));
 		logger.debug("login userPw : {}", map.get("userPwd"));
-
-		User user=userService.login(map);
 		
-		if(user!=null) { // 로그인 성공 
-			session.setAttribute("userInfo", user); // setAttribute 이후 확인 필요
-			return new ResponseEntity<String>("로그인이 완료되었습니다.",HttpStatus.OK);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.ACCEPTED;
+		
+		try {
+			UserDto loginUser = userService.login(map);
+			
+			if(loginUser != null) {
+				String accessToken = jwtUtil.createAccessToken(loginUser.getUserId());
+				String refreshToken = jwtUtil.createRefreshToken(loginUser.getUserId());
+				logger.debug("access token : {}", accessToken);
+				logger.debug("refresh token : {}", refreshToken);
+				
+//				발급받은 refresh token을 DB에 저장.
+				
+				userService.saveRefreshToken(loginUser.getUserId(), refreshToken);
+				
+				logger.debug("db save : id {} refreshToken {}", loginUser.getUserId(), refreshToken);
+				
+//				JSON으로 token 전달.
+				resultMap.put("access-token", accessToken);
+				resultMap.put("refresh-token", refreshToken);
+				
+				status = HttpStatus.CREATED;
+			} else {
+				resultMap.put("message", "아이디 또는 패스워드를 확인해주세요.");
+				status = HttpStatus.UNAUTHORIZED;
+			} 
+			
+		} catch (Exception e) {
+			logger.debug("로그인 에러 발생 : {}", e);
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
-		else { // 로그인 실패 
-			return new ResponseEntity<String>("아이디 혹은 패스워드를 다시 확인하세요.",HttpStatus.UNAUTHORIZED); // 401 에러 
+		return new ResponseEntity<Map<String, Object>>(resultMap, status);
+	}
+	
+	@GetMapping("/info/{userId}")
+	public ResponseEntity<Map<String, Object>> getInfo(
+			@PathVariable("userId") String userId, HttpServletRequest request) {
+		logger.debug("userId : {} ", userId);
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.ACCEPTED;
+		if (jwtUtil.checkToken(request.getHeader("Authorization"))) {
+			logger.info("사용 가능한 토큰!!!");
+			try {
+//				로그인 사용자 정보.
+				UserDto userDto = userService.userInfo(userId);
+				resultMap.put("userInfo", userDto);
+				status = HttpStatus.OK;
+			} catch (Exception e) {
+				logger.error("정보조회 실패 : {}", e);
+				resultMap.put("message", e.getMessage());
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+			}
+		} else {
+			logger.error("사용 불가능 토큰!!!");
+			status = HttpStatus.UNAUTHORIZED;
 		}
+		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 	
 	// 내정보 수정 - 아이디, 이메일 , 비밀번호 
@@ -128,8 +183,8 @@ public class UserController {
 	@GetMapping("/{userId}")
 	public ResponseEntity<?> userInfo(@PathVariable String userId) throws Exception{
 		// User 반환 
-		User user=userService.getUser(userId);
-		return new ResponseEntity<User>(user,HttpStatus.OK);
+		UserDto user=userService.getUser(userId);
+		return new ResponseEntity<UserDto>(user,HttpStatus.OK);
 	}
 	
 	// 아이디, 패스워드 찾기
@@ -147,10 +202,47 @@ public class UserController {
 	}
 	
 	// 로그아웃
-	@PostMapping("/logout") // 임시 
-	public ResponseEntity<?> logout(HttpSession session){
-		session.invalidate();
-		return new ResponseEntity<String>("로그아웃 성공",HttpStatus.OK);
+//	@PostMapping("/logout") // 임시 
+//	public ResponseEntity<?> logout(HttpSession session){
+//		session.invalidate();
+//		return new ResponseEntity<String>("로그아웃 성공",HttpStatus.OK);
+//	}
+	@GetMapping("/logout/{userId}")
+	public ResponseEntity<?> removeToken(@PathVariable ("userId") String userId) {
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.ACCEPTED;
+		try {
+			userService.deleRefreshToken(userId);
+			status = HttpStatus.OK;
+		} catch (Exception e) {
+			logger.error("로그아웃 실패 : {}", e);
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		return new ResponseEntity<Map<String, Object>>(resultMap, status);
+
+	}
+	
+	@PostMapping("/refresh")
+	public ResponseEntity<?> refreshToken(@RequestBody UserDto memberDto, HttpServletRequest request)
+			throws Exception {
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.ACCEPTED;
+		String token = request.getHeader("refreshToken");
+		logger.debug("token : {}, memberDto : {}", token, memberDto);
+		if (jwtUtil.checkToken(token)) {
+			if (token.equals(userService.getRefreshToken(memberDto.getUserId()))) {
+				String accessToken = jwtUtil.createAccessToken(memberDto.getUserId());
+				logger.debug("token : {}", accessToken);
+				logger.debug("정상적으로 액세스토큰 재발급!!!");
+				resultMap.put("access-token", accessToken);
+				status = HttpStatus.CREATED;
+			}
+		} else {
+			logger.debug("리프레쉬토큰도 사용불가!!!!!!!");
+			status = HttpStatus.UNAUTHORIZED;
+		}
+		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 	
 	// 회원 탈퇴 
