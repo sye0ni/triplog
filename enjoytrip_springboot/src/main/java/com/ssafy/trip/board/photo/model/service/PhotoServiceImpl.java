@@ -34,4 +34,10 @@ public class PhotoServiceImpl implements PhotoService{
 		}
 	}
 
+	@Override
+	public void listPhoto(int page, String userId) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
