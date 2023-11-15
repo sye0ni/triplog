@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.ssafy.trip.board.qna.model.mapper.QnaMapper">
+	
+	<resultMap type="BoardQnaDto" id="qna">
+		<result column="board_qna_id" property="boardQnaId"/>
+		<result column="user_id" property="userId"/>
+		<result column="title" property="title"/>
+		<result column="content" property="content"/>
+		<result column="register_time" property="registerTime"/>
+		<result column="comment_cnt" property="commentCnt"/>
+		<result column="hit" property="hit"/>
+	</resultMap>
+	
+	<resultMap type="CommentDto" id="comment">
+		<result column="comment_id" property="commentId"/>
+		<result column="user_id" property="userId"/>
+		<result column="content" property="content"/>
+		<result column="register_time" property="registerTime"/>
+		<result column="board_id" property="boardId"/>
+		<result column="board_type" property="boardType"/>
+		<result column="parent_id" property="parentId"/>
+	</resultMap>
+	
+	
+	
+	<!-- title, 게시글번호,  -->
+	<sql id="search">
+		<if test="word != null and word != ''">
+			<if test="key == 'title'">
+				and title like concat('%', #{word}, '%')
+			</if>
+			<if test="key != 'title'">
+				and ${key} = #{word}
+			</if>
+		</if>
+	</sql>
+	
+	<select id="listQna" parameterType="map" resultMap="qna">
+		select board_qna_id, user_id, title, register_time, comment_cnt
+		from board_qna
+		<where>
+			<include refid="search"></include>
+		</where>
+		order by board_qna_id desc
+		limit #{start}, #{listsize}
+	</select>
+	
+	<select id="getTotalArticleCount" parameterType="map" resultType="int">
+		select count(board_qna_id)
+		from board_qna
+		<where>
+			<include refid="search"></include>
+		</where>
+	</select>
+	
+	<select id="getQna" parameterType="int" resultMap="qna">
+		select * from board_qna
+		where board_qna_id=#{qnaId}
+	</select>
+	
+	<select id="listComment" parameterType="int" resultMap="comment">
+		select * from comment
+		where board_id=#{qnaId} and board_type='qna'
+	</select>
+	
+	<insert id='writeQna' parameterType="BoardQnaDto">
+        insert into board_qna (user_id, title, content, register_time)
+        values 
+        (#{userId}, #{title}, #{content},now())
+        <selectKey resultType="int" keyProperty="boardQnaId" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+	
+	<update id="modifyQuestion" parameterType="boardQnaDto">
+		update board_qna
+		set title=#{title}, content=#{content} 
+		where board_qna_id=#{boardQnaId}
+	</update>
+	
+	<update id="modifyComment" parameterType="commentDto">
+		update comment
+		set content=#{content} 
+		where comment_id=#{commentId}
+	</update>
+	
+	<insert id="writeComment" parameterType="commentDto">
+		insert into comment (user_id, content, register_time, board_id, board_type)
+		values 
+		(#{userId}, #{content}, now(), #{boardId}, 'qna')
+		<selectKey resultType="int" keyProperty="commentId" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	
+	<update id="updateCommentCnt" parameterType="map">
+		update board_qna 
+		<set>
+			<if test="type == 1">
+				comment_cnt=comment_cnt+1 
+			</if>
+			<if test="type == -1">
+				comment_cnt=comment_cnt-1 
+			</if>
+		</set>
+		where board_qna_id=#{id}
+	</update>
+	
+	<delete id="deleteAllComments" parameterType="int">
+		delete from comment 
+		where board_id=#{qnaId} and board_type="qna"
+	</delete>
+	
+	<delete id="deleteQuestion" parameterType="int">
+		delete from board_qna
+		where board_qna_id=#{qnaId}
+	</delete>
+	
+	<delete id='deleteComment' parameterType="int">
+		delete from comment
+		where comment_id=#{commentId}
+	</delete>
+	
+
+</mapper>

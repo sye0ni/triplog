@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.trip.user.model.mapper.UserMapper">
+	
+	<resultMap type="User" id="user">
+		<result column="user_id" property="userId"/>
+		<result column="user_name" property="userName"/>
+		<result column="user_pwd" property="userPwd"/>
+		<result column="user_email" property="userEmail"/>
+		<result column="platform_type" property="platformType"/>
+		<result column="access_token" property="accessToken"/>
+		<result column="salt" property="salt"/>
+	</resultMap>
+	
+	<select id="dupCheck" parameterType="String" resultType="int">
+		select count(user_id) from user
+		<where>
+			<if test="type == 'id'">user_id = #{value}</if>
+			<if test="type == 'email'">user_email = #{value}</if>
+		</where>
+	</select>
+	
+	<insert id="join" parameterType="User">
+		insert into user (user_id,user_name,user_pwd,user_email,platform_type,access_token,salt)
+		values (#{userId},#{userName},#{userPwd},#{userEmail},#{platformType},#{accessToken},#{salt})
+	</insert>
+	
+	<select id="login" parameterType="String" resultMap="user">
+		select * from user
+		where user_id=#{userId} and user_pwd=#{userPwd}
+	</select>
+	
+	<select id="getUser" parameterType="String" resultMap="user">
+		select * from user
+		where user_id=#{userId}
+	</select>
+	
+	<update id="modify" parameterType="map">
+		update user 
+		<set>
+			<if test="type == 'email'">user_email=#{value}</if>
+			<if test="type == 'name'">user_name=#{value}</if>
+			<if test="type == 'password'">user_pwd=#{value}</if>
+		</set>
+		where user_id=#{userId}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		delete from user
+		where user_id=#{userId}
+	</delete>
+	
+	<select id="findIdByEmail" parameterType="String" resultType="String">
+		select user_id from user
+		where user_email = #{email}
+	</select>
+	
+	<update id="setRandomToken" parameterType="String">
+		update user set random_token=#{randomToken}
+		where user_id=#{userId}
+	</update>
+	
+</mapper>
