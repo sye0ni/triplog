@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.ssafy.trip.board.photo.model.mapper.PhotoMapper">
+	
+	<resultMap type="BoardPhotoDto" id="photoDto">
+		<result column="board_photo_id" property="boardPhotoId"/>
+		<result column="user_id" property="userId"/>
+		<result column="content" property="content"/>
+		<result column="location" property="location"/>
+		<result column="place" property="place"/>
+		<result column="like" property="like"/>
+		<result column="register_time" property="registerTime"/>
+		<result column="thumbnail_id" property="thumbnailId"/>
+	</resultMap>
+	
+	<resultMap type="PhotoInfoDto" id="photoInfo">
+		<result column="photo_info_id" property="photoInfoId"/>
+		<result column="photo_id" property="photoId"/>
+		<result column="save_folder" property="saveFolder"/>
+		<result column="original_file" property="originalFile"/>
+		<result column="save_file" property="saveFile"/>		 
+	</resultMap>
+	
+	<insert id="writePhoto" parameterType="boardPhotoDto">
+		insert into board_photo (user_id, content, location, place, `like`, register_time, thumbnail_id)
+		values (#{userId}, #{content}, #{location}, #{place}, #{like}, now(), 1)
+		<selectKey resultType="int" keyProperty="boardPhotoId" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	
+	<insert id="registerFile" parameterType="boardPhotoDto">
+		insert into photo_info (photo_id , save_folder, original_file, save_file)
+		values
+		<foreach collection="photoInfos" item="photoinfo" separator=", ">
+			(#{boardPhotoId}, #{photoinfo.saveFolder}, #{photoinfo.originalFile}, #{photoinfo.saveFile})
+		</foreach>
+	</insert> 
+	
+
+
+</mapper>
