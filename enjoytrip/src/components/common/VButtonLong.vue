@@ -15,7 +15,7 @@ defineProps({ text: String, color: String });
 
 button {
   width: 500px;
-  height: 70px;
+  height: 65px;
   background-color: white;
   border-radius: 10px;
   font-size: 1.3rem;
