@@ -4,6 +4,7 @@ import MainView from "@/views/TheMainView.vue";
 import BoardQnAView from "@/views/TheBoardQnAView.vue";
 import PlanView from "@/views/ThePlanView.vue";
 import AccountView from "@/views/TheAccountView.vue";
+import BoardPhotoView from "@/views/TheBoardPhotoView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,7 +48,7 @@ const router = createRouter({
         {
           path: "pwdsearch",
           name: "user-pwd-search",
-          component: () => import("@/components/user/AccountSearch.vue"),
+          component: () => import("@/components/user/AccountPwdSearch.vue"),
         },
       ],
     },
@@ -71,6 +72,19 @@ const router = createRouter({
           path: "detail",
           name: "plan-detail",
           component: () => import("@/components/plan/PlanDetail.vue"),
+        },
+      ],
+    },
+    {
+      path: "/board/photo",
+      name: "board-photo",
+      component: BoardPhotoView,
+      redirect: { name: "board-photo-list" },
+      children: [
+        {
+          path: "",
+          name: "board-photo-list",
+          component: () => import("@/components/board/photo/BoardPhotoList.vue"),
         },
       ],
     },
