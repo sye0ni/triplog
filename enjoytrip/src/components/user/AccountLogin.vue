@@ -1,5 +1,39 @@
 <script setup>
 import VButtonLong from "../common/VButtonLong.vue";
+
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useMemberStore } from "@/stores/user";
+// import { useMenuStore } from "@/stores/menu";
+
+const router = useRouter();
+
+const memberStore = useMemberStore();
+
+const { isLogin } = storeToRefs(memberStore);
+const { userLogin, getUserInfo } = memberStore;
+// const { changeMenuState } = useMenuStore();
+
+const loginUser = ref({
+  userId: "",
+  userPwd: "",
+});
+
+const login = async () => {
+  console.log("login ing!!!! !!!");
+  await userLogin(loginUser.value);
+  let token = sessionStorage.getItem("accessToken");
+  console.log("111. ", token);
+  console.log("isLogin: ", isLogin);
+  if (isLogin) {
+    console.log("로그인 성공아닌가???");
+    getUserInfo(token);
+    // changeMenuState();
+    // 메뉴 변경!!
+  }
+  router.push("/");
+};
 </script>
 
 <template>
@@ -9,13 +43,13 @@ import VButtonLong from "../common/VButtonLong.vue";
       <div class="form-container">
         <form action="" method="post">
           <label for="user-id">아이디</label><br />
-          <input type="text" id="user-id" name="user-id" /><br />
+          <input type="text" v-model="loginUser.userId" id="user-id" /><br />
           <hr />
           <label for="user-pwd">비밀번호</label><br />
-          <input type="password" id="user-pwd" name="user-pwd" /><br />
+          <input type="password" v-model="loginUser.userPwd" id="user-pwd" /><br />
           <hr />
           <div class="button">
-            <VButtonLong text="로그인" />
+            <VButtonLong text="로그인" @click.prevent="login" />
           </div>
         </form>
         <div class="user">

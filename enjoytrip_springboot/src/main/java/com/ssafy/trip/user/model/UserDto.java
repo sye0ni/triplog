@@ -1,64 +1,85 @@
 package com.ssafy.trip.user.model;
 
 public class UserDto {
-	
-	private String user_id;
-	private String user_name;
-	private String user_pwd;
-	private String user_email;
-	private String platform_type;
-	private String access_token;
+
+	private String userId;
+	private String userName;
+	private String userPwd;
+	private String userEmail;
+	private String platformType;
+	private String refreshToken;
 	private String salt;
-	
-	public String getUser_id() {
-		return user_id;
+	private String randomToken;
+
+	public String getUserId() {
+		return userId;
 	}
-	public void setUser_id(String user_id) {
-		this.user_id = user_id;
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-	public String getUser_name() {
-		return user_name;
+
+	public String getUserName() {
+		return userName;
 	}
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-	public String getUser_pwd() {
-		return user_pwd;
+
+	public String getUserPwd() {
+		return userPwd;
 	}
-	public void setUser_pwd(String user_pwd) {
-		this.user_pwd = user_pwd;
+
+	public void setUserPwd(String userPwd) {
+		this.userPwd = userPwd;
 	}
-	public String getUser_email() {
-		return user_email;
+
+	public String getUserEmail() {
+		return userEmail;
 	}
-	public void setUser_email(String user_email) {
-		this.user_email = user_email;
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
-	public String getPlatform_type() {
-		return platform_type;
+
+	public String getPlatformType() {
+		return platformType;
 	}
-	public void setPlatform_type(String platform_type) {
-		this.platform_type = platform_type;
+
+	public void setPlatformType(String platformType) {
+		this.platformType = platformType;
 	}
-	public String getAccess_token() {
-		return access_token;
+
+	public String getRefreshToken() {
+		return refreshToken;
 	}
-	public void setAccess_token(String access_token) {
-		this.access_token = access_token;
+
+	public void setRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
 	}
+
 	public String getSalt() {
 		return salt;
 	}
+
 	public void setSalt(String salt) {
 		this.salt = salt;
 	}
-	
+
+	public String getRandomToken() {
+		return randomToken;
+	}
+
+	public void setRandomToken(String randomToken) {
+		this.randomToken = randomToken;
+	}
+
 	@Override
 	public String toString() {
-		return "UserDto [user_id=" + user_id + ", user_name=" + user_name + ", user_pwd=" + user_pwd + ", user_email="
-				+ user_email + ", platform_type=" + platform_type + ", access_token=" + access_token + ", salt=" + salt
-				+ "]";
+		return "UserDto [userId=" + userId + ", userName=" + userName + ", userPwd=" + userPwd + ", userEmail="
+				+ userEmail + ", platformType=" + platformType + ", refreshToken=" + refreshToken + ", salt=" + salt
+				+ ", randomToken=" + randomToken + "]";
 	}
-	
-	
+
 }

@@ -5,14 +5,14 @@ import java.util.Map;
 
 import javax.mail.MessagingException;
 
-import com.ssafy.trip.user.model.User;
+import com.ssafy.trip.user.model.UserDto;
 
 public interface UserService {
 	
 	int dupCheck(String type,String value) throws Exception;
-	int join(User user) throws Exception;
-	User login(Map<String,String> map) throws Exception;
-	User getUser(String userId) throws Exception;
+	int join(UserDto user) throws Exception;
+	UserDto login(Map<String,String> map) throws Exception;
+	UserDto getUser(String userId) throws Exception;
 	int modify(Map<String, String> map) throws Exception;
 	int pwdCheck(Map<String, String> map) throws Exception;
 	void delete(String userId);
@@ -20,4 +20,9 @@ public interface UserService {
 	int findPw(String id) throws Exception;
 	int find(Map<String, String> map) throws SQLException, MessagingException;
 	
+	// token
+	UserDto userInfo(String userId) throws Exception;
+	void saveRefreshToken(String userId, String refreshToken) throws Exception;
+	Object getRefreshToken(String userId) throws Exception;
+	void deleRefreshToken(String userId) throws Exception;
 }

@@ -1,4 +1,12 @@
-<script setup></script>
+<script setup>
+import { storeToRefs } from "pinia";
+import { useMemberStore } from "@/stores/user";
+
+const memberStore = useMemberStore();
+
+const { isLogin } = storeToRefs(memberStore);
+const { userLogin, userInfo, getUserInfo } = memberStore;
+</script>
 
 <template>
   <nav class="navbar fixed-top">

@@ -2,13 +2,14 @@ package com.ssafy.trip.user.model.service;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.mail.MessagingException;
 
 import org.springframework.stereotype.Service;
 
-import com.ssafy.trip.user.model.User;
+import com.ssafy.trip.user.model.UserDto;
 import com.ssafy.trip.user.model.mapper.UserMapper;
 import com.ssafy.trip.util.PwHash;
 
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService{
 	
 	// 회원 가입
 	@Override
-	public int join(User user) throws Exception {
+	public int join(UserDto user) throws Exception {
 		// 패스워드 암호화 후 insert
 		String userPw=user.getUserPwd();
 		user.setSalt(PwHash.makeSalt());
@@ -49,28 +50,28 @@ public class UserServiceImpl implements UserService{
 
 	// 회원 조회 
 	@Override
-	public User getUser(String userId) throws SQLException {
+	public UserDto getUser(String userId) throws SQLException {
 		return userMapper.getUser(userId);
 	}
 
 	// 로그인 
 	@Override
-	public User login(Map<String, String> map) throws SQLException {
+	public UserDto login(Map<String, String> map) throws SQLException {
 		String userPwd=null;
-		User user=getUser(map.get("userId"));
-		
+		UserDto user=getUser(map.get("userId"));
+		System.out.println("유저 아이디: " + map.get("userId"));
 		if(user==null) { // 유효하지 않은 회원인 경우 
 			return null;
 		}
 		
 		try {
 			userPwd=PwHash.pwHashing(map.get("userPwd"), user.getSalt());
-			System.out.println("로그인 비밀번호 : "+userPwd);
+			System.out.println("로그인 비밀번호 : " + userPwd);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
 		
-		return userMapper.login(map.get("userId"),userPwd);	
+		return userMapper.login(map.get("userId"), userPwd);	
 	}
 
 	// 내 정보 수정 
@@ -87,7 +88,7 @@ public class UserServiceImpl implements UserService{
 		
 		// password 의 경우에는 암호화하여 전달 
 		if(map.get("type").equals("password")) {
-			User user=getUser(map.get("userId"));
+			UserDto user=getUser(map.get("userId"));
 			String userPwd=map.get("value");
 			userPwd=PwHash.pwHashing(userPwd, user.getSalt());
 			map.replace("value", userPwd);
@@ -102,7 +103,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int pwdCheck(Map<String, String> map) throws SQLException { // userId, value 담겨 있음 
 		String userPwd=map.get("value");
-		User user, user2;
+		UserDto user, user2;
 		int result=0;
 		
 		user = getUser(map.get("userId"));
@@ -150,7 +151,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int findPw(String userId) throws SQLException, MessagingException {
 		
-		User user=getUser(userId);
+		UserDto user=getUser(userId);
 		if(user==null) return 0; // 아이디 일치하는 사용자 없음 
 
 		emailService.sendPwdReset(user); // 패스워드 리셋 링크
@@ -171,7 +172,7 @@ public class UserServiceImpl implements UserService{
 		}
 		
 		else { // 비밀번호 찾기 
-			User user=getUser(map.get("value"));
+			UserDto user=getUser(map.get("value"));
 			if(user==null) return 0; // 아이디 일치하는 사용자 없음 
 
 			emailService.sendPwdReset(user); // 패스워드 리셋 링크
@@ -180,4 +181,31 @@ public class UserServiceImpl implements UserService{
 		return 1;
 	}
 	
+	// token ----
+	@Override
+	public UserDto userInfo(String userId) throws Exception {
+		return userMapper.userInfo(userId);
+	}
+	
+	@Override
+	public void saveRefreshToken(String userId, String refreshToken) throws Exception {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("userId", userId);
+		map.put("refreshToken", refreshToken);
+		userMapper.saveRefreshToken(map);
+	}
+
+	@Override
+	public Object getRefreshToken(String userId) throws Exception {
+		return userMapper.getRefreshToken(userId);
+	}
+
+	@Override
+	public void deleRefreshToken(String userId) throws Exception {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("userId", userId);
+		map.put("refreshToken", null);
+		userMapper.deleteRefreshToken(map);
+	}
+
 }
