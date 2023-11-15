@@ -10,11 +10,12 @@
       <router-link :to="{ name: 'plan' }"> | 계획 세우기</router-link>
       <!-- <a href=""> | 계획 세우기</a> -->
       <a href=""> | 여행지 찜</a>
-      <a href=""> | 후기 공유</a>
+      <router-link :to="{ name: 'board-photo' }"> | 후기 공유</router-link>
+      <!-- <a href=""> | 후기 공유</a> -->
       <router-link :to="{ name: 'board-qna' }"> | Q&A</router-link>
       <a href="" class="user"> | 마이페이지</a>
       <a href="" class="user"> | 로그아웃</a>
-      <router-link :to="{ name: 'user' }"> | 로그인</router-link>
+      <router-link :to="{ name: 'user-login' }"> | 로그인</router-link>
       <!-- <a href="" class="user"> | 로그인</a> -->
     </div>
   </nav>
