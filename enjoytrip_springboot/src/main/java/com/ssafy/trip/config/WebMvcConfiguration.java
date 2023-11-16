@@ -27,6 +27,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	
 	private final Logger logger = LoggerFactory.getLogger(WebMvcConfiguration.class);
 
+	
+	private String resourcePath="file:///board/upload/";
+	
+	
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**").allowedOrigins("*")
@@ -44,6 +48,13 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/").setViewName("index");
+	}
+	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/upload/**") // 클라이언트가 파일에 접근하기 위해 요청하는 url
+		.addResourceLocations(resourcePath); // 실제 리소스가 존재하는 외부 경로 (앞에 file:/// 필수)
+		
 	}
 	
 }

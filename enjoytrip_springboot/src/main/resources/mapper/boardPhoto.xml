@@ -23,6 +23,13 @@
 		<result column="save_file" property="saveFile"/>		 
 	</resultMap>
 	
+	<resultMap type="BoardPhotoItemDto" id="photoItem">
+		<result column="board_photo_id" property="boardPhotoId"/>
+		<result column="user_id" property="userId"/>
+		<result column="like" property="like"/> 
+		<result column="thumbNail" property="thumbNail"/>
+	</resultMap>
+	
 	<insert id="writePhoto" parameterType="boardPhotoDto">
 		insert into board_photo (user_id, content, location, place, `like`, register_time, thumbnail_id)
 		values (#{userId}, #{content}, #{location}, #{place}, #{like}, now(), #{thumbnailId})
@@ -39,6 +46,20 @@
 		</foreach>
 	</insert> 
 	
+<!--   	<select id='getList' parameterType="int" resultMap="photoItem">
+		select b.board_photo_id, b.user_id, b.like, t.save_file thumbNail
+		from board_photo b join 
+		thumbnail t on b.thumbnail_id=t.thumbnail_id
+		limit #{page},4
+	</select> -->
+
+	
+ 	<select id='getList' parameterType="int" resultMap="photoItem">
+		select b.board_photo_id, b.user_id, b.like, concat(t.save_folder,'/',t.save_file) thumbNail
+		from board_photo b join 
+		thumbnail t on b.thumbnail_id=t.thumbnail_id
+		limit #{page},4;
+	</select>
 
 
 </mapper>

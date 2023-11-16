@@ -1,17 +1,30 @@
-<script setup></script>
+<script setup>
+import { onMounted } from "vue";
+
+const props = defineProps({
+  photo: Object,
+});
+
+onMounted(() => {
+  console.log("들어옴!");
+  console.log(props.photo.thumbNail);
+});
+</script>
 
 <template>
   <div class="container">
     <div>
-      <img src="@/assets/gangneung.jpg" alt="not found" />
-    </div>
+    <img :src="'http://localhost:80/upload/' + props.photo.thumbNail" alt="not found" /> <!-- 이미지 스프링 통해서 불러오기 -->
+  </div>
+
     <!-- <hr> -->
     <div class="info">
       <div>
-        <span>userName</span>
+        <span>{{ props.photo.boardPhotoId }}</span>
+        <span>{{ props.photo.userId }}</span>
       </div>
       <div>
-        <span>13 </span>
+        <span>{{ props.photo.like }}</span>
         <span>♥</span>
       </div>
     </div>

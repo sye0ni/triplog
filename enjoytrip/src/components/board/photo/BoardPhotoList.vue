@@ -1,12 +1,13 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import VSelect from "../../common/VSelect.vue";
-// import BoardPhotoListItem from "./item/BoardPhotoListItem.vue";
+import BoardPhotoListItem from "./item/BoardPhotoListItem.vue";
 import { listPhoto } from "@/api/boardPhoto.js";
 import { useMemberStore } from "@/stores/user";
+import InfiniteLoading from "v3-infinite-loading";
+import "v3-infinite-loading/lib/style.css";
 
 const memberStore = useMemberStore();
-const { userInfo } = memberStore;
 
 const selectSortOption = ref([
   { text: "검색조건", value: "" },
@@ -19,25 +20,35 @@ const selectAreaOption = ref([
   { text: "시/군", value: "sigun" },
 ]);
 
-const page = ref(1);
-const photos = ref([]); // 받아올 photoList 배열
-
-onMounted(() => {
-  // console.log(userInfo.value);
-  infiniteHandler();
-})
+let page = ref({page:1});
+let photos = ref([]); // 받아올 photoList 배열
 
 
-const infiniteHandler = function () {
+const infiniteHandler = async $state => {
   console.log("스크롤 로딩!!");
-  // page + 1 씩 하면서 반복적으로 4개씩 받아오기 !!
-  listPhoto(
+  console.log("page=",page.value.page); // 현재 페이지
+
+  // page + 1 씩 하면서 반복적으로 4개씩 받아오기 
+  await listPhoto(
     page.value,
-    "ssafy",
     ({ data }) => {
-      console.log("get photo list", data); // data에 photo list 
-      page.value = page.value + 1;
-      photos.value = data.value; // list 라는 속성을 갖도록 설정해야함 ! 
+      setTimeout(() => {
+        
+        console.log("get photo list", data); // data에 photo list 
+        // console.log("length:", data.length);
+        // if (data.length < 4) $state.complete();
+        // else {
+          page.value.page = page.value.page + 1; // 페이지 증가
+          photos.value.push(...data);
+          console.log("photos:" + photos.value);
+          console.log(photos.value[0]);
+
+        if (data.length < 4) $state.complete();
+        else $state.loaded();
+
+        // $state.loaded();
+        // }
+      }, 800)
     },
     (error) => {
       console.log(error);
@@ -70,12 +81,15 @@ const infiniteHandler = function () {
         </div>
       </div>
     </div>
-    <!-- <template>
-                    <div class="listItem">
-                      <BoardPhotoListItem v-for="photo in photos" :key="photo.boardPhotoId" :photo="photo" />
-                    </div>
-                    <infinite-loading @infinite="infiniteHandler" spinner="bubbles"></infinite-loading>
-                  </template> -->
+    
+    <div class='listContainer'>
+      <div class="listItem">
+        <BoardPhotoListItem  v-for='photo in photos' :key='photo.boardPhotoId' :photo='photo'>
+        </BoardPhotoListItem>
+      </div>
+      <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+    </div>
+
 
 
   </div>
@@ -131,6 +145,18 @@ input:focus {
 
 .listItem {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center; 
+  flex-wrap: wrap; 
+} 
+
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  /* justify-content:center; */
+}
+
+.spinner{
+  border:1px solid red;
+  display:none;
 }
 </style>

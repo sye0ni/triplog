@@ -3,10 +3,12 @@ package com.ssafy.trip.board.photo.model.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.trip.board.photo.model.BoardPhotoDto;
+import com.ssafy.trip.board.photo.model.BoardPhotoItemDto;
 import com.ssafy.trip.board.photo.model.PhotoInfoDto;
 import com.ssafy.trip.board.photo.model.mapper.PhotoMapper;
 
@@ -14,6 +16,9 @@ import com.ssafy.trip.board.photo.model.mapper.PhotoMapper;
 public class PhotoServiceImpl implements PhotoService{
 
 	private PhotoMapper photoMapper;
+	
+	@Value("${file.path}")
+	private String uploadPath;
 	
 	@Autowired
 	public PhotoServiceImpl(PhotoMapper photoMapper) {
@@ -34,9 +39,17 @@ public class PhotoServiceImpl implements PhotoService{
 		}
 	}
 
+
 	@Override
-	public void listPhoto(int page, String userId) throws Exception {
-		// TODO Auto-generated method stub
+	public List<BoardPhotoItemDto> listPhoto(int page) throws Exception {
+		// 게시글 번호, 작성자, 좋아요 수, thumbnail 경로 담기 
+		List<BoardPhotoItemDto> list=photoMapper.getList((page-1)*4);
+//		String temp="";
+//		for(int i=0;i<list.size();i++) {
+//			temp=list.get(i).getThumbNail();
+//			list.get(i).setThumbNail(uploadPath+temp);
+//		}
+		return list; 
 		
 	}
 

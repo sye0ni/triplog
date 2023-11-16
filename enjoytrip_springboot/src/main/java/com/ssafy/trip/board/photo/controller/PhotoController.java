@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.trip.board.photo.model.BoardPhotoDto;
+import com.ssafy.trip.board.photo.model.BoardPhotoItemDto;
 import com.ssafy.trip.board.photo.model.PhotoInfoDto;
 import com.ssafy.trip.board.photo.model.service.PhotoService;
 
@@ -82,6 +83,7 @@ private static final Logger logger = LoggerFactory.getLogger(PhotoController.cla
 					String saveFileName = UUID.randomUUID().toString()
 							+ originalFileName.substring(originalFileName.lastIndexOf('.'));
 					photoInfoDto.setSaveFolder(today);
+//					photoInfoDto.setSaveFolder(saveFolder);
 					photoInfoDto.setOriginalFile(originalFileName);
 					photoInfoDto.setSaveFile(saveFileName);
 					logger.debug("원본 파일 이름 : {}, 실제 저장 파일 이름 : {}", mfile.getOriginalFilename(), saveFileName);
@@ -98,12 +100,11 @@ private static final Logger logger = LoggerFactory.getLogger(PhotoController.cla
 	}
 	
 	@GetMapping
-	public ResponseEntity<?> listPhoto(@RequestParam int page, HttpServletRequest request) throws Exception{
+	public ResponseEntity<?> listPhoto(@RequestParam int page) throws Exception{
         logger.info("listPhoto - 호출 {}", page);
-        String userId=request.getHeader("Authorization"); 
-        System.out.println(userId);
-//        photoService.listPhoto(page,userId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        
+        List<BoardPhotoItemDto> list=photoService.listPhoto(page);
+        return new ResponseEntity<List<BoardPhotoItemDto>>(list,HttpStatus.OK);
 
 	}
 	
