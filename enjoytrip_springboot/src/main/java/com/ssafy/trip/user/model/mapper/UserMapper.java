@@ -20,6 +20,10 @@ public interface UserMapper {
 	String findIdByEmail(String email);
 	void setRandomToken(String userId, String randomToken);
 	
+	// pw modify
+	String findByRandomToken(String randomToken);
+	void deleteRandomToken(String userId);
+	
 	// token
 	UserDto userInfo(String userId) throws SQLException;
 	void saveRefreshToken(Map<String, String> map) throws SQLException;

@@ -1,5 +1,22 @@
 <script setup>
 import VButtonLong from "../common/VButtonLong.vue";
+
+import { ref } from "vue";
+import { pwdcheck } from "@/api/account";
+
+const userPwd = ref("");
+const message = ref("");
+
+const passwordCheck = function () {
+  console.log("pwdCheck!!");
+  pwdcheck(userPwd.value),
+    ({ data }) => {
+      console.log(data);
+    },
+    ({ response }) => {
+      console.log(response);
+    };
+};
 </script>
 
 <template>
@@ -8,10 +25,20 @@ import VButtonLong from "../common/VButtonLong.vue";
       <div class="title">비밀번호 확인</div>
       <div class="form-container">
         <label for="user-pwd">비밀번호</label>
-        <input type="password" id="user-pwd" name="user-pwd" class="shortInput" />
+        <input
+          type="password"
+          v-model="userPwd"
+          id="user-pwd"
+          class="shortInput"
+          placeholder="현재 비밀번호를 입력 해주세요.."
+          @keyup.enter="passwordCheck"
+        />
         <hr />
+        <div class="message">
+          {{ message }}
+        </div>
         <div class="button">
-          <VButtonLong text="비밀번호 변경" />
+          <VButtonLong text="비밀번호 변경" @click="passwordCheck" />
         </div>
       </div>
     </div>
@@ -55,5 +82,9 @@ hr {
 }
 .button {
   margin: 50px 0px;
+}
+
+.message {
+  color: #ca0f0f;
 }
 </style>

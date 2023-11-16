@@ -3,7 +3,7 @@ package com.ssafy.trip.util;
 import java.security.SecureRandom;
 
 	public class RandomString{
-	    private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_+=<>?";
+	    private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@$^*";
 
 	    public static String generateRandomString(int length) {
 	        SecureRandom random = new SecureRandom();

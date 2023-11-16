@@ -17,7 +17,7 @@ import com.ssafy.trip.util.PwHash;
 @Service
 public class UserServiceImpl implements UserService{
 
-	private UserMapper userMapper;
+	private final UserMapper userMapper;
 	private EmailService emailService;
 
 	public UserServiceImpl(UserMapper userMapper, EmailService emailService) {
@@ -89,9 +89,15 @@ public class UserServiceImpl implements UserService{
 		// password 의 경우에는 암호화하여 전달 
 		if(map.get("type").equals("password")) {
 			UserDto user=getUser(map.get("userId"));
+
 			String userPwd=map.get("value");
+			
 			userPwd=PwHash.pwHashing(userPwd, user.getSalt());
+			
 			map.replace("value", userPwd);
+
+			// 랜덤 토큰 삭제
+			userMapper.deleteRandomToken(map.get("userId"));
 		}
 		
 		// 수정 	
@@ -131,33 +137,6 @@ public class UserServiceImpl implements UserService{
 		
 	}
 
-	// 아이디 찾기 : 이메일로 아이디 조회, 아이디가 있다면 메일 보내기 
-	@Override
-	public int findId(String email) {
-		
-		String userId=userMapper.findIdByEmail(email);
-		System.out.println("아이디 : " + userId);
-		
-		if(userId==null) { // 아이디 없음 
-			return 0;
-		}
-		
-		emailService.sendUserId(userId,email);
-		
-		return 1;
-	}
-
-	// 패스워드 찾기 : 아이디 조회 -> 아이디로 이메일 조회 , 유효한 아이디라면 메일 보내기 
-	@Override
-	public int findPw(String userId) throws SQLException, MessagingException {
-		
-		UserDto user=getUser(userId);
-		if(user==null) return 0; // 아이디 일치하는 사용자 없음 
-
-		emailService.sendPwdReset(user); // 패스워드 리셋 링크
-		return 1;
-	}
-
 	@Override
 	public int find(Map<String, String> map) throws SQLException, MessagingException {
 		
@@ -167,18 +146,26 @@ public class UserServiceImpl implements UserService{
 			
 			if(userId==null) { // 아이디 없음 
 				return 0;
-			}	
+			}
 			emailService.sendUserId(userId,map.get("value"));
 		}
 		
 		else { // 비밀번호 찾기 
 			UserDto user=getUser(map.get("value"));
-			if(user==null) return 0; // 아이디 일치하는 사용자 없음 
+			System.out.println("비밀번호 찾기1!!! " + user);
+			if(user==null) {
+				return 0; // 아이디 일치하는 사용자 없음 
+			}
 
 			emailService.sendPwdReset(user); // 패스워드 리셋 링크
 		}
 		
 		return 1;
+	}
+	
+	@Override
+	public String findByRandomToken(String randomToken) {
+		return userMapper.findByRandomToken(randomToken);
 	}
 	
 	// token ----

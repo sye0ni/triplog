@@ -4,8 +4,13 @@ import { useMemberStore } from "@/stores/user";
 
 const memberStore = useMemberStore();
 
-const { isLogin } = storeToRefs(memberStore);
-const { userLogin, userInfo, getUserInfo } = memberStore;
+const { isLogin, userInfo } = storeToRefs(memberStore);
+const { userLogout } = memberStore;
+
+const logout = async () => {
+  console.log("logout ing!!!");
+  await userLogout(userInfo.userId);
+};
 </script>
 
 <template>
@@ -21,9 +26,13 @@ const { userLogin, userInfo, getUserInfo } = memberStore;
       <router-link :to="{ name: 'board-photo' }"> | 후기 공유</router-link>
       <!-- <a href=""> | 후기 공유</a> -->
       <router-link :to="{ name: 'board-qna' }"> | Q&A</router-link>
-      <a href="" class="user"> | 마이페이지</a>
-      <a href="" class="user"> | 로그아웃</a>
-      <router-link :to="{ name: 'user-login' }"> | 로그인</router-link>
+      <span v-show="isLogin">
+        <a href="#" class="user"> | 마이페이지</a>
+        <a href="#" class="user" @click="logout"> | 로그아웃</a>
+      </span>
+      <span v-show="!isLogin">
+        <router-link :to="{ name: 'user-login' }"> | 로그인</router-link>
+      </span>
       <!-- <a href="" class="user"> | 로그인</a> -->
     </div>
   </nav>

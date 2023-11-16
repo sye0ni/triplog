@@ -58,7 +58,7 @@ public class EmailServiceImpl implements EmailService{
 	    String htmlContent = "<html><body>";
 	    htmlContent += "<p>안녕하세요. Enjoy Trip 입니다.</p>";
 	    htmlContent += "<p>아래 링크에 접속하여 비밀번호를 재설정 해주세요.</p>";
-	    htmlContent += "<a href=\"http://localhost/user/passwordReset?token=" + randomToken + "\">비밀번호 재설정</a>";
+	    htmlContent += "<a href=\"http://localhost:5173/user/pwdmodify?token=" + randomToken + "\">비밀번호 재설정</a>";
 	    htmlContent += "</body></html>";
 
 	    // //// 위 href 수정 필요 

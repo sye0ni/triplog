@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.trip.user.model.UserDto;
@@ -33,7 +35,7 @@ public class UserController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-	private UserService userService;
+	private final UserService userService;
 	private JWTUtil jwtUtil;
 
 	@Autowired
@@ -45,9 +47,10 @@ public class UserController {
 	// 아이디, 이메일 중복 검사
 	@PostMapping("/dupCheck") // 임시
 	public ResponseEntity<?> dupCheck(@RequestBody Map<String,String> map) throws Exception{
-		// map : type, value 
-		
+		// map -> 1.type: id, email 2.value: 
+		System.out.println("dupCheck start");
 		int result=userService.dupCheck(map.get("type"),map.get("value"));
+		System.out.println(map + " 중복검사: " + result);
 		
 		if(result==0) {
 			return new ResponseEntity<String>("사용 가능한 "+map.get("type")+" 입니다.", HttpStatus.CREATED); // 201
@@ -66,13 +69,15 @@ public class UserController {
 		try {
 			result = userService.join(user);
 			if(result==1) {
-				return new ResponseEntity<String>("회원가입이 완료되었습니다.", HttpStatus.CREATED); // 201
+				return new ResponseEntity<String>("1", HttpStatus.CREATED); // 201
+//				return new ResponseEntity<String>("회원가입이 완료되었습니다.", HttpStatus.CREATED); // 201
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return new ResponseEntity<String>("회원가입 오류! 중복 검사를 진행해주세요.",HttpStatus.CONFLICT); // 409 
+		return new ResponseEntity<String>("0",HttpStatus.CONFLICT); // 409 
+//		return new ResponseEntity<String>("회원가입 오류! 중복 검사를 진행해주세요.",HttpStatus.CONFLICT); // 409 
 
 	}
 	
@@ -94,13 +99,12 @@ public class UserController {
 				logger.debug("access token : {}", accessToken);
 				logger.debug("refresh token : {}", refreshToken);
 				
-//				발급받은 refresh token을 DB에 저장.
-				
+				// 발급받은 refresh token을 DB에 저장.
 				userService.saveRefreshToken(loginUser.getUserId(), refreshToken);
 				
 				logger.debug("db save : id {} refreshToken {}", loginUser.getUserId(), refreshToken);
 				
-//				JSON으로 token 전달.
+				// JSON으로 token 전달.
 				resultMap.put("access-token", accessToken);
 				resultMap.put("refresh-token", refreshToken);
 				
@@ -127,7 +131,7 @@ public class UserController {
 		if (jwtUtil.checkToken(request.getHeader("Authorization"))) {
 			logger.info("사용 가능한 토큰!!!");
 			try {
-//				로그인 사용자 정보.
+				// 로그인 사용자 정보.
 				UserDto userDto = userService.userInfo(userId);
 				resultMap.put("userInfo", userDto);
 				status = HttpStatus.OK;
@@ -143,22 +147,40 @@ public class UserController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 	
-	// 내정보 수정 - 아이디, 이메일 , 비밀번호 
+	// 랜덤토큰으로 아이디 찾기
+	@GetMapping("/randomToken")
+	public ResponseEntity<?> findByRandomToken(@RequestParam String token) {
+		System.out.println("controller randomToken start!!!!");
+		logger.debug("randomToken: {}", token);
+		
+		String userId = userService.findByRandomToken(token);
+		
+		if(userId != null) {
+			return new ResponseEntity<String>(userId, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("유효하지 않은 token", HttpStatus.NOT_FOUND);
+		}
+		
+	}
+	
+	// 내정보 수정 - 이름, 이메일 , 비밀번호 
 	@PutMapping
+	@Transactional
 	public ResponseEntity<?> modify(@RequestBody Map<String,String> map) throws Exception{
 		// map 에 담겨야 하는 값 
 		// 1. userId 
 		// 2. type - name or email or password
 		// 3. value - 변경하고자 하는 값
-		
+		System.out.println("controlelr modify start!!"+ map);
 		logger.debug("type : {}", map.get("type")); 
 		logger.debug("value : {}", map.get("value"));
 		
 		int result=userService.modify(map);
-		
+			
 		if(result==1) { // 수정 성공 
 			return new ResponseEntity<String>("수정이 완료되었습니다.", HttpStatus.OK); // 200 
 		} else {
+			// ?? 중복된이메일??
 			return new ResponseEntity<String>("중복된 이메일입니다.",HttpStatus.CONFLICT); // 409 -> 아이디는 not unique 이기 때문에  
 		}
 	}
@@ -175,7 +197,7 @@ public class UserController {
 		if(result==1) { // 일치 
 			return new ResponseEntity<String>("일치하는 패스워드입니다.", HttpStatus.OK); // 200 
 		} else {
-			return new ResponseEntity<String>("패스워드를 다시 확인하세요.", HttpStatus.UNAUTHORIZED); // 401
+			return new ResponseEntity<String>("패스워드를 다시 확인하세요.", HttpStatus.OK); // 401
 		}
 	}
 	
@@ -189,15 +211,19 @@ public class UserController {
 	
 	// 아이디, 패스워드 찾기
 	@PostMapping("/search") // 임시 
-	public ResponseEntity<?> findId(@RequestBody Map<String,String> map) throws Exception{ // type, value 가짐 
-		int ret=0;
+	public ResponseEntity<?> findId(@RequestBody Map<String,String> map) throws Exception{ 
+		// map -> 1.type : id, password  2.value: 
+		int ret = userService.find(map); // 0: 실패, 1: 성공
 		
-		ret=userService.find(map);
 		if(ret==1) { // 성공
-			return new ResponseEntity<String>(map.get("type")+" 찾기 메일 전송",HttpStatus.OK);
+			if(map.get("type").equals("id")) {
+				return new ResponseEntity<String>("아이디가 가입하신 이메일로 전송되었습니다.",HttpStatus.OK);
+			} else {
+				return new ResponseEntity<String>("비밀번호 변경 링크가 메일로 전송되었습니다.",HttpStatus.OK);
+			}
 		}
 		
-		return new ResponseEntity<String>("일치하는 사용자가 없습니다.",HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<String>("일치하는 사용자가 없습니다.", HttpStatus.UNAUTHORIZED);
 
 	}
 	
@@ -207,6 +233,7 @@ public class UserController {
 //		session.invalidate();
 //		return new ResponseEntity<String>("로그아웃 성공",HttpStatus.OK);
 //	}
+	
 	@GetMapping("/logout/{userId}")
 	public ResponseEntity<?> removeToken(@PathVariable ("userId") String userId) {
 		Map<String, Object> resultMap = new HashMap<>();

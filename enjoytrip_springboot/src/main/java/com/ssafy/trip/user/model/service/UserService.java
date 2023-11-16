@@ -16,9 +16,10 @@ public interface UserService {
 	int modify(Map<String, String> map) throws Exception;
 	int pwdCheck(Map<String, String> map) throws Exception;
 	void delete(String userId);
-	int findId(String email);
-	int findPw(String id) throws Exception;
 	int find(Map<String, String> map) throws SQLException, MessagingException;
+
+	// pw modify
+	String findByRandomToken(String randomToken);
 	
 	// token
 	UserDto userInfo(String userId) throws Exception;
