@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import VSelect from "../../common/VSelect.vue";
 import BoardPhotoListItem from "./item/BoardPhotoListItem.vue";
+import BoardPhotoWrite from "./BoardPhotoWrite.vue";
 import { listPhoto } from "@/api/boardPhoto.js";
 import { useMemberStore } from "@/stores/user";
 import InfiniteLoading from "v3-infinite-loading";
@@ -20,28 +21,28 @@ const selectAreaOption = ref([
   { text: "시/군", value: "sigun" },
 ]);
 
-let page = ref({page:1});
+let page = ref({ page: 1 });
 let photos = ref([]); // 받아올 photoList 배열
 
 
 const infiniteHandler = async $state => {
   console.log("스크롤 로딩!!");
-  console.log("page=",page.value.page); // 현재 페이지
+  console.log("page=", page.value.page); // 현재 페이지
 
   // page + 1 씩 하면서 반복적으로 4개씩 받아오기 
   await listPhoto(
     page.value,
     ({ data }) => {
       setTimeout(() => {
-        
+
         console.log("get photo list", data); // data에 photo list 
         // console.log("length:", data.length);
         // if (data.length < 4) $state.complete();
         // else {
-          page.value.page = page.value.page + 1; // 페이지 증가
-          photos.value.push(...data);
-          console.log("photos:" + photos.value);
-          console.log(photos.value[0]);
+        page.value.page = page.value.page + 1; // 페이지 증가
+        photos.value.push(...data);
+        console.log("photos:" + photos.value);
+        console.log(photos.value[0]);
 
         if (data.length < 4) $state.complete();
         else $state.loaded();
@@ -54,6 +55,11 @@ const infiniteHandler = async $state => {
       console.log(error);
     }
   )
+}
+
+const modal = ref(false);
+const isModalOpen = function () {
+  modal.value = !modal.value;
 }
 
 </script>
@@ -77,14 +83,17 @@ const infiniteHandler = async $state => {
         </div>
         <div>
           <!-- 로그인해야 보임 -->
-          <button type="button" id="writeButton">글쓰기</button>
+          <button type="button" id="writeButton" @click="isModalOpen">글쓰기</button>
+          <Transition v-if="modal">
+            <BoardPhotoWrite />
+          </Transition>
         </div>
       </div>
     </div>
-    
+
     <div class='listContainer'>
       <div class="listItem">
-        <BoardPhotoListItem  v-for='photo in photos' :key='photo.boardPhotoId' :photo='photo'>
+        <BoardPhotoListItem v-for='photo in photos' :key='photo.boardPhotoId' :photo='photo'>
         </BoardPhotoListItem>
       </div>
       <infinite-loading @infinite="infiniteHandler"></infinite-loading>
@@ -96,6 +105,12 @@ const infiniteHandler = async $state => {
 </template>
 
 <style scoped>
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.4s;
+}
+
+
 button {
   padding: 5px 10px;
   /* margin: 5px; */
@@ -145,9 +160,9 @@ input:focus {
 
 .listItem {
   display: flex;
-  justify-content: center; 
-  flex-wrap: wrap; 
-} 
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
 .listContainer {
   display: flex;
@@ -155,8 +170,8 @@ input:focus {
   /* justify-content:center; */
 }
 
-.spinner{
-  border:1px solid red;
-  display:none;
+.spinner {
+  border: 1px solid red;
+  display: none;
 }
 </style>
