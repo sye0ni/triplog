@@ -191,14 +191,18 @@ public class UserController {
 		// map 에 담겨야 하는 값 
 		// 1. userId 
 		// 2. value - 확인하고자 하는 값
+		System.out.println("pwdCheck!! " + map);
 		
-		int result=userService.pwdCheck(map);
+		int result = 0;
+		result =userService.pwdCheck(map);
 		
 		if(result==1) { // 일치 
 			return new ResponseEntity<String>("일치하는 패스워드입니다.", HttpStatus.OK); // 200 
 		} else {
-			return new ResponseEntity<String>("패스워드를 다시 확인하세요.", HttpStatus.OK); // 401
+			return new ResponseEntity<String>("패스워드를 다시 확인하세요.", HttpStatus.UNAUTHORIZED); // 401
 		}
+		
+//		return null;
 	}
 	
 	// 내 정보 조회 

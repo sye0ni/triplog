@@ -5,6 +5,7 @@ import BoardQnAView from "@/views/TheBoardQnAView.vue";
 import PlanView from "@/views/ThePlanView.vue";
 import AccountView from "@/views/TheAccountView.vue";
 import BoardPhotoView from "@/views/TheBoardPhotoView.vue";
+import UserView from "@/views/TheUserView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,6 +54,19 @@ const router = createRouter({
       ],
     },
     {
+      path: "/users",
+      name: "users",
+      component: UserView,
+      redirect: { name: "user-mypage" },
+      children: [
+        {
+          path: "mypage",
+          name: "user-mypage",
+          component: () => import("@/components/user/UserMypage.vue"),
+        },
+      ],
+    },
+    {
       path: "/plan",
       name: "plan",
       component: PlanView,
@@ -84,7 +98,8 @@ const router = createRouter({
         {
           path: "",
           name: "board-photo-list",
-          component: () => import("@/components/board/photo/BoardPhotoList.vue"),
+          component: () =>
+            import("@/components/board/photo/BoardPhotoList.vue"),
         },
       ],
     },

@@ -42,7 +42,7 @@ const modifyPassword = function () {
     if (isLogin.value) {
       console.log("로그인된 경우");
       // 로그인 후 변경하는 경우
-      param.value.userId = userInfo.userId;
+      param.value.userId = userInfo.value.userId;
     } else {
       // 비밀번호 변경 링크를 통해 들어오는 경우
       console.log("로그인 안된 경우", route.query.token);
@@ -69,7 +69,7 @@ const modifyPassword = function () {
         if (isLogin.value) {
           // 임시!!
           // 마이페이지로 이동해야함
-          router.push({ name: "main" });
+          router.push({ name: "user-mypage" });
         } else {
           router.push({ name: "user-login" });
         }
@@ -94,10 +94,20 @@ const messageDelete = function () {
       <div class="title">비밀번호 확인</div>
       <div class="form-container">
         <label for="user-pwd">비밀번호</label>
-        <input type="password" v-model="userPwd" id="user-pwd" class="shortInput" />
+        <input
+          type="password"
+          v-model="userPwd"
+          id="user-pwd"
+          class="shortInput"
+        />
         <hr />
         <label for="user-pwd-new">비밀번호 확인</label>
-        <input type="password" v-model="userPwdConfirm" id="user-pwd-new" class="shortInput" />
+        <input
+          type="password"
+          v-model="userPwdConfirm"
+          id="user-pwd-new"
+          class="shortInput"
+        />
         <hr />
         <div class="message">{{ message }}</div>
         <div class="button">

@@ -69,11 +69,11 @@ public class JWTUtil {
 //			charset 설정 안하면 사용자 플랫폼의 기본 인코딩 설정으로 인코딩 됨.
 			key = salt.getBytes("UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			if (log.isInfoEnabled()) {
-				e.printStackTrace();
-			} else {
-				log.error("Making JWT Key Error ::: {}", e.getMessage());
-			}
+//			if (log.isInfoEnabled()) {
+//				e.printStackTrace();
+//			} else {
+//				log.error("Making JWT Key Error ::: {}", e.getMessage());
+//			}
 		}
 		return key;
 	}
@@ -86,10 +86,10 @@ public class JWTUtil {
 //			parseClaimsJws : 파싱하여 원본 jws 만들기
 			Jws<Claims> claims = Jwts.parser().setSigningKey(this.generateKey()).parseClaimsJws(token);
 //			Claims 는 Map의 구현체 형태
-			log.debug("claims: {}", claims);
+//			log.debug("claims: {}", claims);
 			return true;
 		} catch (Exception e) {
-			log.error(e.getMessage());
+//			log.error(e.getMessage());
 			return false;
 		}
 	}
@@ -99,11 +99,11 @@ public class JWTUtil {
 		try {
 			claims = Jwts.parser().setSigningKey(this.generateKey()).parseClaimsJws(authorization);
 		} catch (Exception e) {
-			log.error(e.getMessage());
+//			log.error(e.getMessage());
 			throw new UnAuthorizedException();
 		}
 		Map<String, Object> value = claims.getBody();
-		log.info("value : {}", value);
+//		log.info("value : {}", value);
 		return (String) value.get("userId");
 	}
 

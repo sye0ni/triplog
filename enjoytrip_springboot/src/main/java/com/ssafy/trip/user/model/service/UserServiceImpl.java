@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService{
 	// 패스워드 일치하는지 확인 
 	@Override
 	public int pwdCheck(Map<String, String> map) throws SQLException { // userId, value 담겨 있음 
-		String userPwd=map.get("value");
+		String userPwd = map.get("value");
 		UserDto user, user2;
 		int result=0;
 		

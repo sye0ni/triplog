@@ -3,19 +3,42 @@ import VButtonLong from "../common/VButtonLong.vue";
 
 import { ref } from "vue";
 import { pwdcheck } from "@/api/account";
+import { storeToRefs } from "pinia";
+import { useMemberStore } from "@/stores/user";
+import { useRouter } from "vue-router";
+
+const memberStore = useMemberStore();
+const router = useRouter();
+
+const { userInfo } = storeToRefs(memberStore);
 
 const userPwd = ref("");
 const message = ref("");
 
+const param = ref({
+  userId: "",
+  value: "",
+});
+
 const passwordCheck = function () {
   console.log("pwdCheck!!");
-  pwdcheck(userPwd.value),
+  console.log("userInfo", userInfo);
+  console.log("userInfo", userInfo.value.userId);
+  param.value.userId = userInfo.value.userId;
+  param.value.value = userPwd.value;
+  console.log(param.value);
+  pwdcheck(
+    param.value,
     ({ data }) => {
       console.log(data);
+      message.value = data;
+      router.push({ name: "user-pwd-modify" });
     },
     ({ response }) => {
       console.log(response);
-    };
+      message.value = response.data;
+    }
+  );
 };
 </script>
 
