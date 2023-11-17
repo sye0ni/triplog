@@ -1,8 +1,10 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/user";
+import { useRouter } from "vue-router";
 
 const memberStore = useMemberStore();
+const router = useRouter();
 
 const { isLogin, userInfo } = storeToRefs(memberStore);
 const { userLogout } = memberStore;
@@ -10,6 +12,7 @@ const { userLogout } = memberStore;
 const logout = async () => {
   console.log("logout ing!!!");
   await userLogout(userInfo.userId);
+  router.push({ name: "main" });
 };
 </script>
 
@@ -21,12 +24,12 @@ const logout = async () => {
     <div class="list">
       <router-link :to="{ name: 'main' }">홈</router-link>
       <router-link :to="{ name: 'plan' }"> | 계획 세우기</router-link>
-      <a href=""> | 여행지 찜</a>
+      <router-link :to="{ name: 'wishlist' }"> | 여행지 찜</router-link>
+      <!-- <a href=""> | 여행지 찜</a> -->
       <router-link :to="{ name: 'board-photo' }"> | 후기 공유</router-link>
       <router-link :to="{ name: 'board-qna' }"> | Q&A</router-link>
       <span v-show="isLogin">
         <router-link :to="{ name: 'user-mypage' }"> | 마이페이지</router-link>
-        <!-- <a href="#" class="user"> | 마이페이지</a> -->
         <a href="#" class="user" @click="logout"> | 로그아웃</a>
       </span>
       <span v-show="!isLogin">

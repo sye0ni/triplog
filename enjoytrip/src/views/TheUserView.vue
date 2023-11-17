@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    the user view
+    theuserview
     <div class="container">
       <router-view></router-view>
     </div>

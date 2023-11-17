@@ -115,7 +115,7 @@ const join = function () {
       <div class="form-container">
         <form action="" method="post">
           <label for="user-id">아이디</label><br />
-          <input type="text" v-model="userIdRef" id="user-id" class="shortInput" />
+          <input type="text" v-model="userIdRef" id="user-id" class="shortInput" autofocus />
           <!-- <button class="dupBtn">중복 확인</button><br /> -->
           <hr />
           <div class="message">{{ idMessage }}</div>

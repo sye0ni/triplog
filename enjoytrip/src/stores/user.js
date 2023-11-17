@@ -17,11 +17,11 @@ export const useMemberStore = defineStore(
     const isValidToken = ref(false);
 
     const userLogin = async (loginUser) => {
+      console.log("userLogin!!", loginUser);
       await userConfirm(
         loginUser,
         (response) => {
-          // console.log("login ok!!!!", response.status);
-          // console.log("login ok!!!!", httpStatusCode.CREATE);
+          console.log("response.status", response.status);
           if (response.status === httpStatusCode.CREATE) {
             let { data } = response;
             // console.log("data", data);
@@ -44,6 +44,7 @@ export const useMemberStore = defineStore(
         },
         (error) => {
           console.error(error);
+          // ----------
         }
       );
     };

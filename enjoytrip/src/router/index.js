@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import MainView from "@/views/TheMainView.vue";
 import BoardQnAView from "@/views/TheBoardQnAView.vue";
 import PlanView from "@/views/ThePlanView.vue";
+import WishlistView from "@/views/TheWishlistView.vue";
 import AccountView from "@/views/TheAccountView.vue";
 import BoardPhotoView from "@/views/TheBoardPhotoView.vue";
 import UserView from "@/views/TheUserView.vue";
@@ -70,24 +71,29 @@ const router = createRouter({
       path: "/plan",
       name: "plan",
       component: PlanView,
-      // redirect: { name: "plan-create" },
-      // children: [
-      //   {
-      //     path: "",
-      //     name: "plan-create",
-      //     component: () => import("@/components/plan/PlanCreate.vue"),
-      //   },
-      //   {
-      //     path: "wishlist",
-      //     name: "plan-wishlist",
-      //     component: () => import("@/components/plan/PlanWishlist.vue"),
-      //   },
-      //   {
-      //     path: "detail",
-      //     name: "plan-detail",
-      //     component: () => import("@/components/plan/PlanDetail.vue"),
-      //   },
-      // ],
+      redirect: { name: "plan-create" },
+      children: [
+        {
+          path: "",
+          name: "plan-create",
+          component: () => import("@/components/plan/PlanCreate.vue"),
+        },
+        {
+          path: "wishlist",
+          name: "plan-wishlist",
+          component: () => import("@/components/plan/PlanWishlist.vue"),
+        },
+        {
+          path: "detail",
+          name: "plan-detail",
+          component: () => import("@/components/plan/PlanDetail.vue"),
+        },
+      ],
+    },
+    {
+      path: "/plan/wishlist",
+      name: "wishlist",
+      component: WishlistView,
     },
     {
       path: "/board/photo",
@@ -98,8 +104,7 @@ const router = createRouter({
         {
           path: "",
           name: "board-photo-list",
-          component: () =>
-            import("@/components/board/photo/BoardPhotoList.vue"),
+          component: () => import("@/components/board/photo/BoardPhotoList.vue"),
         },
       ],
     },

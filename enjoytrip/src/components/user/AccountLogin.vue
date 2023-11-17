@@ -20,19 +20,18 @@ const loginUser = ref({
   userPwd: "",
 });
 
+const message = ref("");
+
 const login = async () => {
   console.log("login ing!!!! !!!");
   await userLogin(loginUser.value);
   let token = sessionStorage.getItem("accessToken");
-  console.log("111. ", token);
-  console.log("isLogin: ", isLogin);
-  if (isLogin) {
-    console.log("로그인 성공아닌가???");
+  if (isLogin.value) {
     getUserInfo(token);
-    // changeMenuState();
-    // 메뉴 변경!!
+    router.push("/");
+  } else {
+    message.value = "아이디 또는 비밀번호를 다시 확인해주세요.";
   }
-  router.push("/");
 };
 </script>
 
@@ -43,11 +42,12 @@ const login = async () => {
       <div class="form-container">
         <form action="" method="post">
           <label for="user-id">아이디</label><br />
-          <input type="text" v-model="loginUser.userId" id="user-id" /><br />
+          <input type="text" v-model="loginUser.userId" id="user-id" autofocus /><br />
           <hr />
           <label for="user-pwd">비밀번호</label><br />
           <input type="password" v-model="loginUser.userPwd" id="user-pwd" /><br />
           <hr />
+          <div class="message">{{ message }}</div>
           <div class="button">
             <VButtonLong text="로그인" @click.prevent="login" />
           </div>
@@ -120,5 +120,9 @@ hr {
 }
 .social {
   margin-top: 20px;
+}
+
+.message {
+  color: #ca0f0f;
 }
 </style>

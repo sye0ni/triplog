@@ -32,7 +32,8 @@
 		<result column="plan_id" property="planId"/>
 		<result column="user_id" property="userId"/>
 		<result column="user_plan_nth" property="userPlanNth"/>
-		<result column="location" property="location" />
+		<result column="sido_code" property="sidoCode"/>
+		<result column="gugun_code" property="gugunCode"/>
 		<result column="start_date" property="startDate"/>
 		<result column="end_date" property="endDate"/>
 		<result column="plan_name" property="planName"/>
@@ -88,8 +89,8 @@
 	</select>
     
 	<insert id="registPlan" parameterType="planDto">
-    	insert into plan (user_id, user_plan_nth, location, start_date, end_date)
-		select #{userId}, IFNULL(MAX(user_plan_nth), 0) + 1, #{location}, #{startDate}, #{endDate}
+    	insert into plan (user_id, user_plan_nth, sido_code, gugun_code, start_date, end_date)
+		select #{userId}, IFNULL(MAX(user_plan_nth), 0) + 1, #{sidoCode}, #{gugunCode}, #{startDate}, #{endDate}
 		from plan
 		where user_id = #{userId}
 		<selectKey resultType="int" keyProperty="planId" order="AFTER">

@@ -16,7 +16,7 @@ public interface UserMapper {
 	UserDto getUser(String userId) throws SQLException;
 	void modify(Map<String,String> map) throws SQLException;
 	int pwdCheck(String userId, String value) throws SQLException;
-	void delete(String userId);
+	int delete(String userId);
 	String findIdByEmail(String email);
 	void setRandomToken(String userId, String randomToken);
 	

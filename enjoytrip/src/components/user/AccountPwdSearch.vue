@@ -38,6 +38,7 @@ const findPwd = function () {
           id="user-id"
           class="shortInput"
           @keyup.enter="findPwd"
+          autofocus
         />
         <hr />
         <div class="message">

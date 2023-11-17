@@ -14,25 +14,27 @@ async function dupCheck(param, success, fail) {
 }
 
 async function userConfirm(param, success, fail) {
-  console.log("param", param);
+  console.log("userConfirm param", param);
   await local.post(`/users/login`, param).then(success).catch(fail);
-  console.log("userConfirm ok");
+  console.log("userConfirm end");
 }
 
 async function findById(userid, success, fail) {
-  local.defaults.headers["Authorization"] =
-    sessionStorage.getItem("accessToken");
+  local.defaults.headers["Authorization"] = sessionStorage.getItem("accessToken");
   await local.get(`/users/info/${userid}`).then(success).catch(fail);
 }
 
 async function tokenRegeneration(user, success, fail) {
-  local.defaults.headers["refreshToken"] =
-    sessionStorage.getItem("refreshToken"); //axios header에 refresh-token 셋팅
+  local.defaults.headers["refreshToken"] = sessionStorage.getItem("refreshToken"); //axios header에 refresh-token 셋팅
   await local.post(`/users/refresh`, user).then(success).catch(fail);
 }
 
 async function logout(userid, success, fail) {
   await local.get(`/users/logout/${userid}`).then(success).catch(fail);
+}
+
+async function deleteUser(userid, success, fail) {
+  await local.delete(`/users/${userid}`).then(success).catch(fail);
 }
 
 // 아이디찾기, 비밀번호찾기
@@ -44,16 +46,18 @@ async function searchIdPwd(param, success, fail) {
 // randomToken으로 아이디 식별
 async function findByRandomToken(param, success, fail) {
   console.log("findByRandomToken param:", param);
-  await local
-    .get("/users/randomToken", { params: param })
-    .then(success)
-    .catch(fail);
+  await local.get("/users/randomToken", { params: param }).then(success).catch(fail);
   console.log("findByRandomToken end!!");
 }
 
 async function modifyPwd(param, success, fail) {
   console.log("modify password param: ", param);
   await local.put("/users", param).then(success).catch(fail);
+}
+
+async function modifyUserInfo(param, success, fail) {
+  console.log("modify param: ", param);
+  await local.put("/users", param).then(success).dupCheck(fail);
 }
 
 async function pwdcheck(param, success, fail) {
@@ -67,9 +71,11 @@ export {
   tokenRegeneration,
   logout,
   searchIdPwd,
+  deleteUser,
   userJoin,
   dupCheck,
   findByRandomToken,
   modifyPwd,
+  modifyUserInfo,
   pwdcheck,
 };

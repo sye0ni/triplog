@@ -15,7 +15,7 @@ public interface UserService {
 	UserDto getUser(String userId) throws Exception;
 	int modify(Map<String, String> map) throws Exception;
 	int pwdCheck(Map<String, String> map) throws Exception;
-	void delete(String userId);
+	int delete(String userId); //
 	int find(Map<String, String> map) throws SQLException, MessagingException;
 
 	// pw modify

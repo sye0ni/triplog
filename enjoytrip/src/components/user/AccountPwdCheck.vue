@@ -55,6 +55,7 @@ const passwordCheck = function () {
           class="shortInput"
           placeholder="현재 비밀번호를 입력 해주세요.."
           @keyup.enter="passwordCheck"
+          autofocus
         />
         <hr />
         <div class="message">

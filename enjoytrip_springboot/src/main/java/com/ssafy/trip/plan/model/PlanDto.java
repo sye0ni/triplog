@@ -8,12 +8,14 @@ public class PlanDto {
 	private String userId;
 	private int userPlanNth;
 	private String location;
+	private int sidoCode;
+	private int gugunCode;
 	private String startDate;
 	private String endDate;
 	private String planName;
+
 //	private List<PlanNthDto> planNthList;
 //	private List<PlanNthDetailDto> planNthDetailList;
-
 	public int getPlanId() {
 		return planId;
 	}
@@ -46,6 +48,22 @@ public class PlanDto {
 		this.location = location;
 	}
 
+	public int getSidoCode() {
+		return sidoCode;
+	}
+
+	public void setSidoCode(int sidoCode) {
+		this.sidoCode = sidoCode;
+	}
+
+	public int getGugunCode() {
+		return gugunCode;
+	}
+
+	public void setGugunCode(int gugunCode) {
+		this.gugunCode = gugunCode;
+	}
+
 	public String getStartDate() {
 		return startDate;
 	}
@@ -73,9 +91,8 @@ public class PlanDto {
 	@Override
 	public String toString() {
 		return "PlanDto [planId=" + planId + ", userId=" + userId + ", userPlanNth=" + userPlanNth + ", location="
-				+ location + ", startDate=" + startDate + ", endDate=" + endDate + ", planName=" + planName + "]";
+				+ location + ", sidoCode=" + sidoCode + ", gugunCode=" + gugunCode + ", startDate=" + startDate
+				+ ", endDate=" + endDate + ", planName=" + planName + "]";
 	}
-
-	
 
 }

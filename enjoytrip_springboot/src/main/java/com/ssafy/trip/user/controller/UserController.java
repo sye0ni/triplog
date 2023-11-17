@@ -108,10 +108,13 @@ public class UserController {
 				resultMap.put("access-token", accessToken);
 				resultMap.put("refresh-token", refreshToken);
 				
+				resultMap.put("message", "로그인 성공일까?");//??
 				status = HttpStatus.CREATED;
+				logger.debug("성공일까?");
 			} else {
 				resultMap.put("message", "아이디 또는 패스워드를 확인해주세요.");
 				status = HttpStatus.UNAUTHORIZED;
+				logger.debug("불일치!");
 			} 
 			
 		} catch (Exception e) {
@@ -279,8 +282,15 @@ public class UserController {
 	// 회원 탈퇴 
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<?> delete(@PathVariable String userId){
-		userService.delete(userId);
-		return new ResponseEntity<String>("회원탈퇴 성공", HttpStatus.OK);
+		
+		int tmp = userService.delete(userId);
+		if(tmp == 0) {
+			System.out.println("실패");
+			return new ResponseEntity<String>("0", HttpStatus.BAD_REQUEST);
+		} else {
+			System.out.println("성공");
+			return new ResponseEntity<String>("1", HttpStatus.OK);
+		}
 	}
 	
 }

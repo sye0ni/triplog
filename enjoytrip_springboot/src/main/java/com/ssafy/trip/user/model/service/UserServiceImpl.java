@@ -125,16 +125,16 @@ public class UserServiceImpl implements UserService{
 		return result;	
 	}
 
-	// 회원 탈퇴 -> 여행 계획, 찜 목록도 삭제 해야함 
+	// 회원 탈퇴 -> 여행 계획, 찜 목록만 삭제 해야함??
 	@Override
-	public void delete(String userId) {
+	public int delete(String userId) {
 		
 		// TODO : 여행 계획 삭제 
 		
 		// TODO : 찜 목록 삭제 
+	
 		
-		userMapper.delete(userId);
-		
+		return userMapper.delete(userId);
 	}
 
 	@Override
