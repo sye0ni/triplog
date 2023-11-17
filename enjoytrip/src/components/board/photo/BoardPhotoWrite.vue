@@ -1,4 +1,137 @@
 <script setup>
+import VSelect from "../../common/VSelect.vue";
+import { ref, onMounted } from "vue";
+import { getSigun, writePhoto } from '@/api/boardPhoto.js';
+
+import { storeToRefs } from "pinia";
+import { useMemberStore } from "@/stores/user";
+import { useMenuStore } from "@/stores/menu";
+
+
+const memberStore = useMemberStore();
+
+const { isLogin } = storeToRefs(memberStore);
+const { userLogin, getUserInfo } = memberStore;
+
+const emit = defineEmits(['cancelEvent']);
+const content = ref('');
+const place = ref('');
+const option = ref('');
+
+const selectOption = ref([{
+    text: "시/군",
+    value: ""
+}]);
+
+onMounted(() => {
+    // 시 군 받아와 
+    getSigun(
+        ({ data }) => {
+            data.forEach(item => {
+                selectOption.value.push({
+                    text: item.sigunName,
+                    value: {
+                        sidoCode: item.sidoCode,
+                        gugunCode: item.gugunCode
+                    }
+                });
+            })
+        },
+        (error) => {
+            console.log(error);
+        }
+    )
+});
+
+
+const images = ref([]);
+
+const currIdx = ref(0);
+
+// const getFileName = async (files) => {
+
+//     console.log(files);
+
+//     for (let i = 0; i < files.length; i++) {
+//         const file = files[i];
+//         const reader = new FileReader();
+
+//         reader.onload = (e) => {
+//             images.value.push(e.target.result); // 이미지 URL을 배열에 추가하여 저장
+//         };
+
+//         reader.readAsDataURL(file); // 파일을 읽어 이미지 URL로 변환
+//     }
+// }
+
+const getFileName = async (files) => {
+    // console.log(files);
+
+    const promises = []; // FileReader의 작업을 담을 배열
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const promise = new Promise((resolve, reject) => {
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                images.value.push(e.target.result); // 이미지 URL을 배열에 추가하여 저장
+                resolve(); // Promise 완료
+            };
+
+            reader.onerror = reader.onabort = reject; // 에러 발생 시 reject
+            reader.readAsDataURL(file); // 파일을 읽어 이미지 URL로 변환
+        });
+
+        promises.push(promise); // 생성된 Promise를 배열에 추가
+    }
+
+    try {
+        await Promise.all(promises); // 모든 Promise가 완료될 때까지 기다림
+        console.log('모든 파일 처리 완료');
+    } catch (err) {
+        console.error('파일 처리 중 에러 발생:', err);
+    }
+};
+
+const writePhotos = async function () {
+    // let token = sessionStorage.getItem("accessToken");
+    // if (isLogin.value) {
+    //     await getUserInfo(token);
+    //     let userId = userInfo.value.userId;
+    //     console.log("아이디:",userId);
+    // }
+    // 위에 주석 나중에 풀기
+
+    let photoJson = JSON.stringify({
+        userId: 'ss',
+        content: content.value,
+        sidoCode: option.value.sidoCode,
+        gugunCode: option.value.gugunCode,
+        place: place.value
+    });
+
+    let formData = new FormData();
+
+    // 이미지 파일들을 FormData에 추가
+    images.value.forEach((image) => {
+        formData.append("file", image);
+    });
+
+    let photoDto = new Blob([photoJson], { type: 'application/json' });
+    formData.append("photoDto", photoDto);
+
+    writePhoto(
+        formData,
+        ({ data }) => {
+            console.log("파일 업로드 성공!!!!");
+            // router.push 
+        },
+        (error) => {
+            console.log(error);
+        }
+    )
+}
 
 </script>
 
@@ -6,21 +139,47 @@
     <transition name="modal" appear>
         <div class="modal modal-overlay" @click.self="$emit('close')">
             <div class="modal-window">
-                <div class="modal-content" style="background-color: tomato;">
-                    <div class="box1" style="background-color: green;">
-                        <button style="padding: 10px 15px;">사진 업로드</button>
-                    </div>
-                    <div class="rightBox" style="background-color: slategray;">
-                        <div class="box2" style="background-color: blue;">
-                            <button>등록</button>
-                            <button>취소</button>
-                        </div>
-                        <div class="box3" style="background-color: palevioletred;">
-                            <textarea placeholder="글을 입력하세요..."></textarea>
-                        </div>
-                        <div class="box4" style="background-color: tan;">
-                            <span>장소</span>
+                <div class="modal-content">
+                    <div class="box1">
+                        <template v-if='images.length == 0'>
+                            <label for="file">
+                                <div class="btn-upload">사진 업로드</div>
+                            </label>
+                            <input multiple type="file" name="file" id="file" style='display: none;'
+                                @change='getFileName($event.target.files)'>
+                        </template>
 
+                        <template v-else>
+                            <div class='preview-image'>
+                                <i v-if='currIdx > 0' id='idxMinus' class="fa-solid fa-circle-chevron-left fa-xl"
+                                    @click='currIdx--'></i>
+                                <img :src=images[currIdx] style='height:100%'>
+                                <i v-if='currIdx < images.length - 1' id='idxPlus'
+                                    class="fa-solid fa-circle-chevron-right fa-xl" @click='currIdx++'></i>
+                            </div>
+                            <div>
+                                <label for="file">
+                                    <i class="fa-solid fa-circle-plus fa-xl" id='uploadIcon'></i>
+                                </label>
+                                <input multiple type="file" name="file" id="file" style='display: none;'
+                                    @change='getFileName($event.target.files)'>
+                            </div>
+                        </template>
+
+                    </div>
+
+                    <div class="rightBox">
+                        <div class="box2">
+                            <button @click.prevent='writePhotos'>등록</button>
+                            <button @click.prevent="$emit('cancelEvent')">취소</button>
+                        </div>
+                        <div class="box3">
+                            <textarea placeholder="글을 입력하세요." v-model='content'></textarea>
+                        </div>
+                        <div class="box4">
+                            <span>장소</span>
+                            <VSelect :selectOption="selectOption" v-model='option' />
+                            <input type="text" placeholder="상세 위치를 입력하세요." v-model='place'>
                         </div>
                     </div>
                 </div>
@@ -30,7 +189,39 @@
 </template>
 
 <style scoped>
-/* CSS 코드로 변환된 스타일 */
+#uploadIcon {
+    position: absolute;
+    right: 1%;
+    bottom: 3%;
+    cursor: pointer;
+}
+
+#idxMinus {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    cursor: pointer;
+}
+
+#idxPlus {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    cursor: pointer;
+}
+
+.preview-image {
+    height: 70%;
+    width: 100%;
+    background-color: aqua;
+    position: relative;
+}
+
+.preview-image img {
+    height: 100%;
+    width: 100%;
+}
+
 .modal.modal-overlay {
     display: flex;
     align-items: center;
@@ -67,19 +258,17 @@
 }
 
 
-/* 오버레이 트랜지션 */
 .modal-enter-active,
 .modal-leave-active {
     transition: opacity 0.4s;
 }
 
-/* 오버레이에 포함된 모달 윈도의 트랜지션 */
+
 .modal-enter-active .modal-window,
 .modal-leave-active .modal-window {
     transition: opacity 0.4s, transform 0.4s;
 }
 
-/* 딜레이가 적용된 모달 윈도가 제거된 후에 오버레이가 사라짐 */
 .modal-leave-active {
     transition: opacity 0.6s ease 0.4s;
 }
@@ -101,13 +290,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    border-right: solid 1px lightgray;
+    position: relative;
+    /* 부모 요소에 relative position을 추가합니다. */
+
 }
 
 .box2 {
     height: 10%;
     width: 100%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: end;
+    align-items: center;
+    border-bottom: solid 1px lightgray;
+    padding-right: 4%;
 }
 
 
@@ -119,6 +315,11 @@
 .box4 {
     height: 10%;
     width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border-top: solid 1px lightgray;
+
 }
 
 button {
@@ -136,14 +337,53 @@ button:hover {
     border-color: #d20000;
 }
 
+.btn-upload {
+    width: 150px;
+    height: 30px;
+    background: #fff;
+    border: 2px solid black;
+    padding: 5px 5px;
+    border-radius: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.btn-upload:hover {
+    border-color: #d20000;
+}
+
+span {
+    font-weight: bold;
+}
+
+input {
+    outline: none;
+    background: none;
+    border-width: 0 0 1px;
+    /* size:50px; */
+    width: 50%;
+}
+
+input:focus {
+    border-width: 0 0 2px;
+}
+
+.class {
+    width: 50%;
+}
+
 textarea {
     border-width: 0;
     resize: none;
     width: 100%;
     height: 100%;
     max-width: 100%;
-    background-color: rgb(247, 247, 247);
-    padding: 3%;
+    /* background-color: rgb(247, 247, 247); */
+    padding: 2%;
 }
 
 textarea:focus {

@@ -36,9 +36,7 @@ const infiniteHandler = async $state => {
       setTimeout(() => {
 
         console.log("get photo list", data); // data에 photo list 
-        // console.log("length:", data.length);
-        // if (data.length < 4) $state.complete();
-        // else {
+
         page.value.page = page.value.page + 1; // 페이지 증가
         photos.value.push(...data);
         console.log("photos:" + photos.value);
@@ -47,8 +45,6 @@ const infiniteHandler = async $state => {
         if (data.length < 4) $state.complete();
         else $state.loaded();
 
-        // $state.loaded();
-        // }
       }, 800)
     },
     (error) => {
@@ -85,7 +81,7 @@ const isModalOpen = function () {
           <!-- 로그인해야 보임 -->
           <button type="button" id="writeButton" @click="isModalOpen">글쓰기</button>
           <Transition v-if="modal">
-            <BoardPhotoWrite />
+            <BoardPhotoWrite @cancel-event='isModalOpen' />
           </Transition>
         </div>
       </div>
