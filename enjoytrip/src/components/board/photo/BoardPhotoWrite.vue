@@ -9,10 +9,10 @@ import { useMemberStore } from "@/stores/user";
 
 const memberStore = useMemberStore();
 
-const { isLogin } = storeToRefs(memberStore);
+const { isLogin, userInfo } = storeToRefs(memberStore);
 const { userLogin, getUserInfo } = memberStore;
 
-const emit = defineEmits(['cancelWrite']);
+const emit = defineEmits(['cancelWrite', 'writePhoto']);
 const content = ref('');
 const place = ref('');
 const option = ref('');
@@ -101,7 +101,7 @@ const writePhotos = async () => {
 
 
         let photoJson = JSON.stringify({
-            userId: 'ss',
+            userId: userInfo.value.userId,
             content: content.value,
             sidoCode: option.value.sidoCode,
             gugunCode: option.value.gugunCode,
@@ -122,10 +122,11 @@ const writePhotos = async () => {
             formData,
             ({ data }) => {
                 console.log("파일 업로드 성공!!!!");
-                // router.push 
+                emit("writePhoto");
             },
             (error) => {
                 console.log(error);
+                alert("업로드 할 수 없는 파일입니다!");
             }
         )
     }

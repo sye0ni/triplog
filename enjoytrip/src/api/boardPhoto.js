@@ -51,6 +51,17 @@ function deletePhoto(photoid, success, fail) {
     local.delete(`${url}/${photoid}`).then(success).catch(fail);
 }
 
+// /boards/photo/{photoid}/comment/{commentid}
+function modifyComment(photoid, commentid, comment, success, fail) {
+    local.put(`${url}/${photoid}/comment/${commentid}`, JSON.stringify(comment)).then(success).catch(fail);
+}
+
+// /boards/photo/{photoid}/comment/{commentid}
+function deleteComment(photoid, commentid, success, fail) {
+    local.delete(`${url}/${photoid}/comment/${commentid}`).then(success).catch(fail);
+}
+
+
 export {
-    listPhoto, getSigun, writePhoto, getPhoto, getComments, modifyPhoto, writeComment, deletePhoto
+    listPhoto, getSigun, writePhoto, getPhoto, getComments, modifyPhoto, writeComment, deletePhoto, modifyComment, deleteComment
 };

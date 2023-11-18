@@ -41,6 +41,10 @@ public interface PhotoMapper {
 	void deleteAllPhotos(int photoId) throws SQLException;
 
 	void deleteThumbnail(int photoId) throws SQLException;
+
+	void modifyComment(CommentDto commentDto) throws SQLException;
+
+	void deleteComment(int commentId) throws SQLException;
 	
 	
 

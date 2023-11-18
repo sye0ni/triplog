@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getPhoto, getComments, modifyPhoto, writeComment, deletePhoto } from "@/api/boardPhoto.js";
+import { getPhoto, getComments, modifyPhoto, writeComment, deletePhoto, modifyComment, deleteComment } from "@/api/boardPhoto.js";
 import BoardPhotoCommentItem from "./item/BoardPhotoCommentItem.vue";
 import { useMemberStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
@@ -12,7 +12,7 @@ const props = defineProps({
     photoId: Number,
 });
 
-const emit = defineEmits(['cancelDetail']);
+const emit = defineEmits(['cancelDetail', 'deleteDetail']);
 
 const memberStore = useMemberStore();
 const { isLogin, userInfo } = storeToRefs(memberStore);
@@ -23,7 +23,7 @@ const comment = ref(""); // 새로 남긴 댓글
 const currIdx = ref(0); // 사진 인덱스
 
 const photoLoaded = ref(false); // photo 데이터 로드 여부를 나타내는 변수
-const commentsLoaded = ref(false); // comments 데이터 로드 여부를 나타내는 변수
+const commentsLoaded = ref(false); // comments 데이터 여부를 나타내는 변수
 
 const toggleContentState = ref(true); // 내용 readOnly 설정용
 const contentInput = ref("");
@@ -44,9 +44,6 @@ const detailPhoto = () => {
     getPhoto(
         props.photoId,
         ({ data }) => {
-            // console.log(JSON.stringify(data));
-            // console.log("photo:" + data);
-            // console.log(data.photoPaths);
             photo.value = data;
             photoLoaded.value = true; // photo 데이터 로드 완료
         },
@@ -99,23 +96,30 @@ const writeComments = () => {
     // console.log("입력한 댓글:", comment.value);
     // console.log("현재 유저:", userInfo.value.userId);
 
-    let commentJson = {
-        content: comment.value,
-        userId: userInfo.value.userId
-    };
+    if (!isLogin.value) {
+        alert("로그인 하세요!");
+        comment.value = '';
+    }
+    else {
+        let commentJson = {
+            content: comment.value,
+            userId: userInfo.value.userId
+        };
 
-    writeComment(
-        photo.value.boardPhotoId,
-        commentJson,
-        () => {
-            console.log("댓글 작성 성공");
-            comment.value = '';
-            getComment();
-        },
-        (error) => {
-            console.log(error);
-        }
-    )
+        writeComment(
+            photo.value.boardPhotoId,
+            commentJson,
+            () => {
+                console.log("댓글 작성 성공");
+                comment.value = '';
+                getComment();
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
+    }
+
 }
 
 const deletePhotos = () => {
@@ -126,12 +130,42 @@ const deletePhotos = () => {
             () => {
                 console.log("삭제 성공");
                 // router.push({ name: "board-photo-list" });
-                emit('cancelDetail');
+                emit('deleteDetail');
             }
         )
     }
 }
 
+const modifyComments = (arg) => {
+
+    modifyComment(
+        photo.value.boardPhotoId,
+        arg.commentId,
+        arg,
+        () => {
+            console.log("댓글 수정 완료!");
+            getComment();
+        },
+        (error) => {
+            console.log(error);
+        }
+    )
+}
+
+const deleteComments = (arg) => {
+
+    deleteComment(
+        photo.value.boardPhotoId,
+        arg.commentId,
+        () => {
+            console.log("댓글 삭제 완료!");
+            getComment();
+        },
+        (error) => {
+            console.log(error);
+        }
+    )
+}
 
 </script>
 
@@ -176,7 +210,8 @@ const deletePhotos = () => {
                             <textarea :readOnly="toggleContentState" v-model="photo.content" ref="contentInput"></textarea>
                         </div>
                         <div class="box4">
-                            <BoardPhotoCommentItem v-for="cmt in comments" :comment="cmt" :key="cmt.commentId" />
+                            <BoardPhotoCommentItem v-for="cmt in comments" :comment="cmt" :key="cmt.commentId"
+                                @modify-comment="modifyComments" @delete-comment="deleteComments" />
                         </div>
                         <div class="box5">
                             <i class="fa-solid fa-heart" style="color: #db0000;"></i>
@@ -283,14 +318,15 @@ button:hover {
 }
 
 .box2-1-1 button {
-    padding: 4px 4px;
+    padding: 2px 2px;
     /* margin: 5px; */
     /* margin-bottom: 10px; */
-    border-radius: 10px;
+    /* border-radius: 10px; */
     background-color: white;
     font-weight: 700;
     font-size: 0.6rem;
     margin-left: 5px;
+    border: 0px;
 }
 
 .modal.modal-overlay {
