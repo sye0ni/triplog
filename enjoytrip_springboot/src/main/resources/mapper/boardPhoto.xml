@@ -8,11 +8,13 @@
 		<result column="board_photo_id" property="boardPhotoId"/>
 		<result column="user_id" property="userId"/>
 		<result column="content" property="content"/>
-		<result column="location" property="location"/>
+		<result column="sido_code" property="sidoCode"/>
+		<result column="gugun_code" property="gugunCode" />
 		<result column="place" property="place"/>
 		<result column="like" property="like"/>
 		<result column="register_time" property="registerTime"/>
 		<result column="thumbnail_id" property="thumbnailId"/>
+		<result column="detail_place" property="detailPlace" />
 	</resultMap>
 	
 	<resultMap type="PhotoInfoDto" id="photoInfo">
@@ -30,9 +32,32 @@
 		<result column="thumbNail" property="thumbNail"/>
 	</resultMap>
 	
+	<resultMap type="SigunDto" id="sigun">
+		<result column="sido_code" property="sidoCode"/>
+		<result column="sigun_name" property="sigunName"/>
+		<result column="gugun_code" property="gugunCode"/> 
+	</resultMap>
+	
+	<resultMap type="thumbnailDto" id="thumbnail">
+		<result column="thumbnail_id" property="thumbnailId"/>
+		<result column="save_folder" property="saveFoler"/>
+		<result column="original_file" property="originalFile"/>
+		<result column="save_file" property="saveFile"/>
+	</resultMap>
+	
+	<resultMap type="CommentDto" id="comment">
+		<result column="comment_id" property="commentId"/>
+		<result column="user_id" property="userId"/>
+		<result column="content" property="content"/>
+		<result column="register_time" property="registerTime"/>
+		<result column="board_id" property="boardId"/>
+		<result column="board_type" property="boardType"/>
+		<result column="parent_id" property="parentId"/>
+	</resultMap>
+	
 	<insert id="writePhoto" parameterType="boardPhotoDto">
-		insert into board_photo (user_id, content, location, place, `like`, register_time, thumbnail_id)
-		values (#{userId}, #{content}, #{location}, #{place}, #{like}, now(), #{thumbnailId})
+		insert into board_photo (user_id, content, sido_code, gugun_code, place, `like`, register_time, thumbnail_id)
+		values (#{userId}, #{content}, #{sidoCode}, #{gugunCode}, #{place}, #{like}, now(), #{thumbnailId})
 		<selectKey resultType="int" keyProperty="boardPhotoId" order="AFTER">
 			select last_insert_id()
 		</selectKey>
@@ -45,21 +70,79 @@
 			(#{boardPhotoId}, #{photoinfo.saveFolder}, #{photoinfo.originalFile}, #{photoinfo.saveFile})
 		</foreach>
 	</insert> 
-	
-<!--   	<select id='getList' parameterType="int" resultMap="photoItem">
-		select b.board_photo_id, b.user_id, b.like, t.save_file thumbNail
-		from board_photo b join 
-		thumbnail t on b.thumbnail_id=t.thumbnail_id
-		limit #{page},4
-	</select> -->
 
-	
+
  	<select id='getList' parameterType="int" resultMap="photoItem">
 		select b.board_photo_id, b.user_id, b.like, concat(t.save_folder,'/',t.save_file) thumbNail
 		from board_photo b join 
-		thumbnail t on b.thumbnail_id=t.thumbnail_id
-		limit #{page},4;
+		thumbnail t on b.thumbnail_id=t.thumbnail_id order by register_time desc
+		limit #{page},4
+	</select>
+	
+	<select id='getSigun' resultMap="sigun">
+		select * from sigun
+	</select>
+	
+	<insert id='writeThumbnail' parameterType='thumbnailDto'>
+		insert into thumbnail (save_folder,original_file,save_file)
+		values (#{saveFolder},#{originalFile},#{saveFile})
+		<selectKey resultType="int" keyProperty="thumbnailId" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	
+	<select id='getPhoto' parameterType='int' resultMap='photoDto'>
+		select b.board_photo_id, b.user_id, b.content, b.`like`, substr(b.register_time,1,10) register_time, concat(s.sigun_name,' ',b.place) as detail_place, b.thumbnail_id
+		from board_photo b inner join sigun s 
+		on b.sido_code=s.sido_code and b.gugun_code=s.gugun_code
+		where board_photo_id=#{photoId}
 	</select>
 
+	<select id='getPhotoList' parameterType='int' resultType="String">
+		select concat(save_folder,'/',save_file) path 
+		from photo_info where photo_id=#{photoId}
+	</select>
 
+	<select id="listComment" parameterType="int" resultMap="comment">
+		select comment_id,user_id,content, substr(register_time,1,10) register_time,
+		board_id,board_type,parent_id from comment
+		where board_id=#{qnaId} and board_type='photo'
+	</select>
+	
+	<update id="modifyPhoto" parameterType="boardPhotoDto">
+		update board_photo 
+		set content=#{content} where board_photo_id=#{boardPhotoId}
+	</update>
+	
+	<insert id="writeComment" parameterType="commentDto">
+		insert into comment (user_id, content, register_time, board_id, board_type)
+		values 
+		(#{userId}, #{content}, now(), #{boardId}, 'photo')
+		<selectKey resultType="int" keyProperty="commentId" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	
+	<delete id="deleteAllComments" parameterType="int">
+		delete from comment 
+		where board_id=#{photoId} and board_type="photo"
+	</delete>
+	
+	<delete id="deletePhoto" parameterType="int">
+		delete from board_photo
+		where board_photo_id=#{photoId}
+	</delete>
+	
+	<delete id="deleteAllPhotos" parameterType="int">
+		delete from photo_info
+		where photo_id=#{photoId}
+	</delete>
+	
+	<delete id="deleteThumbnail" parameterType="int">
+		delete from thumbnail 
+		where thumbnail_id=#{thumbnailId}
+	</delete>
+	
+	
+	
 </mapper>

@@ -3,12 +3,15 @@ import { ref, onMounted } from "vue";
 import VSelect from "../../common/VSelect.vue";
 import BoardPhotoListItem from "./item/BoardPhotoListItem.vue";
 import BoardPhotoWrite from "./BoardPhotoWrite.vue";
+import BoardPhotoDetail from "./BoardPhotoDetail.vue";
 import { listPhoto } from "@/api/boardPhoto.js";
 import { useMemberStore } from "@/stores/user";
 import InfiniteLoading from "v3-infinite-loading";
 import "v3-infinite-loading/lib/style.css";
+import { storeToRefs } from "pinia";
 
 const memberStore = useMemberStore();
+const { isLogin, userInfo } = storeToRefs(memberStore);
 
 const selectSortOption = ref([
   { text: "검색조건", value: "" },
@@ -24,7 +27,6 @@ const selectAreaOption = ref([
 let page = ref({ page: 1 });
 let photos = ref([]); // 받아올 photoList 배열
 
-
 const infiniteHandler = async $state => {
   console.log("스크롤 로딩!!");
   console.log("page=", page.value.page); // 현재 페이지
@@ -35,12 +37,12 @@ const infiniteHandler = async $state => {
     ({ data }) => {
       setTimeout(() => {
 
-        console.log("get photo list", data); // data에 photo list 
+        // console.log("get photo list", data); // data에 photo list 
 
         page.value.page = page.value.page + 1; // 페이지 증가
         photos.value.push(...data);
-        console.log("photos:" + photos.value);
-        console.log(photos.value[0]);
+        // console.log("photos:" + photos.value);
+        // console.log(photos.value[0]);
 
         if (data.length < 4) $state.complete();
         else $state.loaded();
@@ -53,9 +55,16 @@ const infiniteHandler = async $state => {
   )
 }
 
-const modal = ref(false);
-const isModalOpen = function () {
-  modal.value = !modal.value;
+const writeModal = ref(false);
+const isWriteModalOpen = function () {
+  writeModal.value = !writeModal.value;
+}
+
+const detailModal = ref(false);
+let photoId = ref();
+const isDetailModalOpen = function (arg) {
+  photoId.value = arg;
+  detailModal.value = !detailModal.value;
 }
 
 </script>
@@ -79,9 +88,9 @@ const isModalOpen = function () {
         </div>
         <div>
           <!-- 로그인해야 보임 -->
-          <button type="button" id="writeButton" @click="isModalOpen">글쓰기</button>
-          <Transition v-if="modal">
-            <BoardPhotoWrite @cancel-event='isModalOpen' />
+          <button v-if='isLogin' type="button" id="writeButton" @click="isModalOpen">글쓰기</button>
+          <Transition v-if="writeModal">
+            <BoardPhotoWrite @cancel-write='isWriteModalOpen' />
           </Transition>
         </div>
       </div>
@@ -89,12 +98,16 @@ const isModalOpen = function () {
 
     <div class='listContainer'>
       <div class="listItem">
-        <BoardPhotoListItem v-for='photo in photos' :key='photo.boardPhotoId' :photo='photo'>
+        <BoardPhotoListItem v-for='photo in photos' :key='photo.boardPhotoId' :photo='photo'
+          @show-detail="isDetailModalOpen">
         </BoardPhotoListItem>
       </div>
+      <Transition v-if="detailModal">
+        <BoardPhotoDetail :photoId="photoId" @cancel-detail="isDetailModalOpen" />
+      </Transition>
+
       <infinite-loading @infinite="infiniteHandler"></infinite-loading>
     </div>
-
 
 
   </div>

@@ -5,7 +5,6 @@ import { getSigun, writePhoto } from '@/api/boardPhoto.js';
 
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/user";
-import { useMenuStore } from "@/stores/menu";
 
 
 const memberStore = useMemberStore();
@@ -13,14 +12,16 @@ const memberStore = useMemberStore();
 const { isLogin } = storeToRefs(memberStore);
 const { userLogin, getUserInfo } = memberStore;
 
-const emit = defineEmits(['cancelEvent']);
+const emit = defineEmits(['cancelWrite']);
 const content = ref('');
 const place = ref('');
 const option = ref('');
 
+const selectedFiles = ref([]);
+
 const selectOption = ref([{
     text: "시/군",
-    value: ""
+    value: ''
 }]);
 
 onMounted(() => {
@@ -48,29 +49,16 @@ const images = ref([]);
 
 const currIdx = ref(0);
 
-// const getFileName = async (files) => {
 
-//     console.log(files);
-
-//     for (let i = 0; i < files.length; i++) {
-//         const file = files[i];
-//         const reader = new FileReader();
-
-//         reader.onload = (e) => {
-//             images.value.push(e.target.result); // 이미지 URL을 배열에 추가하여 저장
-//         };
-
-//         reader.readAsDataURL(file); // 파일을 읽어 이미지 URL로 변환
-//     }
-// }
-
-const getFileName = async (files) => {
+const getFileName = async (files) => { // 이미지 url 을 배열에 저장 , 사용자가 파일을 업로드할 때마다 실행
     // console.log(files);
 
     const promises = []; // FileReader의 작업을 담을 배열
+    selectedFiles.value = [];
 
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
+        selectedFiles.value.push(file);
         const promise = new Promise((resolve, reject) => {
             const reader = new FileReader();
 
@@ -94,43 +82,53 @@ const getFileName = async (files) => {
     }
 };
 
-const writePhotos = async function () {
-    // let token = sessionStorage.getItem("accessToken");
-    // if (isLogin.value) {
-    //     await getUserInfo(token);
-    //     let userId = userInfo.value.userId;
-    //     console.log("아이디:",userId);
-    // }
-    // 위에 주석 나중에 풀기
 
-    let photoJson = JSON.stringify({
-        userId: 'ss',
-        content: content.value,
-        sidoCode: option.value.sidoCode,
-        gugunCode: option.value.gugunCode,
-        place: place.value
-    });
+const writePhotos = async () => {
 
-    let formData = new FormData();
+    // 하나라도 입력되지 않았으면 alert 
+    if (content.value == "" || option.value.sidoCode == undefined || option.value.gugunCode == undefined || place.value === '') {
+        alert("모든 항목을 입력하세요!");
+    }
 
-    // 이미지 파일들을 FormData에 추가
-    images.value.forEach((image) => {
-        formData.append("file", image);
-    });
+    else {
+        // let token = sessionStorage.getItem("accessToken");
+        // if (isLogin.value) {
+        //     await getUserInfo(token);
+        //     let userId = userInfo.value.userId;
+        //     console.log("아이디:",userId);
+        // }
+        // 위에 주석 나중에 풀기
 
-    let photoDto = new Blob([photoJson], { type: 'application/json' });
-    formData.append("photoDto", photoDto);
 
-    writePhoto(
-        formData,
-        ({ data }) => {
-            console.log("파일 업로드 성공!!!!");
-            // router.push 
-        },
-        (error) => {
-            console.log(error);
+        let photoJson = JSON.stringify({
+            userId: 'ss',
+            content: content.value,
+            sidoCode: option.value.sidoCode,
+            gugunCode: option.value.gugunCode,
+            place: place.value
+        });
+
+        let formData = new FormData();
+
+        // 이미지 파일들을 FormData에 추가
+        for (let i = 0; i < selectedFiles.value.length; i++) {
+            formData.append('file', selectedFiles.value[i]);
         }
-    )
+
+        let photoDto = new Blob([photoJson], { type: 'application/json' });
+        formData.append("photoDto", photoDto);
+
+        writePhoto(
+            formData,
+            ({ data }) => {
+                console.log("파일 업로드 성공!!!!");
+                // router.push 
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
+    }
 }
 
 </script>
@@ -171,7 +169,7 @@ const writePhotos = async function () {
                     <div class="rightBox">
                         <div class="box2">
                             <button @click.prevent='writePhotos'>등록</button>
-                            <button @click.prevent="$emit('cancelEvent')">취소</button>
+                            <button @click.prevent="$emit('cancelWrite')">취소</button>
                         </div>
                         <div class="box3">
                             <textarea placeholder="글을 입력하세요." v-model='content'></textarea>
@@ -210,10 +208,14 @@ const writePhotos = async function () {
     cursor: pointer;
 }
 
+i {
+    color: rgba(0, 0, 0, 0.7);
+}
+
 .preview-image {
-    height: 70%;
+    height: 80%;
     width: 100%;
-    background-color: aqua;
+    /* background-color: aqua; */
     position: relative;
 }
 

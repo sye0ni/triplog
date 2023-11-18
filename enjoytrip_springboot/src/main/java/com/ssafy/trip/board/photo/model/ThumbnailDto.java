@@ -3,7 +3,7 @@ package com.ssafy.trip.board.photo.model;
 public class ThumbnailDto {
 	
 	int thumbnailId;
-	String saveFoler;
+	String saveFolder;
 	String originalFile;
 	String saveFile;
 	
@@ -13,11 +13,11 @@ public class ThumbnailDto {
 	public void setThumbnailId(int thumbnailId) {
 		this.thumbnailId = thumbnailId;
 	}
-	public String getSaveFoler() {
-		return saveFoler;
+	public String getSaveFolder() {
+		return saveFolder;
 	}
-	public void setSaveFoler(String saveFoler) {
-		this.saveFoler = saveFoler;
+	public void setSaveFolder(String saveFolder) {
+		this.saveFolder = saveFolder;
 	}
 	public String getOriginalFile() {
 		return originalFile;
@@ -34,7 +34,7 @@ public class ThumbnailDto {
 	
 	@Override
 	public String toString() {
-		return "ThumbnailDto [thumbnailId=" + thumbnailId + ", saveFoler=" + saveFoler + ", originalFile="
+		return "ThumbnailDto [thumbnailId=" + thumbnailId + ", saveFolder=" + saveFolder + ", originalFile="
 				+ originalFile + ", saveFile=" + saveFile + "]";
 	}
 	
