@@ -5,13 +5,12 @@ import { storeToRefs } from "pinia";
 import { usePlanStore } from "@/stores/plan";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
+import { gugun, registPlan } from "@/api/plan";
 
 const planStore = usePlanStore();
 const router = useRouter();
 
 const { sidoCode } = storeToRefs(planStore);
-
-import { gugun, registPlan } from "@/api/plan";
 
 const selectOptionSido = sidoCode;
 let selectOptionGugun = ref([{ text: "구/군", value: "" }]);
@@ -104,13 +103,23 @@ const createPlan = function () {
       <div class="line1">
         <div class="subTitle">여행지</div>
         <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
-        <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" />
+        <VSelect
+          :selectOption="selectOptionGugun"
+          @onKeySelect="changeKey2"
+          :index="gugunCode"
+        />
       </div>
       <hr />
       <div class="line2">
         <div class="subTitle">여행 날짜</div>
-        <div>시작일 <input v-model="startDate" class="date" type="date" :max="endDate" /></div>
-        <div>종료일 <input v-model="endDate" class="date" type="date" :min="startDate" /></div>
+        <div>
+          시작일
+          <input v-model="startDate" class="date" type="date" :max="endDate" />
+        </div>
+        <div>
+          종료일
+          <input v-model="endDate" class="date" type="date" :min="startDate" />
+        </div>
       </div>
       <div>
         <button @click="createPlan">시작하기</button>
@@ -131,7 +140,8 @@ const createPlan = function () {
   padding: 50px;
   min-width: 600px;
   margin-top: 30px;
-  /* width: 800px; */
+  height: 70vh;
+  width: 100vh;
 }
 
 .title {
@@ -152,7 +162,7 @@ const createPlan = function () {
   margin: 10px 50px;
   width: 120px;
   height: 40px;
-  text-align: center;
+  /* text-align: center; */
 }
 
 .line2 {

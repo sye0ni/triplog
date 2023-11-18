@@ -178,7 +178,12 @@ const goWhishlist = function () {
           {{ userInfo.userId }}({{ userInfo.userName }})님
           <button @click="nameModify">수정하기</button>
           <div v-show="isNameModifying" class="nameEdit">
-            <input id="nameEdit" type="text" v-model="nameRef" ref="nameInput" />
+            <input
+              id="nameEdit"
+              type="text"
+              v-model="nameRef"
+              ref="nameInput"
+            />
             <hr style="width: 200px" />
           </div>
         </div>
@@ -190,6 +195,7 @@ const goWhishlist = function () {
             v-model="emailRef"
             :readonly="emailReadOnly"
             ref="emailInput"
+            id="userEmail"
           />
           <button @click="emailModify">수정하기</button>
         </div>
@@ -264,8 +270,10 @@ input:hover {
   background: rgba(217, 217, 217, 0.16);
   border: 2px solid #d5d5d5;
   border-radius: 10px;
-  padding: 50px 10px 30px;
-  width: 400px;
+  padding: 50px 30px 30px;
+  width: 450px;
+  /* min-width: 300px; */
+  /* width: 60vh; */
   height: 700px;
   display: flex;
   flex-direction: column;
@@ -283,6 +291,7 @@ input:hover {
   padding: 10px;
   margin-bottom: 30px;
   width: 600px;
+  width: 50vh;
   height: 70px;
   font-size: 1.2rem;
 
@@ -308,7 +317,8 @@ input:hover {
 }
 
 .userInfo {
-  padding: 20px;
+  /* padding: 20px; */
+  padding-bottom: 50px;
   display: flex;
   justify-content: space-between;
 }
@@ -325,18 +335,14 @@ button {
   background-color: #ffffff00;
   border-radius: 10px;
   border: 1px solid black;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   height: 33px;
-  width: 70px;
+  width: 76px;
 }
 
 button:hover {
   border-color: #ca0f0f;
   cursor: pointer;
-}
-
-.message {
-  padding: 0px 20px;
 }
 
 /* 이름 수정 */

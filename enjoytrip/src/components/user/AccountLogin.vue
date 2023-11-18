@@ -5,15 +5,18 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/user";
-// import { useMenuStore } from "@/stores/menu";
+import { usePlanStore } from "@/stores/plan";
+import { jwtDecode } from "jwt-decode";
+import { getWishlist } from "@/api/plan";
 
 const router = useRouter();
 
 const memberStore = useMemberStore();
+const planStore = usePlanStore();
 
 const { isLogin } = storeToRefs(memberStore);
 const { userLogin, getUserInfo } = memberStore;
-// const { changeMenuState } = useMenuStore();
+const { wishlist } = planStore;
 
 const loginUser = ref({
   userId: "",
@@ -28,6 +31,20 @@ const login = async () => {
   let token = sessionStorage.getItem("accessToken");
   if (isLogin.value) {
     getUserInfo(token);
+    // 찜목록 불러오기
+    let decodeToken = jwtDecode(token);
+    getWishlist(
+      decodeToken.userId,
+      ({ data }) => {
+        console.log("getWishlist!!", data);
+        for (let i = 0; i < data.length; i++) {
+          wishlist.value.push(data[i]);
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
     router.push("/");
   } else {
     message.value = "아이디 또는 비밀번호를 다시 확인해주세요.";
@@ -42,10 +59,19 @@ const login = async () => {
       <div class="form-container">
         <form action="" method="post">
           <label for="user-id">아이디</label><br />
-          <input type="text" v-model="loginUser.userId" id="user-id" autofocus /><br />
+          <input
+            type="text"
+            v-model="loginUser.userId"
+            id="user-id"
+            autofocus
+          /><br />
           <hr />
           <label for="user-pwd">비밀번호</label><br />
-          <input type="password" v-model="loginUser.userPwd" id="user-pwd" /><br />
+          <input
+            type="password"
+            v-model="loginUser.userPwd"
+            id="user-pwd"
+          /><br />
           <hr />
           <div class="message">{{ message }}</div>
           <div class="button">
@@ -53,13 +79,11 @@ const login = async () => {
           </div>
         </form>
         <div class="user">
-          <!-- <a href="">아이디 찾기</a>&nbsp;&nbsp;|&nbsp;&nbsp; -->
           <router-link :to="{ name: 'user-id-search' }">아이디 찾기</router-link
           >&nbsp;&nbsp;|&nbsp;&nbsp;
-          <!-- <a href="">비밀번호 찾기</a>&nbsp;&nbsp;|&nbsp;&nbsp; -->
-          <router-link :to="{ name: 'user-pwd-search' }">비밀번호 찾기</router-link
+          <router-link :to="{ name: 'user-pwd-search' }"
+            >비밀번호 찾기</router-link
           >&nbsp;&nbsp;|&nbsp;&nbsp;
-          <!-- <a href="">회원가입</a> -->
           <router-link :to="{ name: 'user-join' }">회원가입</router-link>
         </div>
         <div class="social">

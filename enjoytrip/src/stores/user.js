@@ -3,7 +3,12 @@ import { useRouter } from "vue-router";
 import { defineStore } from "pinia";
 import { jwtDecode } from "jwt-decode";
 
-import { userConfirm, findById, tokenRegeneration, logout } from "@/api/account.js";
+import {
+  userConfirm,
+  findById,
+  tokenRegeneration,
+  logout,
+} from "@/api/account.js";
 import { httpStatusCode } from "@/util/http-status";
 
 export const useMemberStore = defineStore(
@@ -75,7 +80,10 @@ export const useMemberStore = defineStore(
     };
 
     const tokenRegenerate = async () => {
-      console.log("토큰 재발급 >> 기존 토큰 정보 : {}", sessionStorage.getItem("accessToken"));
+      console.log(
+        "토큰 재발급 >> 기존 토큰 정보 : {}",
+        sessionStorage.getItem("accessToken")
+      );
       await tokenRegeneration(
         JSON.stringify(userInfo.value),
         (response) => {

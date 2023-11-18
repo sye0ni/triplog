@@ -10,6 +10,8 @@ import { httpStatusCode } from "@/util/http-status";
 export const usePlanStore = defineStore(
   "planStore",
   () => {
+    const wishlist = ref([]); // 사용자의 찜목록
+    const storeBox = ref([]); // 보관함 (찜주머니에서 남은것들이 저장되어 넘어옴 / detail에서도 사용)
     const sidoCode = ref([
       {
         text: "시/도",
@@ -85,8 +87,50 @@ export const usePlanStore = defineStore(
       },
     ]);
 
+    const attractionType = ref([
+      {
+        title: "관광지",
+        value: "12",
+      },
+      {
+        title: "문화시설",
+        value: "14",
+      },
+      {
+        title: "여행코스",
+        value: "25",
+      },
+      {
+        title: "행사/공연/축제",
+        value: "15",
+      },
+      {
+        title: "레포츠",
+        value: "28",
+      },
+      {
+        title: "숙박",
+        value: "32",
+      },
+      {
+        title: "쇼핑",
+        value: "38",
+      },
+      {
+        title: "음식점",
+        value: "39",
+      },
+      {
+        title: "전체",
+        value: "",
+      },
+    ]);
+
     return {
       sidoCode,
+      wishlist,
+      storeBox,
+      attractionType,
     };
   },
   {
