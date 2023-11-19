@@ -1,6 +1,8 @@
 package com.ssafy.trip.board.photo.model.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,10 +53,81 @@ public class PhotoServiceImpl implements PhotoService{
 
 
 	@Override
-	public List<BoardPhotoItemDto> listPhoto(int page) throws Exception {
-		// 게시글 번호, 작성자, 좋아요 수, thumbnail 경로 담기 
-		return photoMapper.getList((page-1)*4);
+	public List<BoardPhotoItemDto> listPhoto(Map<String,Object> map) throws Exception {
+		// page: 1, word: "", // 단어 검색  order: "", // 정렬  sidocode: "", guguncode: "", userId: ""
+		System.out.println("리스트서비스!!!!!!!!!!!");
+
+		int pg=(Integer.parseInt((String) map.get("page"))-1)*4;
+		map.replace("page", pg);
+
+		if(((String) map.get("word")).length()==0) { // 키워드 검색이 아니면? -> 정렬 + 지역 검색으로 
+			if(((String) map.get("order")).length()>0) { // 정렬 조건 ㅇ -> 정렬 + 지역 검색 
+				
+				if(((String)map.get("sidocode")).length() ==0) { // 정렬만 
+
+
+					if(map.get("order").equals("latest") || map.get("order").equals("")) { // 최신 정렬 ->> 기본 값 
+						System.out.println("기본정렬111");
+						
+						return photoMapper.getList(map);
+					}
+					else if(map.get("order").equals("oldest")) { // 오래된 순 정렬 
+						System.out.println("오래된순정렬111");
+						return photoMapper.getListByTimeAsc(map);
+					}
+					else { // 조회수 정렬 
+						System.out.println("조회수정렬11");
+						return photoMapper.getListByLike(map);
+					}
+				}
+				
+				else { // 정렬 + 지역 검색 
+					// 지역코드 숫자로 
+					int sido=Integer.parseInt((String) map.get("sidocode"));
+					map.replace("sidocode", sido);
+					int gugun=Integer.parseInt((String) map.get("guguncode"));
+					map.replace("guguncode", gugun);
+					
+					if(map.get("order").equals("latest")) { // 최신 정렬 
+						System.out.println("최신정렬22");
+						return photoMapper.getListByTimeDesc(map);
+					}
+					else if(map.get("order").equals("oldest")) { // 오래된 순 정렬 
+						System.out.println("오래된순정렬22");
+						return photoMapper.getListByTimeAsc(map);
+					}
+					else { // 조회수 정렬 
+						System.out.println("조회수정렬22");
+						return photoMapper.getListByLike(map);
+					}
+				}
+				
+			}
+			
+			else { // 정렬 조건 x -> 지역 검색만 
+				if(((String) map.get("sidocode")).length()>0) { // 지역 검색 있음 
+					// 숫자로 바꿔주기 
+					int sido=Integer.parseInt((String) map.get("sidocode"));
+					map.replace("sidocode", sido);
+					int gugun=Integer.parseInt((String) map.get("guguncode"));
+					map.replace("guguncode", gugun);
+					
+					System.out.println("지역정렬33");
+					return photoMapper.getListByArea(map);
+				}
+				else { // 지역 검색도 없음 
+					System.out.println("기본정렬33");
+					return photoMapper.getList(map); 
+				}
+			}
+		}
 		
+		else { // 키워드 검색!!!! 
+			System.out.println("키워드검색44");
+			return photoMapper.getListByWord(map);
+		}
+		
+
 	}
 
 	@Override
@@ -69,10 +142,15 @@ public class PhotoServiceImpl implements PhotoService{
 
 	@Override
 	public BoardPhotoDto getPhoto(int photoId) throws Exception {
-		BoardPhotoDto photoDto=photoMapper.getPhoto(photoId);
+		System.out.println(photoId);
+		
 
+		BoardPhotoDto photoDto=photoMapper.getPhoto(photoId);
+		System.out.println("photoID!!!!!!!!!!!!"+photoDto);
+		System.out.println(photoDto);
 		// 이미지들 경로 가져오기 
-		List<String> photoPaths=photoMapper.getPhotoList(photoId);
+		List<String> photoPaths=photoMapper.getPhotoList(photoDto.getBoardPhotoId());
+
 		photoDto.setPhotoPaths(photoPaths);
 
 		return photoDto;
@@ -123,5 +201,26 @@ public class PhotoServiceImpl implements PhotoService{
 	public void deleteComment(int commentId) throws Exception {
 		photoMapper.deleteComment(commentId);
 	}
+
+	@Override
+	public void updateLike(Map<String, Object> map) throws Exception {
+		// userId, photoId, state 
+		if(map.get("state")==Integer.valueOf(1)) { // 삭제
+			photoMapper.deleteLike(map);
+		}
+		else {
+			photoMapper.addLike(map);
+		}
+		
+		if(map.get("state")==Integer.valueOf(1)) {
+			map.replace("state", "1");
+		}
+		else {
+			map.replace("state", "0");
+		}
+		photoMapper.updateLike(map); // 이미지의 like 수 변경 
+	}
+
+
 
 }

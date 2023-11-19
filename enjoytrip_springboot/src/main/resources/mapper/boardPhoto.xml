@@ -12,6 +12,7 @@
 		<result column="gugun_code" property="gugunCode" />
 		<result column="place" property="place"/>
 		<result column="like" property="like"/>
+		<result column="isLike" property="isLike"/>
 		<result column="register_time" property="registerTime"/>
 		<result column="thumbnail_id" property="thumbnailId"/>
 		<result column="detail_place" property="detailPlace" />
@@ -30,6 +31,7 @@
 		<result column="user_id" property="userId"/>
 		<result column="like" property="like"/> 
 		<result column="thumbNail" property="thumbNail"/>
+		<result column="isLike" property="isLike"/>
 	</resultMap>
 	
 	<resultMap type="SigunDto" id="sigun">
@@ -72,10 +74,76 @@
 	</insert> 
 
 
- 	<select id='getList' parameterType="int" resultMap="photoItem">
-		select b.board_photo_id, b.user_id, b.like, concat(t.save_folder,'/',t.save_file) thumbNail
+ 	<select id='getList' parameterType="map" resultMap="photoItem">
+		select b.board_photo_id, b.user_id, b.like, concat(t.save_folder,'/',t.save_file) thumbNail,
+		(select count(*) from like_photo where board_photo_id=b.board_photo_id and user_id=#{userId}) as isLike
 		from board_photo b join 
 		thumbnail t on b.thumbnail_id=t.thumbnail_id order by register_time desc
+		limit #{page},4
+	</select>
+	
+	 <select id='getListByTimeAsc' parameterType="map" resultMap="photoItem">
+		select b.board_photo_id, b.user_id, b.like, concat(t.save_folder,'/',t.save_file) thumbNail,
+		( select count(*) from like_photo where board_photo_id=b.board_photo_id and user_id=#{userId} )
+			as isLike
+		from board_photo b join 
+		thumbnail t on b.thumbnail_id=t.thumbnail_id
+		<where>
+			<if test="sidocode != null">
+				b.sido_code=#{sidocode} and b.gugun_code=#{guguncode}
+			</if>
+		</where>
+		 order by register_time asc
+		limit #{page},4
+	</select>
+	
+	<select id='getListByTimeDesc' parameterType="map" resultMap="photoItem">
+		select b.board_photo_id, b.user_id, b.like, concat(t.save_folder,'/',t.save_file) thumbNail,
+		( select count(*) from like_photo where board_photo_id=b.board_photo_id and user_id=#{userId} )
+			as isLike
+		from board_photo b join 
+		thumbnail t on b.thumbnail_id=t.thumbnail_id 
+		<where>
+			<if test="sidocode != null">
+				b.sido_code=#{sidocode} and b.gugun_code=#{guguncode}
+			</if>
+		</where>
+		order by register_time desc
+		limit #{page},4
+	</select>
+	
+	<select id='getListByLike' parameterType="map" resultMap="photoItem">
+		select b.board_photo_id, b.user_id, b.like, concat(t.save_folder,'/',t.save_file) thumbNail,
+		( select count(*) from like_photo where board_photo_id=b.board_photo_id and user_id=#{userId} )
+			as isLike
+		from board_photo b join 
+		thumbnail t on b.thumbnail_id=t.thumbnail_id 
+		<where>
+			<if test="sidocode != null">
+				b.sido_code=#{sidocode} and b.gugun_code=#{guguncode}
+			</if>
+		</where>
+		order by `like` desc, register_time desc
+		limit #{page},4
+	</select>
+	
+	<select id='getListByArea' parameterType="map" resultMap="photoItem">
+		select b.board_photo_id, b.user_id, b.like, concat(t.save_folder,'/',t.save_file) thumbNail,
+		(select count(*) from like_photo where board_photo_id=b.board_photo_id and user_id=#{userId} )
+		as isLike
+		from board_photo b join thumbnail t
+		on b.thumbnail_id=t.thumbnail_id where b.sido_code=#{sidocode} and b.gugun_code=#{guguncode}
+		order by b.register_time desc
+		limit #{page},4
+	</select>
+
+	<select id='getListByWord' parameterType="map" resultMap="photoItem">
+		select b.board_photo_id, b.user_id, b.like, concat(t.save_folder,'/',t.save_file) thumbNail,
+		( select count(*) from like_photo where board_photo_id=b.board_photo_id and user_id=#{userId} )
+			as isLike
+		from board_photo b join thumbnail t
+		 on b.thumbnail_id=t.thumbnail_id where instr(content,#{word})>0 or instr(place,#{word})>0
+		order by b.register_time desc
 		limit #{page},4
 	</select>
 	
@@ -94,7 +162,7 @@
 	<select id='getPhoto' parameterType='int' resultMap='photoDto'>
 		select b.board_photo_id, b.user_id, b.content, b.`like`, substr(b.register_time,1,10) register_time, concat(s.sigun_name,' ',b.place) as detail_place, b.thumbnail_id
 		from board_photo b inner join sigun s 
-		on b.sido_code=s.sido_code and b.gugun_code=s.gugun_code
+		on (b.sido_code=s.sido_code and b.gugun_code=s.gugun_code) or (b.sido_code=s.sido_code and s.gugun_code is null)
 		where board_photo_id=#{photoId}
 	</select>
 
@@ -153,5 +221,28 @@
 		delete from comment
 		where comment_id=#{commentId}
 	</delete>
+	
+	<update id='deleteLike' parameterType="map">
+		delete from like_photo where 
+		board_photo_id=#{photoId} and user_id=#{userId}
+	</update>
+	
+	<update id='addLike' parameterType="map">
+		insert into like_photo (board_photo_id, user_id) 
+		values (#{photoId}, #{userId})
+	</update>
+	
+	<update id='updateLike' parameterType="map">
+		update board_photo 
+		<set>
+			<if test='state == "1"'>
+				`like`=`like`-1
+			</if>
+			<if test='state == "0"'>
+				`like`=`like`+1
+			</if>
+		</set>
+		where board_photo_id=#{photoId}
+	</update>
 	
 </mapper>

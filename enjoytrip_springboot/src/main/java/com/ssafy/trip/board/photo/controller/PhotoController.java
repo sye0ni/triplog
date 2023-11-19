@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -77,7 +78,7 @@ private static final Logger logger = LoggerFactory.getLogger(PhotoController.cla
 		
 		// FileUpload 관련 설정
 		logger.debug("MultipartFile.isEmpty : {}", files.get(0).isEmpty());
-		
+		System.out.println(files.size());
 		
 		ThumbnailDto thumbnailDto=new ThumbnailDto();
 		
@@ -151,10 +152,14 @@ private static final Logger logger = LoggerFactory.getLogger(PhotoController.cla
 	}
 	
 	@GetMapping
-	public ResponseEntity<?> listPhoto(@RequestParam int page) throws Exception{
-//        logger.info("listPhoto - 호출 {}", page);
+	public ResponseEntity<?> listPhoto(@RequestParam Map<String,Object> map) throws Exception{
+        logger.info("listPhoto - 호출 {}", map);
+        System.out.println("페이지??????????"+map.get("page"));
         
-        List<BoardPhotoItemDto> list=photoService.listPhoto(page);
+        List<BoardPhotoItemDto> list=photoService.listPhoto(map);
+        
+        System.out.println("리턴값!!!!!!!!!!!!"+list.size());
+//        System.out.println(list.get(0));
         return new ResponseEntity<List<BoardPhotoItemDto>>(list,HttpStatus.OK);
 
 	}
@@ -169,7 +174,10 @@ private static final Logger logger = LoggerFactory.getLogger(PhotoController.cla
 	
 	@GetMapping("/{photoId}")
 	public ResponseEntity<?> getPhoto(@PathVariable int photoId) throws Exception{
+        logger.info("getPhoto - 호출 ");
+
 		BoardPhotoDto photoDto=photoService.getPhoto(photoId);
+		System.out.println("getPhoto!!!!!!"+photoDto);
 		return new ResponseEntity<BoardPhotoDto>(photoDto,HttpStatus.OK);
 	}
 	
@@ -225,4 +233,12 @@ private static final Logger logger = LoggerFactory.getLogger(PhotoController.cla
 		photoService.deleteComment(commentId);
 		return new ResponseEntity<>(HttpStatus.OK);	
 	}
+	
+	@PutMapping("/{photoId}/like")
+	public ResponseEntity<?> updateLike(@PathVariable int photoId, @RequestBody Map<String,Object> map) throws Exception {
+		logger.info("updateLike - 호출 {}", map);
+		photoService.updateLike(map);
+		return new ResponseEntity<>(HttpStatus.OK);	
+	}
+	
 }

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getPhoto, getComments, modifyPhoto, writeComment, deletePhoto, modifyComment, deleteComment } from "@/api/boardPhoto.js";
+import { getPhoto, getComments, modifyPhoto, writeComment, deletePhoto, modifyComment, deleteComment, updateLike } from "@/api/boardPhoto.js";
 import BoardPhotoCommentItem from "./item/BoardPhotoCommentItem.vue";
 import { useMemberStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
@@ -9,7 +9,7 @@ import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 
 const props = defineProps({
-    photoId: Number,
+    photoEmit: Object
 });
 
 const emit = defineEmits(['cancelDetail', 'deleteDetail']);
@@ -31,6 +31,7 @@ const contentInput = ref("");
 
 onMounted(() => {
     // console.log("디테일 뷰 들어옴!");
+    console.log(props.photoEmit);
 
     // 게시글 조회 
     detailPhoto();
@@ -38,14 +39,16 @@ onMounted(() => {
     // 댓글 조회 
     getComment();
 
+    isLikeState.value = props.photoEmit.isLike;
 });
 
 const detailPhoto = () => {
     getPhoto(
-        props.photoId,
+        props.photoEmit.boardPhotoId,
         ({ data }) => {
             photo.value = data;
             photoLoaded.value = true; // photo 데이터 로드 완료
+            console.log(photo.value);
         },
         (error) => {
             console.log(error);
@@ -55,7 +58,7 @@ const detailPhoto = () => {
 
 const getComment = () => {
     getComments(
-        props.photoId,
+        props.photoEmit.boardPhotoId,
         ({ data }) => {
             // console.log("comments:" + data);
             comments.value = data;
@@ -67,24 +70,34 @@ const getComment = () => {
     );
 };
 
+
 const modifyContent = () => {
 
-    if (!toggleContentState.value) { // 수정하러 가기 
-        console.log(photo.value.content); // 입력한 내용
+    if (!toggleContentState.value) { // 수정하러 가기
 
-        // 수정하러 가! (boardPhotoId, content만 들고가면 됨)
-        modifyPhoto(
-            photo.value.boardPhotoId,
-            photo.value,
-            () => {
-                console.log("게시글 수정 성공");
-            },
-            (error) => {
-                console.log(error);
-            }
-        )
+        if (photo.value.content.length == 0) {
+            alert("내용을 입력하세요!");
+            contentInput.value.focus();
+        }
 
-        toggleContentState.value = !toggleContentState.value;
+        else if (confirm("정말로 수정하시겠습니까?")) {
+
+            console.log(photo.value.content); // 입력한 내용
+
+            // 수정하러 가! (boardPhotoId, content만 들고가면 됨)
+            modifyPhoto(
+                photo.value.boardPhotoId,
+                photo.value,
+                () => {
+                    console.log("게시글 수정 성공");
+                },
+                (error) => {
+                    console.log(error);
+                }
+            )
+
+            toggleContentState.value = !toggleContentState.value;
+        }
     }
     else { // 수정 상태로 변경 
         toggleContentState.value = !toggleContentState.value;
@@ -99,6 +112,9 @@ const writeComments = () => {
     if (!isLogin.value) {
         alert("로그인 하세요!");
         comment.value = '';
+    }
+    else if (comment.value.length == 0) {
+        alert("내용을 입력하세요!");
     }
     else {
         let commentJson = {
@@ -167,6 +183,50 @@ const deleteComments = (arg) => {
     )
 }
 
+const alertComment = () => {
+    if (!isLogin.value) {
+        alert("로그인 하세요!");
+    }
+}
+
+// 좋아요 update
+const isLikeState = ref(0);
+
+const updateIsLike = function () {
+
+    if (!isLogin.value) {
+        alert("로그인 하세요!");
+    }
+
+    else {
+
+        console.log("상태바꿔")
+
+        let modifyJson = {
+            userId: userInfo.value.userId,
+            photoId: props.photoEmit.boardPhotoId,
+            state: isLikeState.value
+        };
+
+        updateLike(
+            props.photoEmit.boardPhotoId,
+            modifyJson,
+            ({ data }) => {
+                console.log("좋아요 업뎃 성공!!");
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
+
+        if (isLikeState.value == 0) {
+            isLikeState.value = 1;
+        } else {
+            isLikeState.value = 0;
+        }
+    }
+}
+
 </script>
 
 <template>
@@ -196,8 +256,10 @@ const deleteComments = (arg) => {
                                 <span id="userId" style="font-weight: bold;">{{ photo.userId }}</span>
                                 <div class="box2-1-1">
                                     <!-- <i class="fa-solid fa-ellipsis"></i> -->
-                                    <button @click.prevent='modifyContent'>수정</button>
-                                    <button @click.prevent='deletePhotos'>삭제</button>
+                                    <template v-if="userInfo.userId == photo.userId">
+                                        <button @click.prevent='modifyContent'>수정</button>
+                                        <button @click.prevent='deletePhotos'>삭제</button>
+                                    </template>
                                     <i class="fa-solid fa-xmark" @click.prevent="$emit('cancelDetail')"></i>
                                 </div>
                             </div>
@@ -214,9 +276,10 @@ const deleteComments = (arg) => {
                                 @modify-comment="modifyComments" @delete-comment="deleteComments" />
                         </div>
                         <div class="box5">
-                            <i class="fa-solid fa-heart" style="color: #db0000;"></i>
-                            <!-- <i class="fa-regular fa-heart" style="color: #db0000;"></i> -->
-                            <input type="text" placeholder="댓글을 남겨보세요 !" v-model='comment'>
+                            <i v-if="isLikeState == 1" class="fa-solid fa-heart" style="color: #db0000;"
+                                @click="updateIsLike"></i>
+                            <i v-else class="fa-regular fa-heart" style="color: #db0000;" @click="updateIsLike"></i>
+                            <input type="text" placeholder="댓글을 남겨보세요 !" v-model='comment' @click.prevent="alertComment">
                             <button @click.prevent='writeComments'>등록</button>
                         </div>
                     </div>
@@ -266,6 +329,7 @@ textarea:focus {
 
 i {
     color: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
 }
 
 

@@ -21,8 +21,14 @@ const modifyComments = function () {
 
     // 수정하러 가기 
     if (!toggleContentState.value) {
-        emit("modifyComment", props.comment);
-        toggleContentState.value = !toggleContentState.value;
+        if (props.comment.content.length == 0) {
+            alert("내용을 입력하세요!");
+            commentInput.value.focus();
+        }
+        else if (confirm("정말로 수정하시겠습니까?")) {
+            emit("modifyComment", props.comment);
+            toggleContentState.value = !toggleContentState.value;
+        }
     }
 
     else {
@@ -68,7 +74,7 @@ textarea {
     resize: none;
     width: 98%;
     max-width: 98%;
-    /* height: auto; */
+    height: auto;
 
 }
 
@@ -116,11 +122,11 @@ textarea:focus {
 
 .box2 {
     /* height: 60%; */
-    height: auto;
+    /* height: auto; */
     /* background-color: lightblue; */
     display: flex;
     /* justify-content: space-between; */
-    align-items: center;
+    /* align-items: center; */
     margin-top: 5px;
 }
 

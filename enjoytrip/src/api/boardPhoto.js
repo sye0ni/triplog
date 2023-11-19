@@ -5,8 +5,8 @@ const localFile = localFileAxios();
 
 const url = "/board/photo";
 
-function listPhoto(page, success, fail) {
-    local.get(`${url}`, { params: page }).then(success).catch(fail);
+async function listPhoto(param, success, fail) {
+    await local.get(`${url}`, { params: param }).then(success).catch(fail);
 }
 
 // 시군 받아오기 
@@ -61,7 +61,12 @@ function deleteComment(photoid, commentid, success, fail) {
     local.delete(`${url}/${photoid}/comment/${commentid}`).then(success).catch(fail);
 }
 
+// /boards/photo/{photoid}/like
+function updateLike(photoid, param, success, fail) {
+    local.put(`${url}/${photoid}/like`, JSON.stringify(param)).then(success).catch(fail);
+}
+
 
 export {
-    listPhoto, getSigun, writePhoto, getPhoto, getComments, modifyPhoto, writeComment, deletePhoto, modifyComment, deleteComment
+    listPhoto, getSigun, writePhoto, getPhoto, getComments, modifyPhoto, writeComment, deletePhoto, modifyComment, deleteComment, updateLike
 };

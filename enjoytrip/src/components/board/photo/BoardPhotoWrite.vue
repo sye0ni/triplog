@@ -54,7 +54,7 @@ const getFileName = async (files) => { // 이미지 url 을 배열에 저장 , �
     // console.log(files);
 
     const promises = []; // FileReader의 작업을 담을 배열
-    selectedFiles.value = [];
+    // selectedFiles.value = [];
 
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
@@ -91,14 +91,6 @@ const writePhotos = async () => {
     }
 
     else {
-        // let token = sessionStorage.getItem("accessToken");
-        // if (isLogin.value) {
-        //     await getUserInfo(token);
-        //     let userId = userInfo.value.userId;
-        //     console.log("아이디:",userId);
-        // }
-        // 위에 주석 나중에 풀기
-
 
         let photoJson = JSON.stringify({
             userId: userInfo.value.userId,

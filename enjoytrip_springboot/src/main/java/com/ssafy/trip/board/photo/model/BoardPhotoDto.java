@@ -14,11 +14,11 @@ public class BoardPhotoDto {
 	int like;
 	String registerTime;
 	int thumbnailId;
+	int isLike;
 
 	String detailPlace; // 상세 위치 ( 시 군 사용자입력 위치)
 	List<PhotoInfoDto> photoInfos;
 	List<String> photoPaths; // 사진의 경로만 있으면 됨 
-	
 	
 	public int getBoardPhotoId() {
 		return boardPhotoId;
@@ -74,6 +74,12 @@ public class BoardPhotoDto {
 	public void setThumbnailId(int thumbnailId) {
 		this.thumbnailId = thumbnailId;
 	}
+	public int getIsLike() {
+		return isLike;
+	}
+	public void setIsLike(int isLike) {
+		this.isLike = isLike;
+	}
 	public String getDetailPlace() {
 		return detailPlace;
 	}
@@ -97,9 +103,11 @@ public class BoardPhotoDto {
 	public String toString() {
 		return "BoardPhotoDto [boardPhotoId=" + boardPhotoId + ", userId=" + userId + ", content=" + content
 				+ ", sidoCode=" + sidoCode + ", gugunCode=" + gugunCode + ", place=" + place + ", like=" + like
-				+ ", registerTime=" + registerTime + ", thumbnailId=" + thumbnailId + ", detailPlace=" + detailPlace
-				+ ", photoInfos=" + photoInfos + ", photoPaths=" + photoPaths + "]";
+				+ ", registerTime=" + registerTime + ", thumbnailId=" + thumbnailId + ", isLike=" + isLike
+				+ ", detailPlace=" + detailPlace + ", photoInfos=" + photoInfos + ", photoPaths=" + photoPaths + "]";
 	}
+	
+	
 	
 	
 	

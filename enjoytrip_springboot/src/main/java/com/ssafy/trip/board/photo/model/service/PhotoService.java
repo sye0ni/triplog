@@ -1,6 +1,7 @@
 package com.ssafy.trip.board.photo.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ssafy.trip.board.model.CommentDto;
 import com.ssafy.trip.board.photo.model.BoardPhotoDto;
@@ -12,7 +13,7 @@ public interface PhotoService {
 
 	void writePhoto(ThumbnailDto thumbnailDto, BoardPhotoDto boardPhotoDto) throws Exception;
 
-	List<BoardPhotoItemDto> listPhoto(int page) throws Exception;
+	List<BoardPhotoItemDto> listPhoto(Map<String, Object> map) throws Exception;
 
 	List<SigunDto> getSigun() throws Exception;
 
@@ -31,6 +32,8 @@ public interface PhotoService {
 	void modifyComment(CommentDto commentDto) throws Exception;
 
 	void deleteComment(int commentId) throws Exception;
+
+	void updateLike(Map<String, Object> map) throws Exception;
 
 
 }

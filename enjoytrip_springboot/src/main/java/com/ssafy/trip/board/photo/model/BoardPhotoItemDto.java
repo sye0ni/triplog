@@ -5,6 +5,7 @@ public class BoardPhotoItemDto {
 	String userId; // 게시글 작성자 
 	int like;  // 좋아요 수 
 	String thumbNail; // 폴더명(날짜) +/+ 파일명 
+	int isLike; // 좋아요 여부 : 1이면 true 
 	
 	public int getBoardPhotoId() {
 		return boardPhotoId;
@@ -30,11 +31,16 @@ public class BoardPhotoItemDto {
 	public void setThumbNail(String thumbNail) {
 		this.thumbNail = thumbNail;
 	}
-	
+	public int getIsLike() {
+		return isLike;
+	}
+	public void setIsLike(int isLike) {
+		this.isLike = isLike;
+	}
 	@Override
 	public String toString() {
-		return "BoardPhotoItemDto [boardPhotoId=" + boardPhotoId + ", userId=" + userId + ", "
-				+ "like="	+ like + ", thumbNail=" + thumbNail + "]";
+		return "BoardPhotoItemDto [boardPhotoId=" + boardPhotoId + ", userId=" + userId + ", like=" + like
+				+ ", thumbNail=" + thumbNail + ", isLike=" + isLike + "]";
 	}
 	
 	

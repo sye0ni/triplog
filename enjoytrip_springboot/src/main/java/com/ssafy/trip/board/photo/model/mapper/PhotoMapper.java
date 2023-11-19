@@ -2,6 +2,7 @@ package com.ssafy.trip.board.photo.model.mapper;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -18,8 +19,18 @@ public interface PhotoMapper {
 
 	void registerFile(BoardPhotoDto boardPhotoDto) throws SQLException;
 
-	List<BoardPhotoItemDto> getList(int page) throws SQLException;
+	List<BoardPhotoItemDto> getList(Map<String, Object> map) throws SQLException;
+	
+	List<BoardPhotoItemDto> getListByTimeAsc(Map<String, Object> map) throws SQLException;
 
+	List<BoardPhotoItemDto> getListByLike(Map<String, Object> map) throws SQLException;
+
+	List<BoardPhotoItemDto> getListByArea(Map<String, Object> map) throws SQLException;
+	
+	List<BoardPhotoItemDto> getListByTimeDesc(Map<String, Object> sqlMap) throws SQLException;
+
+	List<BoardPhotoItemDto> getListByWord(Map<String, Object> sqlMap) throws SQLException;
+	
 	List<SigunDto> getSigun() throws SQLException;
 
 	int writeThumbnail(ThumbnailDto thumbnailDto) throws SQLException;
@@ -45,6 +56,17 @@ public interface PhotoMapper {
 	void modifyComment(CommentDto commentDto) throws SQLException;
 
 	void deleteComment(int commentId) throws SQLException;
+
+	void deleteLike(Map<String, Object> map) throws SQLException;
+
+	void addLike(Map<String, Object> map) throws SQLException;
+
+	void updateLike(Map<String, Object> map) throws SQLException;
+
+
+
+
+
 	
 	
 
