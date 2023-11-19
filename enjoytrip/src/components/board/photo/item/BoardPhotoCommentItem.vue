@@ -53,7 +53,7 @@ const deletePhotos = function () {
             <span id="userId" style="font-weight: bold;">{{ comment.userId }}</span>
             <!-- 작성자의 경우에만 보이게 -->
             <div class="box1-1">
-                <template v-if="userInfo.userId === comment.userId">
+                <template v-if="isLogin && userInfo.userId === comment.userId">
                     <button @click.prevent='modifyComments'>수정</button>
                     <button @click.prevent='deletePhotos'>삭제</button>
                 </template>

@@ -33,18 +33,36 @@ const contentInput = ref("");
 const toggleChange = function (event) {
   const parentNode = event.target.parentNode.parentNode;
   const textArea1 = parentNode.children[0].children[0]; // title
-  const textArea2 = props.article.content;
+  // const textArea2 = parentNode.children[1].children[0]; // content
+  const textArea2 = contentInput.value;
+
+  console.log(textArea1.value);
+  // console.log(textArea2.value);
+  console.log(contentInput.value.value);
 
   // readOnly 상태가 아니라면? 수정하러 가기
   if (!toggleContentState.value) {
     if (props.type === "question") {
       // 제목 지정
-      props.article.title = textArea1.value;
+      if (textArea1.value == '') {
+        alert('제목을 입력하세요!');
+      }
+      else {
+        props.article.title = textArea1.value;
+      }
     }
-    props.article.content = textArea2;
-    emit("modifyEvent", props.article);
-    toggleTitleState.value = !toggleTitleState.value;
-    toggleContentState.value = !toggleContentState.value;
+
+    if (textArea2.value == '') {
+      alert("내용을 입력하세요!");
+    }
+    else {
+      if (confirm("정말로 수정하시겠습니까?")) {
+        props.article.content = textArea2.value;
+        emit("modifyEvent", props.article);
+        toggleTitleState.value = !toggleTitleState.value;
+        toggleContentState.value = !toggleContentState.value;
+      }
+    }
   }
 
   // 작성하기 ; readOnly 해제 (답변일때에는 내용만 해제)
@@ -117,13 +135,14 @@ const deleteArticle = function (event) {
           <button class='noBorderBtn' @click="toggleChange">수정</button>
           <button class='noBorderBtn' @click="deleteArticle">삭제</button>
           <!-- </template> -->
+          <!-- </template> -->
           <span>{{ article.userId }}
             <span id="date">{{ article.registerTime }}</span></span>
         </div>
       </div>
 
       <div class="box2">
-        <textarea id="textArea2" v-model="article.content" :readOnly="toggleContentState" ref="contentInput"></textarea>
+        <textarea id="textArea2" :value=article.content :readOnly="toggleContentState" ref="contentInput"></textarea>
       </div>
 
 
@@ -131,18 +150,21 @@ const deleteArticle = function (event) {
 
     <!-- 답글 등록 -->
     <template v-else>
-      <div class="box3" @click="toggleCommentReset">
-        <button>답글 작성</button>
-      </div>
+      <template v-if="isLogin && userInfo.userId == 'admin'">
+        <div class="box3" @click="toggleCommentReset">
+          <button>답글 작성</button>
+        </div>
 
-      <template v-if="toggleCommentState">
-        <div class="box2">
-          <textarea placeholder="답변을 입력하세요."></textarea>
-        </div>
-        <div class="box3">
-          <button @click="writeComments">등록</button>
-        </div>
+        <template v-if="toggleCommentState">
+          <div class="box2">
+            <textarea placeholder="답변을 입력하세요."></textarea>
+          </div>
+          <div class="box3">
+            <button @click="writeComments">등록</button>
+          </div>
+        </template>
       </template>
+
     </template>
   </div>
 </template>

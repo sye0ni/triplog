@@ -256,7 +256,7 @@ const updateIsLike = function () {
                                 <span id="userId" style="font-weight: bold;">{{ photo.userId }}</span>
                                 <div class="box2-1-1">
                                     <!-- <i class="fa-solid fa-ellipsis"></i> -->
-                                    <template v-if="userInfo.userId == photo.userId">
+                                    <template v-if="isLogin && userInfo.userId == photo.userId">
                                         <button @click.prevent='modifyContent'>수정</button>
                                         <button @click.prevent='deletePhotos'>삭제</button>
                                     </template>
