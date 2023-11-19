@@ -102,7 +102,10 @@ const createPlan = function () {
       <div class="title">여행을 시작해보세요!</div>
       <div class="line1">
         <div class="subTitle">여행지</div>
-        <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
+        <VSelect
+          :selectOption="selectOptionSido"
+          @onKeySelect="changeKey"
+        />
         <VSelect
           :selectOption="selectOptionGugun"
           @onKeySelect="changeKey2"

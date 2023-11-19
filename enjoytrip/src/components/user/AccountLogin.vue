@@ -16,7 +16,7 @@ const planStore = usePlanStore();
 
 const { isLogin } = storeToRefs(memberStore);
 const { userLogin, getUserInfo } = memberStore;
-const { wishlist } = planStore;
+const { wishlist } = storeToRefs(planStore);
 
 const loginUser = ref({
   userId: "",
@@ -36,10 +36,12 @@ const login = async () => {
     getWishlist(
       decodeToken.userId,
       ({ data }) => {
-        console.log("getWishlist!!", data);
+        console.log("login->getWishlist!!", data);
+        wishlist.value.length = 0;
         for (let i = 0; i < data.length; i++) {
           wishlist.value.push(data[i]);
         }
+        console.log("wish:", wishlist.value);
       },
       (error) => {
         console.log(error);

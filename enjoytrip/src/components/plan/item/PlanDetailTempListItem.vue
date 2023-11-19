@@ -20,7 +20,7 @@ const deleteItem = function () {
 </script>
 
 <template>
-  <div>
+  <div draggable="true">
     <div class="container">
       <div>
         <div class="title">{{ item.title }}</div>

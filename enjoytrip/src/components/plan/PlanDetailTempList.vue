@@ -5,6 +5,12 @@ import { usePlanStore } from "@/stores/plan";
 
 const planStore = usePlanStore();
 const { storeBox } = storeToRefs(planStore);
+
+// ----- 드래그...
+const startDrag = function (event, item) {
+  console.log("plandetailtemplist -> start drag");
+  event.dataTransfer.setData("text/plan", JSON.stringify(item));
+};
 </script>
 
 <template>
@@ -22,6 +28,7 @@ const { storeBox } = storeToRefs(planStore);
         v-for="item in storeBox"
         :key="item.contentId"
         :item="item"
+        @dragstart="startDrag($event, item)"
       />
     </div>
   </div>

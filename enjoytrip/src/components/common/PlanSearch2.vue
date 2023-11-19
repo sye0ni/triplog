@@ -2,16 +2,18 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import VSelect from "@/components/common/VSelect.vue";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
-import { gugun, getAttractionList } from "@/api/plan";
+import { gugun, getAttractionList, modifyWishlist } from "@/api/plan";
 import { storeToRefs } from "pinia";
 import { usePlanStore } from "@/stores/plan";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
-import PlanSearchItem from "./PlanSearchItem.vue";
+import PlanSearchItem2 from "./PlanSearchItem2.vue";
 import VRadio from "./VRadio.vue";
 
 const planStore = usePlanStore();
 const router = useRouter();
+
+const { wishlist } = storeToRefs(planStore);
 
 // -- 구군 얻어오기 시작
 const { sidoCode, attractionType } = storeToRefs(planStore);
@@ -72,9 +74,16 @@ const changeKey2 = (val) => {
   }
 
   getAttractionList(param.value, ({ data }) => {
-    console.log(data.length + "get attractionList ,", data);
+    // console.log(data.length + "get attractionList ,", data);
     attractionList.value = [];
     for (let i = 0; i < data.length; i++) {
+      for (let j = 0; j < wishlist.value.length; j++) {
+        if (data[i].contentId == wishlist.value[j].contentId) {
+          data[i].isLike = true;
+          console.log("like!!", data[i]);
+        }
+      }
+      data[i].idx = i;
       attractionList.value.push(data[i]);
     }
   }),
@@ -106,9 +115,18 @@ const changeRadio = function (val) {
   getAttractionList(
     param.value,
     ({ data }) => {
-      console.log(data.length + "get attractionList ,", data);
+      // console.log(data.length + "get attractionList ,", data);
       attractionList.value.length = 0;
+      console.log(wishlist.value.length + "?????");
       for (let i = 0; i < data.length; i++) {
+        data[i].idx = i;
+        for (let j = 0; j < wishlist.value.length; j++) {
+          // console.log(data[i].contentId + ", " + wishlist.value[j].contentId);
+          if (data[i].contentId == wishlist.value[j].contentId) {
+            data[i].isLike = true;
+            console.log("like!!", data[i]);
+          }
+        }
         attractionList.value.push(data[i]);
       }
     },
@@ -116,18 +134,59 @@ const changeRadio = function (val) {
       console.log(error);
     }
   );
+
+  // 좋아요 여부 포함
 };
 
 onMounted(() => {
-  console.log("planSearch!!", attractionType);
+  // console.log("planSearch!!", attractionType);
 });
+
+const likeChange = function (likeIdx, idx) {
+  console.log("likeChange 받음!", likeIdx + " " + idx);
+  if (likeIdx == -1) {
+    attractionList.value[idx].isLike = true;
+  } else {
+    attractionList.value[idx].isLike = undefined;
+  }
+};
+
+const wishParam = ref({
+  userId: "",
+  wishlist: {},
+});
+
+const makeWishlist = function () {
+  console.log("찜주머니 만들러 가자!!");
+
+  // pinia에 저장해놓은 wishlist 들고 만들러 감
+  let token = sessionStorage.getItem("accessToken");
+  let decodeToken = jwtDecode(token);
+
+  wishParam.value.userId = decodeToken.userId;
+  wishParam.value.wishlist = wishlist.value;
+  modifyWishlist(
+    wishParam.value,
+    ({ data }) => {
+      console.log("modify wish=>", data);
+      alert("찜주머니가 만들어졌습니다!!");
+    },
+    (error) => {
+      console.log("modify wish error ->", error);
+    }
+  );
+};
 </script>
 
 <template>
   <div>
     <!--  -->
     <div class="subItem search">
-      <span>검색</span>
+      <div class="title">찜 주머니 만들기</div>
+      <div class="subTitle">
+        찜 버튼을 눌러 여행 장소를 주머니에 담고 <br />
+        만들기 버튼을 눌러주세요
+      </div>
       <div class="select">
         <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
         <VSelect
@@ -155,22 +214,22 @@ onMounted(() => {
           <thead>
             <tr>
               <!-- <th scope="col" class="three">사진</th> -->
-              <th scope="col" class="title">제목</th>
+              <th scope="col" class="colTitle">제목</th>
               <th scope="col" class="addr">주소</th>
-              <th scope="col" class="put">
-                <i class="fa-solid fa-inbox" style="color: #990000"></i>
-              </th>
+              <th scope="col" class="wish">찜</th>
             </tr>
           </thead>
           <tbody>
-            <PlanSearchItem
+            <PlanSearchItem2
               v-for="item in attractionList"
               :key="item.contentId"
               :item="item"
+              @like-change="likeChange"
             />
           </tbody>
         </table>
       </div>
+      <button class="makeBtn" @click="makeWishlist">만들기</button>
     </div>
   </div>
 </template>
@@ -201,6 +260,17 @@ onMounted(() => {
   margin: 10px 0px;
 }
 
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+.subTitle {
+  text-align: center;
+  padding-bottom: 10px;
+}
+
 .search {
   width: 100%;
   /* min-width: 400px; */
@@ -210,12 +280,12 @@ onMounted(() => {
   overflow-y: auto;
 }
 
-.title {
+.colTitle {
   width: 30%;
 }
 
-.put {
-  width: 40px;
+.wish {
+  width: 50px;
 }
 
 .radio {
@@ -238,5 +308,19 @@ table {
 
 thead {
   vertical-align: bottom;
+}
+
+.makeBtn {
+  margin-top: auto;
+  width: 90px;
+  min-height: 40px;
+  height: 40px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 10px;
+  background-color: #c62f2f;
+  border: none;
+  color: white;
+  cursor: pointer;
 }
 </style>

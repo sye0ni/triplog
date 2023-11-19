@@ -12,6 +12,8 @@ export const usePlanStore = defineStore(
   () => {
     const wishlist = ref([]); // 사용자의 찜목록
     const storeBox = ref([]); // 보관함 (찜주머니에서 남은것들이 저장되어 넘어옴 / detail에서도 사용)
+    const planBox = ref([]); // 여행계획 보관함..
+
     const sidoCode = ref([
       {
         text: "시/도",
@@ -130,6 +132,7 @@ export const usePlanStore = defineStore(
       sidoCode,
       wishlist,
       storeBox,
+      planBox,
       attractionType,
     };
   },

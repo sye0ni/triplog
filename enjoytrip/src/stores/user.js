@@ -1,7 +1,12 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { defineStore } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { jwtDecode } from "jwt-decode";
+import { usePlanStore } from "@/stores/plan";
+
+// const planStore = usePlanStore();
+
+// const { storeBox, planBox } = storeToRefs(planStore);
 
 import {
   userConfirm,
@@ -133,6 +138,8 @@ export const useMemberStore = defineStore(
             userInfo.value = null;
             isValidToken.value = false;
             sessionStorage.clear();
+            // planBox.value = [];
+            // storeBox.value = [];
           } else {
             console.error("유저 정보 없음!!!!");
           }

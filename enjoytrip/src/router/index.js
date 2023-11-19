@@ -91,7 +91,7 @@ const router = createRouter({
       ],
     },
     {
-      path: "/plan/wishlist",
+      path: "/wishlist",
       name: "wishlist",
       component: WishlistView,
     },
@@ -104,7 +104,8 @@ const router = createRouter({
         {
           path: "",
           name: "board-photo-list",
-          component: () => import("@/components/board/photo/BoardPhotoList.vue"),
+          component: () =>
+            import("@/components/board/photo/BoardPhotoList.vue"),
         },
       ],
     },

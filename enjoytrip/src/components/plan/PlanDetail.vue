@@ -9,6 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
 import PlanSearch from "@/components/common/PlanSearch.vue";
 import PlanDetailTempList from "@/components/plan/PlanDetailTempList.vue";
+import PlanDetailList from "./PlanDetailList.vue";
 
 const planStore = usePlanStore();
 const router = useRouter();
@@ -17,11 +18,11 @@ const startpos = ref(0);
 const diffpos = ref(0);
 const isEnable = ref(false);
 const range = 50;
-const leftWidth = ref("65%");
+const leftWidth = ref("70%");
 const rightWidth = ref("100%");
 const separatorWidth = ref("3px");
 
-const MIN_WIDTH = 800; // 최소 허용 너비
+const MIN_WIDTH = 1100; // 최소 허용 너비
 const MAX_WIDTH = window.innerWidth; // 최대 허용 너비 (현재 창 너비에서 100px 제외)
 
 const onMouseMove = (event) => {
@@ -68,6 +69,7 @@ const onMouseDown = (event) => {
         <!--  -->
         <div class="subContainer">
           <div class="subItem search">
+            검색
             <PlanSearch />
           </div>
 
@@ -75,7 +77,10 @@ const onMouseDown = (event) => {
             보관함
             <PlanDetailTempList />
           </div>
-          <div class="subItem plan">여행계획</div>
+          <div class="subItem plan">
+            <div class="subTitle">여행계획</div>
+            <PlanDetailList />
+          </div>
         </div>
       </div>
       <div
@@ -83,6 +88,7 @@ const onMouseDown = (event) => {
         :style="{ left: leftWidth }"
         @mousedown="onMouseDown"
       ></div>
+      <button class="makeBtn">만들기</button>
     </div>
   </div>
 </template>
@@ -90,6 +96,25 @@ const onMouseDown = (event) => {
 <style scoped>
 * {
   box-sizing: border-box;
+}
+
+.makeBtn {
+  position: absolute;
+  z-index: 10;
+  right: 0;
+  margin: 30px 50px;
+  background-color: #d20000;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 10px;
+  width: 90px;
+  /* background-color: aqua; */
+  /* top: 20; */
+  /* left: 0; */
+  /* float: right; */
 }
 
 .borderContainer {
@@ -104,13 +129,14 @@ const onMouseDown = (event) => {
 }
 
 .subItem {
-  border-right: 1px solid #b8b8b8;
+  border-right: 2px solid #b8b8b8;
   height: 85vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
   align-items: center;
+  /* margin-bottom: 20px; */
 }
 
 .d1 {
@@ -149,10 +175,21 @@ const onMouseDown = (event) => {
 }
 
 .tempBox {
-  min-width: 300px;
+  min-width: 250px;
   max-width: 350px;
 }
 
 .plan {
+  min-width: 200px;
+  /* width: 200px; */
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  padding: 10px;
+  padding-top: 0px;
+}
+
+.subTitle {
+  padding-bottom: 20px;
 }
 </style>

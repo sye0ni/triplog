@@ -10,33 +10,34 @@ import com.ssafy.trip.plan.model.AttractionInfoDto;
 import com.ssafy.trip.plan.model.GugunDto;
 import com.ssafy.trip.plan.model.PlanDto;
 import com.ssafy.trip.plan.model.PlanListDto;
+import com.ssafy.trip.plan.model.WishlistModifyDto;
 import com.ssafy.trip.plan.model.mapper.PlanMapper;
 
 @Service
 public class PlanServiceImpl implements PlanService {
 
 	private PlanMapper planMapper;
-	
+
 	public PlanServiceImpl(PlanMapper planMapper) {
 		super();
 		this.planMapper = planMapper;
 	}
-	
+
 	@Override
 	public List<AttractionDto> attractionList(Map<String, String> map) {
 		return planMapper.attractionList(map);
 	}
-	
+
 	@Override
 	public List<GugunDto> gugun(int sidoCode) {
 		return planMapper.gugun(sidoCode);
 	}
-	
+
 	@Override
 	public AttractionDto getAttraction(int contentId) {
 		return planMapper.getAttraction(contentId);
 	}
-	
+
 	// plan
 	@Override
 	public void registPlan(PlanDto planDto) {
@@ -68,9 +69,10 @@ public class PlanServiceImpl implements PlanService {
 		return planMapper.planList(userId);
 	}
 
-	
-	
-	
-	
-	
+	@Override
+	public void makeWishlist(WishlistModifyDto wishlistModifyDto) {
+		planMapper.deleteWishlist(wishlistModifyDto.getUserId());
+		planMapper.registWishlist(wishlistModifyDto.getWishlist());
+	}
+
 }

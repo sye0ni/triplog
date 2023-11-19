@@ -11,6 +11,7 @@ import com.ssafy.trip.plan.model.GugunDto;
 import com.ssafy.trip.plan.model.PlanDto;
 import com.ssafy.trip.plan.model.PlanListDto;
 import com.ssafy.trip.plan.model.PlanNthDetailDto;
+import com.ssafy.trip.plan.model.Wishlist;
 
 @Mapper
 public interface PlanMapper {
@@ -29,6 +30,15 @@ public interface PlanMapper {
 	List<PlanListDto> getPlan(Map<String, String> map); // int planId, String userId
 	List<PlanListDto> planList(String userId); // .. PlanDto에 다 담아
 	
+	// wishlist
 	List<AttractionInfoDto> wishlist(String userId);
+//	void deleteWish(String contentId);
+//	<delete id="deleteWish" parameterType="map" >
+//		delete from wishlist
+//		where user_id = #{userId} and content_id = #{content_id}
+//	</delete>    
+	void deleteWishlist(String userId);
+	void registWishlist(List<Wishlist> list);
+	
 	
 }

@@ -8,6 +8,8 @@ import com.ssafy.trip.plan.model.AttractionInfoDto;
 import com.ssafy.trip.plan.model.GugunDto;
 import com.ssafy.trip.plan.model.PlanDto;
 import com.ssafy.trip.plan.model.PlanListDto;
+import com.ssafy.trip.plan.model.Wishlist;
+import com.ssafy.trip.plan.model.WishlistModifyDto;
 
 public interface PlanService {
 
@@ -25,5 +27,10 @@ public interface PlanService {
 	List<PlanListDto> getPlan(Map<String, String> map);
 	List<PlanListDto> planList(String userId); // PlanDto에 다 담아
 	
+	// wishlist
 	List<AttractionInfoDto> wishlist(String userId);
+	void makeWishlist(WishlistModifyDto wishlistModifyDto);
+	
+//	void deleteWishlist(String userId);
+//	void registWishlist(List<Wishlist> list);
 }

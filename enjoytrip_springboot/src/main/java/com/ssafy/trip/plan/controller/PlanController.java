@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ import com.ssafy.trip.plan.model.AttractionInfoDto;
 import com.ssafy.trip.plan.model.GugunDto;
 import com.ssafy.trip.plan.model.PlanDto;
 import com.ssafy.trip.plan.model.PlanListDto;
+import com.ssafy.trip.plan.model.WishlistModifyDto;
 import com.ssafy.trip.plan.model.service.PlanService;
 
 @RequestMapping("/plan")
@@ -138,4 +140,21 @@ public class PlanController {
 				.body(attractionInfoDto);
 	}
 	
+	@PutMapping(value="/wishlist")
+	@Transactional
+	private ResponseEntity<?> modifyWishlist(@RequestBody WishlistModifyDto wishlistModifyDto) {
+		System.out.println("wishlist modify!! " + wishlistModifyDto);
+		
+		for(int i = 0; i < wishlistModifyDto.getWishlist().size(); i++) {
+			wishlistModifyDto.getWishlist().get(i).setUserId(wishlistModifyDto.getUserId());
+		}
+		
+		planService.makeWishlist(wishlistModifyDto);
+		
+		
+		// 에러처리??
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body("찜목록 추가 완료");
+	}
 }

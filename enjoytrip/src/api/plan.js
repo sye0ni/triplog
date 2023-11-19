@@ -25,4 +25,8 @@ function getAttractionList(param, success, fail) {
     .catch(fail);
 }
 
-export { gugun, registPlan, getWishlist, getAttractionList };
+function modifyWishlist(param, success, fail) {
+  local.put(`${url}/wishlist`, param).then(success).catch(fail);
+}
+
+export { gugun, registPlan, getWishlist, getAttractionList, modifyWishlist };
