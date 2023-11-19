@@ -1,6 +1,12 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useMemberStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
+
+
+const memberStore = useMemberStore();
+const { isLogin, userInfo } = storeToRefs(memberStore);
 
 const props = defineProps({
   article: Object,
@@ -21,12 +27,13 @@ const toggleCommentReset = function () {
 // readOnly 설정용
 const toggleTitleState = ref(true);
 const toggleContentState = ref(true);
+const contentInput = ref("");
 
 // 수정 이벤트 처리
 const toggleChange = function (event) {
   const parentNode = event.target.parentNode.parentNode;
   const textArea1 = parentNode.children[0].children[0]; // title
-  const textArea2 = parentNode.children[1].children[0]; // content
+  const textArea2 = props.article.content;
 
   // readOnly 상태가 아니라면? 수정하러 가기
   if (!toggleContentState.value) {
@@ -34,7 +41,7 @@ const toggleChange = function (event) {
       // 제목 지정
       props.article.title = textArea1.value;
     }
-    props.article.content = textArea2.value;
+    props.article.content = textArea2;
     emit("modifyEvent", props.article);
     toggleTitleState.value = !toggleTitleState.value;
     toggleContentState.value = !toggleContentState.value;
@@ -54,11 +61,7 @@ const toggleChange = function (event) {
       );
     } else {
       // 댓글 수정
-      textArea2.focus(); // 내용에 focus 주기
-      textArea2.setSelectionRange(
-        textArea2.value.length,
-        textArea2.value.length
-      );
+      contentInput.value.focus();
     }
   }
 };
@@ -94,41 +97,36 @@ const deleteArticle = function (event) {
 
 <template>
   <div class="container">
+
     <!-- 답글 등록이 아닌 경우 -->
     <template v-if="type != 'write'">
       <div class="box">
-        <textarea
-          id="textArea1"
-          :value="
+        <div class="box1-1">
+          <textarea id="textArea1" :value="
             type === 'question'
               ? article.title
               : type === 'comment'
-              ? '답변'
-              : ''
-          "
-          :readOnly="toggleTitleState"
-        ></textarea>
-        <span
-          >{{ article.userId }}
-          <span id="date">{{ article.registerTime }}</span></span
-        >
+                ? '답변'
+                : ''
+          " :readOnly="toggleTitleState"></textarea>
+        </div>
+
+        <div class="box1-2">
+          <!-- <template v-if="isLogin && userInfo.userId === article.userId"> -->
+          <!-- 작성자한테만 보이게 => 나중에 수정하기 -->
+          <button class='noBorderBtn' @click="toggleChange">수정</button>
+          <button class='noBorderBtn' @click="deleteArticle">삭제</button>
+          <!-- </template> -->
+          <span>{{ article.userId }}
+            <span id="date">{{ article.registerTime }}</span></span>
+        </div>
       </div>
 
       <div class="box2">
-        <textarea
-          id="textArea2"
-          :value="article.content"
-          :readOnly="toggleContentState"
-        ></textarea>
+        <textarea id="textArea2" v-model="article.content" :readOnly="toggleContentState" ref="contentInput"></textarea>
       </div>
 
-      <template v-if="article.userId === 'admin'">
-        <!-- 작성자한테만 보이게 => 나중에 수정하기 -->
-        <div class="box3">
-          <button @click="toggleChange">수정</button>
-          <button @click="deleteArticle">삭제</button>
-        </div>
-      </template>
+
     </template>
 
     <!-- 답글 등록 -->
@@ -160,7 +158,14 @@ const deleteArticle = function (event) {
   justify-content: space-between;
   /* margin: 0% 5%; */
   padding: 1% 1%;
+  /* 요소들을 가로로 배치 */
+
 }
+
+.box1-1 {
+  width: 70%;
+}
+
 
 .box2 {
   background-color: rgb(247, 247, 247);
@@ -193,6 +198,18 @@ button {
 button:hover {
   cursor: pointer;
   border-color: red;
+}
+
+.noBorderBtn {
+  border: 0px;
+  padding: 3px 3px;
+  /* margin-right: 5px; */
+  font-weight: normal;
+}
+
+.noBorderBtn:hover {
+  color: red;
+  font-weight: bold;
 }
 
 textarea {

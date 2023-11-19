@@ -123,6 +123,12 @@
 		</selectKey>
 	</insert>
 	
+	<update id="modifyComment" parameterType="commentDto">
+		update comment
+		set content=#{content} 
+		where comment_id=#{commentId}
+	</update>
+	
 	<delete id="deleteAllComments" parameterType="int">
 		delete from comment 
 		where board_id=#{photoId} and board_type="photo"
@@ -143,6 +149,9 @@
 		where thumbnail_id=#{thumbnailId}
 	</delete>
 	
-	
+	<delete id="deleteComment" parameterType="int">
+		delete from comment
+		where comment_id=#{commentId}
+	</delete>
 	
 </mapper>

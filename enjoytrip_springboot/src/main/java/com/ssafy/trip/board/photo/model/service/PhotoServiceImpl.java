@@ -101,7 +101,7 @@ public class PhotoServiceImpl implements PhotoService{
 		photoMapper.deleteAllComments(photoId);
 		// 관련 파일들 삭제 
 		photoMapper.deleteAllPhotos(photoId);
-		
+
 		int thumbnailId=getPhoto(photoId).getThumbnailId();
 		
 		// 글 삭제
@@ -112,6 +112,16 @@ public class PhotoServiceImpl implements PhotoService{
 	
 		
 		
+	}
+
+	@Override
+	public void modifyComment(CommentDto commentDto) throws Exception {
+		photoMapper.modifyComment(commentDto);
+	}
+
+	@Override
+	public void deleteComment(int commentId) throws Exception {
+		photoMapper.deleteComment(commentId);
 	}
 
 }

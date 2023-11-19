@@ -55,6 +55,7 @@ const infiniteHandler = async $state => {
   )
 }
 
+
 const writeModal = ref(false);
 const isWriteModalOpen = function () {
   writeModal.value = !writeModal.value;
@@ -62,9 +63,17 @@ const isWriteModalOpen = function () {
 
 const detailModal = ref(false);
 let photoId = ref();
+
 const isDetailModalOpen = function (arg) {
   photoId.value = arg;
   detailModal.value = !detailModal.value;
+  // if (!detailModal.value) {
+  //   location.reload(); // 화면 새로고침 
+  // }
+}
+
+const isReload = function () {
+  location.reload();
 }
 
 </script>
@@ -88,13 +97,16 @@ const isDetailModalOpen = function (arg) {
         </div>
         <div>
           <!-- 로그인해야 보임 -->
-          <button v-if='isLogin' type="button" id="writeButton" @click="isModalOpen">글쓰기</button>
-          <Transition v-if="writeModal">
-            <BoardPhotoWrite @cancel-write='isWriteModalOpen' />
-          </Transition>
+          <template v-if="isLogin">
+            <button type="button" id="writeButton" @click="isWriteModalOpen">글쓰기</button>
+            <Transition v-if="writeModal">
+              <BoardPhotoWrite @cancel-write='isWriteModalOpen' @write-photo="isReload" />
+            </Transition>
+          </template>
         </div>
       </div>
     </div>
+
 
     <div class='listContainer'>
       <div class="listItem">
@@ -103,13 +115,11 @@ const isDetailModalOpen = function (arg) {
         </BoardPhotoListItem>
       </div>
       <Transition v-if="detailModal">
-        <BoardPhotoDetail :photoId="photoId" @cancel-detail="isDetailModalOpen" />
+        <BoardPhotoDetail :photoId="photoId" @cancel-detail="isDetailModalOpen" @delete-detail="isReload" />
       </Transition>
 
       <infinite-loading @infinite="infiniteHandler"></infinite-loading>
     </div>
-
-
   </div>
 </template>
 

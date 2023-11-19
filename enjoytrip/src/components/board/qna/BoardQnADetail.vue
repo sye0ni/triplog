@@ -103,7 +103,8 @@ const writeComments = function (...args) {
     commentJson,
     () => {
       console.log("댓글 작성 성공");
-      location.reload();
+      // location.reload();
+      getComment();
     },
     (error) => {
       console.log(error);
@@ -133,7 +134,8 @@ const deleteComments = function (args) {
     args,
     () => {
       console.log("댓글 삭제 성공");
-      location.reload();
+      // location.reload();
+      getComment();
     },
     (error) => {
       console.log(error);
@@ -155,33 +157,21 @@ const list = function () {
     </div>
     <!-- 질문 영역 -->
     <div>
-      <BoardQnAFormItem
-        :article="article"
-        type="question"
-        @modify-event="modifyQuestions"
-        @delete-article="deleteQuestions"
-      />
+      <BoardQnAFormItem :article="article" type="question" @modify-event="modifyQuestions"
+        @delete-article="deleteQuestions" />
     </div>
 
     <!-- (답변이 있다면) 답변 보이기 -->
     <div v-for="comment in comments" :key="comment.commentId">
-      <BoardQnAFormItem
-        :article="comment"
-        type="comment"
-        @modify-event="modifyComments"
-        @delete-article="deleteComments"
-      />
+      <BoardQnAFormItem :article="comment" type="comment" @modify-event="modifyComments"
+        @delete-article="deleteComments" />
     </div>
 
     <!-- (관리자라면) 답변 등록 -->
     <template v-if="userId === 'admin'">
       <!-- 현재 로그인한 유저가 관리자인가?-->
       <div>
-        <BoardQnAFormItem
-          :article="article"
-          @write-comment="writeComments"
-          type="write"
-        />
+        <BoardQnAFormItem :article="article" @write-comment="writeComments" type="write" />
       </div>
     </template>
   </div>

@@ -132,7 +132,7 @@ private static final Logger logger = LoggerFactory.getLogger(PhotoController.cla
 					
 					Thumbnails.of(saveFilePath)
 		            	.size(200, 200)
-		            	.outputQuality(0.8)
+		            	.outputQuality(0.9)
 		            	.toFile(thumbnailSaveFile);
 					
 					
@@ -208,5 +208,21 @@ private static final Logger logger = LoggerFactory.getLogger(PhotoController.cla
 		photoService.writeComment(photoId,commentDto);
 		
 		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+	
+	@PutMapping("/{photoId}/comment/{commentId}")
+	public ResponseEntity<?> modifyComment(@PathVariable int photoId, @PathVariable int commentId, @RequestBody CommentDto commentDto) throws Exception {
+		logger.info("modifyComment - 호출 {}", commentDto);
+		
+		photoService.modifyComment(commentDto);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+
+	@DeleteMapping("/{photoId}/comment/{commentId}")
+	public ResponseEntity<?> deleteComment(@PathVariable int photoId, @PathVariable int commentId) throws Exception {
+		logger.info("deleteComment - 호출 {}", commentId);
+		photoService.deleteComment(commentId);
+		return new ResponseEntity<>(HttpStatus.OK);	
 	}
 }

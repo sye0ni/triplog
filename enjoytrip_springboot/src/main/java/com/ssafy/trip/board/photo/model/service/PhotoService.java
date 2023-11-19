@@ -28,5 +28,9 @@ public interface PhotoService {
 
 	void deletePhoto(int photoId) throws Exception;
 
+	void modifyComment(CommentDto commentDto) throws Exception;
+
+	void deleteComment(int commentId) throws Exception;
+
 
 }
