@@ -130,11 +130,11 @@ const deleteArticle = function (event) {
         </div>
 
         <div class="box1-2">
-          <!-- <template v-if="isLogin && userInfo.userId === article.userId"> -->
+          <template v-if="isLogin && userInfo.userId === article.userId">
           <!-- 작성자한테만 보이게 => 나중에 수정하기 -->
           <button class='noBorderBtn' @click="toggleChange">수정</button>
           <button class='noBorderBtn' @click="deleteArticle">삭제</button>
-          <!-- </template> -->
+          </template>
           <!-- </template> -->
           <span>{{ article.userId }}
             <span id="date">{{ article.registerTime }}</span></span>

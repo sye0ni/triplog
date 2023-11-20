@@ -1,11 +1,17 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useMemberStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 
 const toggleContentState = ref(true);
 const memberStore = useMemberStore();
-const { userInfo } = storeToRefs(memberStore);
+const { isLogin, userInfo } = storeToRefs(memberStore);
+
+onMounted(() => {
+    console.log(userInfo.value.userId);
+    console.log(props.comment.userId);
+    console.log(isLogin.value);
+});
 
 const props = defineProps({
     comment: Object
@@ -53,7 +59,7 @@ const deletePhotos = function () {
             <span id="userId" style="font-weight: bold;">{{ comment.userId }}</span>
             <!-- 작성자의 경우에만 보이게 -->
             <div class="box1-1">
-                <template v-if="isLogin && userInfo.userId === comment.userId">
+                <template v-if="isLogin && comment.userId==userInfo.userId">
                     <button @click.prevent='modifyComments'>수정</button>
                     <button @click.prevent='deletePhotos'>삭제</button>
                 </template>
