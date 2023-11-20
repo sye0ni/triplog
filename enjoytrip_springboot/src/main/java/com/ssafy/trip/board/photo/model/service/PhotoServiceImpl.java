@@ -148,6 +148,7 @@ public class PhotoServiceImpl implements PhotoService{
 		BoardPhotoDto photoDto=photoMapper.getPhoto(photoId);
 		System.out.println("photoID!!!!!!!!!!!!"+photoDto);
 		System.out.println(photoDto);
+		
 		// 이미지들 경로 가져오기 
 		List<String> photoPaths=photoMapper.getPhotoList(photoDto.getBoardPhotoId());
 

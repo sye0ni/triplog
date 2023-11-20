@@ -10,6 +10,7 @@ import { useRouter } from "vue-router";
 import PlanSearchItem2 from "./PlanSearchItem2.vue";
 import VRadio from "./VRadio.vue";
 
+const emits = defineEmits(["showDetail", "sendAttrlist", "moveMap"]);
 const planStore = usePlanStore();
 const router = useRouter();
 
@@ -76,6 +77,7 @@ const changeKey2 = (val) => {
   getAttractionList(param.value, ({ data }) => {
     // console.log(data.length + "get attractionList ,", data);
     attractionList.value = [];
+    sendAttrList.value.length = 0;
     for (let i = 0; i < data.length; i++) {
       for (let j = 0; j < wishlist.value.length; j++) {
         if (data[i].contentId == wishlist.value[j].contentId) {
@@ -85,7 +87,10 @@ const changeKey2 = (val) => {
       }
       data[i].idx = i;
       attractionList.value.push(data[i]);
+      sendAttrList.value.push(data[i]);
     }
+      emits('sendAttrlist', sendAttrList.value);
+
   }),
     (error) => {
       console.log(error);
@@ -94,6 +99,7 @@ const changeKey2 = (val) => {
 
 // 여행지 목록 가져오기
 const attractionList = ref([]);
+const sendAttrList = ref([]);
 
 const type = ref("");
 
@@ -110,13 +116,14 @@ const changeRadio = function (val) {
     param.value.contentTypeId == ""
   ) {
     return;
-  }
+  } // 선택되지 않은 값이 있으면 x 
 
   getAttractionList(
     param.value,
     ({ data }) => {
       // console.log(data.length + "get attractionList ,", data);
       attractionList.value.length = 0;
+      sendAttrList.value.length = 0;
       console.log(wishlist.value.length + "?????");
       for (let i = 0; i < data.length; i++) {
         data[i].idx = i;
@@ -128,7 +135,10 @@ const changeRadio = function (val) {
           }
         }
         attractionList.value.push(data[i]);
-      }
+        sendAttrList.value.push(data[i]);
+      } // attractionList 생성
+
+      emits('sendAttrlist', sendAttrList.value);
     },
     (error) => {
       console.log(error);
@@ -144,6 +154,7 @@ onMounted(() => {
 
 const likeChange = function (likeIdx, idx) {
   console.log("likeChange 받음!", likeIdx + " " + idx);
+  console.log(attractionList.value[idx]);
   if (likeIdx == -1) {
     attractionList.value[idx].isLike = true;
   } else {
@@ -176,6 +187,14 @@ const makeWishlist = function () {
     }
   );
 };
+
+const showDetail = function (arg) {
+  emits("showDetail", arg);
+}
+
+const moveMap = function (arg) {
+  emits("moveMap", arg);
+}
 </script>
 
 <template>
@@ -224,6 +243,8 @@ const makeWishlist = function () {
               :key="item.contentId"
               :item="item"
               @like-change="likeChange"
+              @show-detail="showDetail"
+              @select-attr="moveMap"
             />
           </tbody>
         </table>

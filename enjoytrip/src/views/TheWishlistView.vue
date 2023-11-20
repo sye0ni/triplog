@@ -9,6 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
 import PlanSearch2 from "@/components/common/PlanSearch2.vue";
 import PlanDetailTempList from "@/components/plan/PlanDetailTempList.vue";
+import WishlistDetail from "@/components/plan/WishlistDetail.vue";
 
 const planStore = usePlanStore();
 const router = useRouter();
@@ -52,31 +53,76 @@ const onMouseDown = (event) => {
   document.addEventListener("mouseup", onMouseUp);
 };
 
+const showModal = ref(false);
+
+const toggleModal = () => {
+  showModal.value = !showModal.value;
+}
+
+const attraction = ref({});
+const showDetail=function(arg){
+  // console.log(arg); // 받아온 여행지를 wishlistdetail 로 넘겨야함 
+  attraction.value = arg;
+  // console.log(attraction.value);
+  toggleModal();
+}
+
+const attractionList = ref([]);
+const startMap = function (arg) {
+  // kakao map 으로 attraction list 전달
+  // console.log("검색결과!!!");
+  // console.log(arg);
+  attractionList.value = arg;
+}
+
+const selectAttr = ref({});
+const moveMap = function (arg) {
+  console.log("선택한 요소!!!");
+  // console.log(arg);
+  selectAttr.value = arg;
+}
+
 // --- 페이지 나누기 끝
 
 // --- 지도
 </script>
 
 <template>
-  <div>
+  <div class="bigContainer">
     <div class="borderContainer">
       <div class="d2 mapContainer" :style="{ width: rightWidth }">
-        <VKakaoMap />
+        <VKakaoMap :attractionList='attractionList' :attraction='selectAttr'/>
       </div>
       <div class="d1" :style="{ width: leftWidth }">
         <!--  -->
         <div class="subItem search">
-          <PlanSearch2 />
+          <PlanSearch2 @show-detail='showDetail' @send-attrlist='startMap' @move-map='moveMap'/>
         </div>
       </div>
-      <div class="d3" :style="{ left: leftWidth }" @mousedown="onMouseDown"></div>
+      <div class="d3" :style="{ left: leftWidth }" @mousedown="onMouseDown">
+      </div>
+      <div class='modal'>
+        <Transition v-if="showModal">
+          <WishlistDetail @click='toggleModal' :attraction='attraction'/>
+        </Transition>
+      </div>
     </div>
+
   </div>
 </template>
 
 <style scoped>
 * {
   box-sizing: border-box;
+}
+
+.modal{
+  /* position:relative; */
+  position:fixed;
+  top:20%;
+  right:20%;
+  /* background-color: gray; */
+  z-index: 3;
 }
 
 .borderContainer {

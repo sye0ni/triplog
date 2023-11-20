@@ -5,41 +5,49 @@ var map;
 const positions = ref([]);
 const markers = ref([]);
 
-// const props = defineProps({ stations: Array, selectStation: Object });
+const props = defineProps({
+  attractionList: Array,
+  attraction: Object
+});
 
-// watch(
-//   () => props.selectStation.value,
-//   () => {
-//     // 이동할 위도 경도 위치를 생성합니다
-//     var moveLatLon = new kakao.maps.LatLng(props.selectStation.lat, props.selectStation.lng);
 
-//     // 지도 중심을 부드럽게 이동시킵니다
-//     // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-//     map.panTo(moveLatLon);
-//   },
-//   { deep: true }
-// );
+watch(
+  () => props.attraction,
+  () => {
+    // 이동할 위도 경도 위치를 생성합니다
+    var moveLatLon = new kakao.maps.LatLng(props.attraction.latitude, props.attraction.longitude);
 
-// watch(
-//   // 충전소 목록이 바뀌면..
-//   () => props.stations.value,
-//   () => {
-//     // positions에다가 담아라
-//     positions.value = [];
-//     props.stations.forEach((station) => {
-//       let obj = {};
-//       obj.latlng = new kakao.maps.LatLng(station.lat, station.lng);
-//       obj.title = station.statNm;
+    // 지도 중심을 부드럽게 이동시킵니다
+    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+    map.panTo(moveLatLon);
+  },
+  { deep: true }
+);
 
-//       positions.value.push(obj);
-//     });
-//     loadMarkers();
-//   },
-//   // 객체나 배열 안의 내용이 바뀔 때는 깊은 감시 해야함!!!!!!!
-//   { deep: true }
-// );
+watch(
+  // attraction 목록이 바뀌면..
+  () => props.attractionList,
+  () => {
+    // console.log("지도!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    // console.log(props.attractionList);
+   // positions에다가 담아라
+    positions.value = [];
+    props.attractionList.forEach((attraction) => {
+      let obj = {};
+      obj.latlng = new kakao.maps.LatLng(attraction.latitude, attraction.longitude);
+      obj.title = attraction.title;
+
+      positions.value.push(obj);
+    });
+
+    loadMarkers();
+  },
+  // 객체나 배열 안의 내용이 바뀔 때는 깊은 감시 해야함!!!!!!!
+  { deep: true }
+);
 
 onMounted(() => {
+
   // kakao라는 객체가 있으면 만들어라
   if (window.kakao && window.kakao.maps) {
     initMap();
@@ -81,7 +89,7 @@ const loadMarkers = () => {
   // 마커를 생성합니다
   markers.value = [];
   positions.value.forEach((position) => {
-    const marker = new kakao.maps.Marker({
+      const marker = new kakao.maps.Marker({
       map: map, // 마커를 표시할 지도
       position: position.latlng, // 마커를 표시할 위치
       title: position.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됨.

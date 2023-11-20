@@ -8,7 +8,7 @@ const planStore = usePlanStore();
 const { storeBox, wishlist } = storeToRefs(planStore);
 
 const props = defineProps({ item: Object });
-const emits = defineEmits(["likeChange"]);
+const emits = defineEmits(["likeChange", "showDetail", "selectAttr"]);
 
 const addEvent = function () {
   console.log("wish");
@@ -27,21 +27,30 @@ const addEvent = function () {
   wishlist.value.push(props.item);
 };
 
-const attractionClick = function () {
-  console.log("지도 이동해야...");
+const showDetails = function () {
+  console.log("상세보기");
+  console.log(props.item); // 받은 고대로 돌려줘 
+  emits("showDetail", props.item);
+}
+
+
+const attractionClick = function () { // 클릭한 요소 넘겨주기 
+  // console.log("지도 이동해야...");
+  // 나를 던져야해 
+  emits("selectAttr", props.item); // 받은 고대로 돌려줘 
 };
 </script>
 
 <template>
-  <tr class="line" @click="attractionClick">
+  <tr class="line">
     <!-- <td><img :src="item.firstImage" alt="" /></td> -->
-    <td :title="item.title">
+    <td :title="item.title" @click="attractionClick">
       <b class="name">{{ item.title }}</b>
     </td>
-    <td :title="item.addr1">
+    <td :title="item.addr1" @click="attractionClick">
       <span>{{ item.addr1 }}</span>
     </td>
-    <td title="상세보기"><i class="fa-solid fa-magnifying-glass"></i></td>
+    <td title="상세보기"><i class="fa-solid fa-magnifying-glass" @click='showDetails'></i></td>
     <td class="put" @click="addEvent">
       <span v-show="item.isLike == true">
         <i class="fa-solid fa-heart" style="color: #d20000"></i>
