@@ -22,7 +22,7 @@ const rightWidth = ref("100%");
 const separatorWidth = ref("3px");
 
 const MIN_WIDTH = 400; // 최소 허용 너비
-const MAX_WIDTH = window.innerWidth - 500; // 최대 허용 너비 (현재 창 너비에서 100px 제외)
+const MAX_WIDTH = window.innerWidth - 700; // 최대 허용 너비 (현재 창 너비에서 100px 제외)
 
 const onMouseMove = (event) => {
   if (isEnable.value) {
@@ -69,11 +69,7 @@ const onMouseDown = (event) => {
           <PlanSearch2 />
         </div>
       </div>
-      <div
-        class="d3"
-        :style="{ left: leftWidth }"
-        @mousedown="onMouseDown"
-      ></div>
+      <div class="d3" :style="{ left: leftWidth }" @mousedown="onMouseDown"></div>
     </div>
   </div>
 </template>
@@ -133,6 +129,6 @@ const onMouseDown = (event) => {
 
 .search {
   min-width: 400px;
-  max-width: 550px;
+  /* max-width: 550px; */
 }
 </style>

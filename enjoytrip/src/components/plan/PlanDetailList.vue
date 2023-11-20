@@ -15,6 +15,7 @@ const temp = ref({
 // -- drag
 const dragEnter = function (event) {
   console.log("dragEnter");
+  x;
 };
 
 const dragOver = function (event) {
@@ -33,7 +34,7 @@ const dropItem = function (event) {
 </script>
 
 <template>
-  <div>
+  <div style="width: 100%">
     <div class="container">
       <!-- <div class="title">여행계획</div> -->
       <div
@@ -42,11 +43,7 @@ const dropItem = function (event) {
         @dragover.prevent="dragOver"
         @drop.prevent="dropItem"
       >
-        <PlanDetailListItem
-          v-for="item in planBox"
-          :key="item.contentId"
-          :item="item"
-        />
+        <PlanDetailListItem v-for="item in planBox" :key="item.contentId" :item="item" />
         <!-- <PlanDetailListItem :item="temp" /> -->
       </div>
     </div>
@@ -73,6 +70,9 @@ const dropItem = function (event) {
 .itemContainer {
   /* background-color: aqua; */
   height: 100%;
+  height: 80vh;
+  width: 100%;
+  /* width: 200px; */
 
   display: flex;
   flex-direction: column;

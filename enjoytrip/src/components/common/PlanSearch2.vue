@@ -189,11 +189,7 @@ const makeWishlist = function () {
       </div>
       <div class="select">
         <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
-        <VSelect
-          :selectOption="selectOptionGugun"
-          @onKeySelect="changeKey2"
-          :index="gugunCode"
-        />
+        <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" />
       </div>
 
       <div class="pt-2">
@@ -216,6 +212,9 @@ const makeWishlist = function () {
               <!-- <th scope="col" class="three">사진</th> -->
               <th scope="col" class="colTitle">제목</th>
               <th scope="col" class="addr">주소</th>
+              <th scope="col" class="detail" title="상세보기">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </th>
               <th scope="col" class="wish">찜</th>
             </tr>
           </thead>
@@ -284,8 +283,14 @@ const makeWishlist = function () {
   width: 30%;
 }
 
+.detail {
+  width: 40px;
+  padding: 0px;
+  /* display: flex; */
+  /* justify-content: center; */
+}
 .wish {
-  width: 50px;
+  width: 40px;
 }
 
 .radio {

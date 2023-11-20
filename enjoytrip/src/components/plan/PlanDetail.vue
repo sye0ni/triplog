@@ -29,10 +29,10 @@ const onMouseMove = (event) => {
   if (isEnable.value) {
     const pos = event.clientX;
     diffpos.value = startpos.value - pos;
-
     const width = window.innerWidth / 2;
 
     if (diffpos.value > -(width - range) && diffpos.value < width - range) {
+      console.log("move ", diffpos.value, width, range);
       let newWidth = width - diffpos.value;
       newWidth = Math.max(MIN_WIDTH, Math.min(newWidth, MAX_WIDTH)); // Ensure it stays within the limits
 
@@ -83,11 +83,7 @@ const onMouseDown = (event) => {
           </div>
         </div>
       </div>
-      <div
-        class="d3"
-        :style="{ left: leftWidth }"
-        @mousedown="onMouseDown"
-      ></div>
+      <div class="d3" :style="{ left: leftWidth }" @mousedown="onMouseDown"></div>
       <button class="makeBtn">만들기</button>
     </div>
   </div>
@@ -166,7 +162,8 @@ const onMouseDown = (event) => {
   position: absolute;
   z-index: 1;
   margin: 0px;
-  border-left: 2px solid #b8b8b8;
+  border: 2px solid salmon;
+  /* border-left: 2px solid #b8b8b8; */
 }
 
 .search {
@@ -176,7 +173,7 @@ const onMouseDown = (event) => {
 
 .tempBox {
   min-width: 250px;
-  max-width: 350px;
+  max-width: 300px;
 }
 
 .plan {

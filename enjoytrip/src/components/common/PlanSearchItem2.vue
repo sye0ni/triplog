@@ -41,6 +41,7 @@ const attractionClick = function () {
     <td :title="item.addr1">
       <span>{{ item.addr1 }}</span>
     </td>
+    <td title="상세보기"><i class="fa-solid fa-magnifying-glass"></i></td>
     <td class="put" @click="addEvent">
       <span v-show="item.isLike == true">
         <i class="fa-solid fa-heart" style="color: #d20000"></i>
