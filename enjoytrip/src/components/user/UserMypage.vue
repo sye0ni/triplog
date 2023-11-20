@@ -160,6 +160,7 @@ const goPlanList = function () {
 
 const goPhotoList = function () {
   console.log("내 글 목록 바로가기");
+  router.push({name:"user-myphoto"})
 };
 
 const goWhishlist = function () {

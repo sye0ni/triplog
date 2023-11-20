@@ -65,6 +65,11 @@ const router = createRouter({
           name: "user-mypage",
           component: () => import("@/components/user/UserMypage.vue"),
         },
+        {
+          path: "myphoto",
+          name: "user-myphoto",
+          component:()=>import("@/components/user/UserMyphoto.vue"),
+        }
       ],
     },
     {

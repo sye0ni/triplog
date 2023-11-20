@@ -43,7 +43,7 @@ const onDragEnd = (event) => {
     <!-- <PlanDetailListItem /> -->
     <div style="display: flex; height: 100%">
       <div style="background-color: aliceblue">
-        <!-- {{ wishlist }} -->
+        {{ wishlist }}
         <draggable
           v-model="wishlist"
           group="people"

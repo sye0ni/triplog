@@ -8,9 +8,9 @@ const memberStore = useMemberStore();
 const { isLogin, userInfo } = storeToRefs(memberStore);
 
 onMounted(() => {
-    console.log(userInfo.value.userId);
-    console.log(props.comment.userId);
-    console.log(isLogin.value);
+    // console.log(userInfo.value.userId);
+    // console.log(props.comment.userId);
+    // console.log(isLogin.value);
 });
 
 const props = defineProps({
