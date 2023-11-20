@@ -75,6 +75,7 @@ const onMouseDown = (event) => {
           <div class="subItem search">
             검색
             <PlanSearch />
+            <button class="makeBtn">만들기</button>
           </div>
 
           <div class="subItem tempBox">
@@ -83,13 +84,19 @@ const onMouseDown = (event) => {
           </div>
           <div class="subItem plan">
             <div class="subTitle">여행계획</div>
-            <!-- {{ planCreateInfo.period }} -->
-            <PlanDetailList v-for="index in planCreateInfo.period" :key="index" :nth="index" />
+            <PlanDetailList
+              v-for="index in planCreateInfo.period"
+              :key="index"
+              :nth="index"
+            />
           </div>
         </div>
       </div>
-      <div class="d3" :style="{ left: leftWidth }" @mousedown="onMouseDown"></div>
-      <button class="makeBtn">만들기</button>
+      <div
+        class="d3"
+        :style="{ left: leftWidth }"
+        @mousedown="onMouseDown"
+      ></div>
     </div>
   </div>
 </template>
@@ -100,10 +107,11 @@ const onMouseDown = (event) => {
 }
 
 .makeBtn {
-  position: absolute;
-  z-index: 10;
-  right: 0;
-  margin: 30px 50px;
+  /* position: absolute; */
+  /* z-index: 10; */
+  /* right: 0; */
+  /* margin: 30px 50px; */
+  /* margin-bottom: 10vh; */
   background-color: #d20000;
   border: none;
   color: white;

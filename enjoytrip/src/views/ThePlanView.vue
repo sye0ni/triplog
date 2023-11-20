@@ -1,13 +1,13 @@
 <script setup>
 import { ref } from "vue";
 
-const planCreateInfo = ref({
-  sidoCode: "",
-  gugunCode: "",
-  startDate: "",
-  endDate: "",
-  period: "",
-});
+// const planCreateInfo = ref({
+//   sidoCode: "",
+//   gugunCode: "",
+//   startDate: "",
+//   endDate: "",
+//   period: "",
+// });
 
 const planStoreBox = ref([]);
 
@@ -30,7 +30,7 @@ const planDetailListBox = ref([]);
     <!-- theplanview -->
     <div class="container">
       <!-- <router-view @period-change="setPeriod" :planCreateInfo="planCreateInfo"></router-view> -->
-      <router-view :planCreateInfo="planCreateInfo"></router-view>
+      <router-view></router-view>
     </div>
   </div>
 </template>

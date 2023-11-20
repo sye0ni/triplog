@@ -15,9 +15,6 @@ const props = defineProps({ nth: Number });
 onMounted(() => {
   console.log("detaillist onmounted ", props.nth, planBox.value);
   planBox.value.push([]);
-  // console.log(planBox);
-  // console.log("잉?" + planBox.value[0].plan.contentId);
-  // console.log(planBox.value[props.nth].InstanceType);
 });
 </script>
 
@@ -25,11 +22,6 @@ onMounted(() => {
   <div style="width: 100%">
     <div class="container">
       <div>{{ nth }}일차</div>
-      <!-- <div class="title">여행계획</div> -->
-      <!-- <div class="itemContainer"> -->
-      <!-- <PlanDetailListItem v-for="item in planBox" :key="item.contentId" :item="item" /> -->
-      <!-- <PlanDetailListItem :item="temp" /> -->
-      <!-- {{ planBox[nth - 1] }} -->
       <div style="background-color: aquamarine; min-height: 100px; width: 100%">
         <draggable
           v-model="planBox[nth - 1]"
@@ -42,7 +34,6 @@ onMounted(() => {
             <PlanDetailListItem :item="element" />
           </template>
         </draggable>
-        <!-- </div> -->
       </div>
     </div>
   </div>
@@ -50,17 +41,11 @@ onMounted(() => {
 
 <style scoped>
 .container {
-  /* height: 100px; */
-  /* height: 80vh; */
   min-height: 100px;
   width: 100%;
   background-color: azure;
   border: 1px solid powderblue;
   overflow-y: auto;
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* align-items: center; */
-  /* justify-content: center; */
 }
 .title {
   text-align: center;

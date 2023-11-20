@@ -127,7 +127,6 @@ onMounted(() => {
   <div>
     <!--  -->
     <div class="subItem search">
-      <span>검색</span>
       <div class="select">
         <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
         <VSelect
@@ -154,7 +153,6 @@ onMounted(() => {
         <table class="table custom-table">
           <thead>
             <tr>
-              <!-- <th scope="col" class="three">사진</th> -->
               <th scope="col" class="title">제목</th>
               <th scope="col" class="addr">주소</th>
               <th scope="col" class="put">

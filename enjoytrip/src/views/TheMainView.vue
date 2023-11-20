@@ -43,7 +43,6 @@ const onDragEnd = (event) => {
     <!-- <PlanDetailListItem /> -->
     <div style="display: flex; height: 100%">
       <div style="background-color: aliceblue">
-        {{ wishlist }}
         <draggable
           v-model="wishlist"
           group="people"
@@ -62,7 +61,7 @@ const onDragEnd = (event) => {
           v-model="storeBox"
           group="people"
           @start="drag = true"
-          @end="drag = false"
+          @end="onDragEnd"
           item-key="contentId"
         >
           <template #item="{ element }">
@@ -71,8 +70,12 @@ const onDragEnd = (event) => {
         </draggable>
       </div>
 
-      <div style="background-color: rgb(30, 206, 60); width: 300px">{{ wishlist }}</div>
-      <div style="background-color: rgb(206, 30, 89); width: 300px">{{ storeBox }}</div>
+      <div style="background-color: rgb(30, 206, 60); width: 300px">
+        {{ wishlist }}
+      </div>
+      <div style="background-color: rgb(206, 30, 89); width: 300px">
+        {{ storeBox }}
+      </div>
     </div>
     <div>Main Page</div>
     <div>Main Page</div>

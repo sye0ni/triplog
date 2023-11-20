@@ -22,7 +22,10 @@ const dragEnd = function () {
     <div class="container">
       <!-- {{ storeBox }} -->
       <div class="subText">
-        <i class="fa-solid fa-right-to-bracket fa-flip-both" style="color: #d20000"></i>
+        <i
+          class="fa-solid fa-right-to-bracket fa-flip-both"
+          style="color: #d20000"
+        ></i>
         버튼을 눌러 항목을 보관함에서 제거해보세요
       </div>
       <!-- <PlanDetailTempListItem v-for="item in storeBox" :key="item.contentId" :item="item" /> -->
@@ -36,7 +39,7 @@ const dragEnd = function () {
         <draggable
           v-model="storeBox"
           group="plan"
-          @start="startDrag"
+          @start="drag = true"
           @end="drag = true"
           item-key="contentId"
         >

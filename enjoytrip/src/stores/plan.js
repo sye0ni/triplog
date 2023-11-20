@@ -22,8 +22,10 @@ export const usePlanStore = defineStore(
           addr2: "(신사동)",
           zipcode: "6031",
           tel: "",
-          firstImage: "http://tong.visitkorea.or.kr/cms/resource/80/1258080_image2_1.jpg",
-          firstImage2: "http://tong.visitkorea.or.kr/cms/resource/80/1258080_image3_1.jpg",
+          firstImage:
+            "http://tong.visitkorea.or.kr/cms/resource/80/1258080_image2_1.jpg",
+          firstImage2:
+            "http://tong.visitkorea.or.kr/cms/resource/80/1258080_image3_1.jpg",
           readcount: 24560,
           sidoCode: 1,
           gugunCode: 1,
@@ -39,8 +41,10 @@ export const usePlanStore = defineStore(
           addr2: "312호",
           zipcode: "6011",
           tel: "",
-          firstImage: "http://tong.visitkorea.or.kr/cms/resource/58/683658_image2_1.jpg",
-          firstImage2: "http://tong.visitkorea.or.kr/cms/resource/58/683658_image3_1.jpg",
+          firstImage:
+            "http://tong.visitkorea.or.kr/cms/resource/58/683658_image2_1.jpg",
+          firstImage2:
+            "http://tong.visitkorea.or.kr/cms/resource/58/683658_image3_1.jpg",
           readcount: 23013,
           sidoCode: 1,
           gugunCode: 1,
@@ -58,8 +62,10 @@ export const usePlanStore = defineStore(
           addr2: "312호",
           zipcode: "6011",
           tel: "",
-          firstImage: "http://tong.visitkorea.or.kr/cms/resource/58/683658_image2_1.jpg",
-          firstImage2: "http://tong.visitkorea.or.kr/cms/resource/58/683658_image3_1.jpg",
+          firstImage:
+            "http://tong.visitkorea.or.kr/cms/resource/58/683658_image2_1.jpg",
+          firstImage2:
+            "http://tong.visitkorea.or.kr/cms/resource/58/683658_image3_1.jpg",
           readcount: 23013,
           sidoCode: 1,
           gugunCode: 1,

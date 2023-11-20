@@ -12,13 +12,13 @@ const props = defineProps({ item: Object });
 const addEvent = function () {
   console.log("add");
 
-  for (let i = 0; i < storeBox.value.length; i++) {
-    // console.log(i);
-    if (storeBox.value[i].contentId == props.item.contentId) {
-      alert("이미 보관함에 추가된 항목입니다.");
-      return;
-    }
-  }
+  // for (let i = 0; i < storeBox.value.length; i++) {
+  //   // console.log(i);
+  //   if (storeBox.value[i].contentId == props.item.contentId) {
+  //     alert("이미 보관함에 추가된 항목입니다.");
+  //     return;
+  //   }
+  // }
 
   storeBox.value.push(props.item);
 };
