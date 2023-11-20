@@ -20,17 +20,15 @@ const deleteItem = function () {
 </script>
 
 <template>
-  <div draggable="true">
+  <!-- <div draggable="true"> -->
+  <div>
     <div class="container">
       <div>
         <div class="title">{{ item.title }}</div>
         <div class="addr">{{ item.addr1 }}</div>
       </div>
       <div class="out" title="보관함에서 제거" @click="deleteItem">
-        <i
-          class="fa-solid fa-right-to-bracket fa-flip-both"
-          style="color: #d20000"
-        ></i>
+        <i class="fa-solid fa-right-to-bracket fa-flip-both" style="color: #d20000"></i>
       </div>
     </div>
   </div>

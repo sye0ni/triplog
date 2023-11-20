@@ -99,9 +99,13 @@ public class PlanController {
 			System.out.println("map " + map);
 		}
 		
+		Map<String, Object> map = new HashMap<>();
+		map.put("period", period);
+		map.put("planDto", planDto);
+		
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
-				.body(planDto);
+				.body(map);
 	}
 	
 	@GetMapping(value = "/{planid}")

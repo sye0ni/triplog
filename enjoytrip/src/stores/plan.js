@@ -12,8 +12,72 @@ export const usePlanStore = defineStore(
   () => {
     const wishlist = ref([]); // 사용자의 찜목록
     const storeBox = ref([]); // 보관함 (찜주머니에서 남은것들이 저장되어 넘어옴 / detail에서도 사용)
-    const planBox = ref([]); // 여행계획 보관함..
-
+    const planBox = ref([
+      [
+        {
+          contentId: 129921,
+          contentTypeId: 14,
+          title: "다도화랑",
+          addr1: "서울특별시 강남구 논현로159길 24",
+          addr2: "(신사동)",
+          zipcode: "6031",
+          tel: "",
+          firstImage: "http://tong.visitkorea.or.kr/cms/resource/80/1258080_image2_1.jpg",
+          firstImage2: "http://tong.visitkorea.or.kr/cms/resource/80/1258080_image3_1.jpg",
+          readcount: 24560,
+          sidoCode: 1,
+          gugunCode: 1,
+          latitude: 37.52298794,
+          longitude: 127.0260901,
+          mlevel: "6",
+        },
+        {
+          contentId: 129922,
+          contentTypeId: 14,
+          title: "갤러리미",
+          addr1: "서울특별시 강남구 압구정로 461 네이처 포엠",
+          addr2: "312호",
+          zipcode: "6011",
+          tel: "",
+          firstImage: "http://tong.visitkorea.or.kr/cms/resource/58/683658_image2_1.jpg",
+          firstImage2: "http://tong.visitkorea.or.kr/cms/resource/58/683658_image3_1.jpg",
+          readcount: 23013,
+          sidoCode: 1,
+          gugunCode: 1,
+          latitude: 37.52531027,
+          longitude: 127.0472465,
+          mlevel: "6",
+        },
+      ],
+      [
+        {
+          contentId: 129922,
+          contentTypeId: 14,
+          title: "갤러리미",
+          addr1: "서울특별시 강남구 압구정로 461 네이처 포엠",
+          addr2: "312호",
+          zipcode: "6011",
+          tel: "",
+          firstImage: "http://tong.visitkorea.or.kr/cms/resource/58/683658_image2_1.jpg",
+          firstImage2: "http://tong.visitkorea.or.kr/cms/resource/58/683658_image3_1.jpg",
+          readcount: 23013,
+          sidoCode: 1,
+          gugunCode: 1,
+          latitude: 37.52531027,
+          longitude: 127.0472465,
+          mlevel: "6",
+        },
+      ],
+      [],
+      [],
+    ]); // 여행계획 보관함..
+    const planCreateInfo = ref({
+      sidoCode: "",
+      gugunCode: "",
+      startDate: "",
+      endDate: "",
+      period: "",
+    });
     const sidoCode = ref([
       {
         text: "시/도",
@@ -134,6 +198,7 @@ export const usePlanStore = defineStore(
       storeBox,
       planBox,
       attractionType,
+      planCreateInfo,
     };
   },
   {

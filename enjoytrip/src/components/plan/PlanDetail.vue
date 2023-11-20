@@ -14,6 +14,8 @@ import PlanDetailList from "./PlanDetailList.vue";
 const planStore = usePlanStore();
 const router = useRouter();
 
+const { planCreateInfo } = storeToRefs(planStore);
+
 const startpos = ref(0);
 const diffpos = ref(0);
 const isEnable = ref(false);
@@ -56,6 +58,8 @@ const onMouseDown = (event) => {
 
 // --- 페이지 나누기 끝
 
+// --- planCreateInfo
+
 // --- 지도
 </script>
 
@@ -79,7 +83,8 @@ const onMouseDown = (event) => {
           </div>
           <div class="subItem plan">
             <div class="subTitle">여행계획</div>
-            <PlanDetailList />
+            <!-- {{ planCreateInfo.period }} -->
+            <PlanDetailList v-for="index in planCreateInfo.period" :key="index" :nth="index" />
           </div>
         </div>
       </div>
@@ -162,8 +167,8 @@ const onMouseDown = (event) => {
   position: absolute;
   z-index: 1;
   margin: 0px;
-  border: 2px solid salmon;
-  /* border-left: 2px solid #b8b8b8; */
+  /* border: 2px solid salmon; */
+  border-left: 2px solid #b8b8b8;
 }
 
 .search {

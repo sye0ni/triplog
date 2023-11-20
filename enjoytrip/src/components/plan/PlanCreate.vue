@@ -10,10 +10,12 @@ import { gugun, registPlan } from "@/api/plan";
 const planStore = usePlanStore();
 const router = useRouter();
 
-const { sidoCode } = storeToRefs(planStore);
+const { sidoCode, planCreateInfo } = storeToRefs(planStore);
 
 const selectOptionSido = sidoCode;
 let selectOptionGugun = ref([{ text: "구/군", value: "" }]);
+
+// const emits = defineEmits(["periodChange"]);
 
 const param = ref({
   userId: "",
@@ -21,6 +23,7 @@ const param = ref({
   gugunCode: "",
   startDate: "",
   endDate: "",
+  period: "",
 });
 
 const gugunCode = ref("0");
@@ -86,6 +89,15 @@ const createPlan = function () {
     param.value,
     ({ data }) => {
       console.log("createPlan data", data);
+      // emits("periodChange", data);
+      // 피니아에 정보 저장!!
+      planCreateInfo.value.period = data.period;
+      planCreateInfo.value.sidoCode = data.planDto.sidoCode;
+      planCreateInfo.value.gugunCode = data.planDto.gugunCode;
+      planCreateInfo.value.startDate = data.planDto.startDate;
+      planCreateInfo.value.endDate = data.planDto.endDate;
+
+      console.log(planCreateInfo + " , " + planCreateInfo.value);
       router.push({ name: "plan-wishlist" });
     },
     (error) => {
@@ -102,15 +114,8 @@ const createPlan = function () {
       <div class="title">여행을 시작해보세요!</div>
       <div class="line1">
         <div class="subTitle">여행지</div>
-        <VSelect
-          :selectOption="selectOptionSido"
-          @onKeySelect="changeKey"
-        />
-        <VSelect
-          :selectOption="selectOptionGugun"
-          @onKeySelect="changeKey2"
-          :index="gugunCode"
-        />
+        <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
+        <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" />
       </div>
       <hr />
       <div class="line2">

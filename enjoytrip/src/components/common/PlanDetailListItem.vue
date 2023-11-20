@@ -11,6 +11,8 @@ const props = defineProps({
       <div>
         <!-- planDetailListItem -->
         <!-- item: {{ item }} -->
+        <!-- <div class="title">titile</div>
+        <div class="addr">addr1</div> -->
         <div class="title">{{ item.title }}</div>
         <div class="addr">{{ item.addr1 }}</div>
       </div>
