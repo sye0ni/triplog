@@ -8,6 +8,13 @@ const planStore = usePlanStore();
 const { storeBox } = storeToRefs(planStore);
 
 // ----- 드래그...
+
+const startDrag = function () {
+  console.log("dragStart!!");
+};
+const dragEnd = function () {
+  console.log("dragEnd!!");
+};
 </script>
 
 <template>
@@ -29,7 +36,7 @@ const { storeBox } = storeToRefs(planStore);
         <draggable
           v-model="storeBox"
           group="plan"
-          @start="drag = true"
+          @start="startDrag"
           @end="drag = true"
           item-key="contentId"
         >
