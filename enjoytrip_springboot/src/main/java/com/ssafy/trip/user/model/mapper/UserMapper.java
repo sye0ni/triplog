@@ -1,11 +1,13 @@
 package com.ssafy.trip.user.model.mapper;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ssafy.trip.user.model.UserDto;
+import com.ssafy.trip.user.model.UserPhotoDto;
 
 @Mapper
 public interface UserMapper {
@@ -29,5 +31,8 @@ public interface UserMapper {
 	void saveRefreshToken(Map<String, String> map) throws SQLException;
 	Object getRefreshToken(String userid) throws SQLException;
 	void deleteRefreshToken(Map<String, String> map) throws SQLException;
-
+	
+	// mypage
+	List<UserPhotoDto> getPhotos(String userId) throws SQLException;
+	List<String> getPhotoPaths(int photoId) throws SQLException;
 }

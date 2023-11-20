@@ -1,11 +1,13 @@
 package com.ssafy.trip.user.model.service;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
 
 import com.ssafy.trip.user.model.UserDto;
+import com.ssafy.trip.user.model.UserPhotoDto;
 
 public interface UserService {
 	
@@ -26,4 +28,5 @@ public interface UserService {
 	void saveRefreshToken(String userId, String refreshToken) throws Exception;
 	Object getRefreshToken(String userId) throws Exception;
 	void deleRefreshToken(String userId) throws Exception;
+	List<UserPhotoDto> getPhotos(String userId) throws Exception;
 }

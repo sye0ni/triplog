@@ -3,6 +3,7 @@ package com.ssafy.trip.user.model.service;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
@@ -10,6 +11,7 @@ import javax.mail.MessagingException;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.trip.user.model.UserDto;
+import com.ssafy.trip.user.model.UserPhotoDto;
 import com.ssafy.trip.user.model.mapper.UserMapper;
 import com.ssafy.trip.util.PwHash;
 
@@ -193,6 +195,15 @@ public class UserServiceImpl implements UserService{
 		map.put("userId", userId);
 		map.put("refreshToken", null);
 		userMapper.deleteRefreshToken(map);
+	}
+
+	@Override
+	public List<UserPhotoDto> getPhotos(String userId) throws Exception {
+		List<UserPhotoDto> list=userMapper.getPhotos(userId); // 게시 사진 정보 가져오기
+		
+		
+		return list;
+		
 	}
 
 }

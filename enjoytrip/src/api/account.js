@@ -65,6 +65,11 @@ async function pwdcheck(param, success, fail) {
   await local.post("/users/password", param).then(success).catch(fail);
 }
 
+// /users/{userId}/photo
+function getMyPhoto(userid, success, fail) {
+  local.get(`/users/${userid}/photo`).then(success).catch(fail);
+}
+
 export {
   userConfirm,
   findById,
@@ -78,4 +83,5 @@ export {
   modifyPwd,
   modifyUserInfo,
   pwdcheck,
+  getMyPhoto
 };

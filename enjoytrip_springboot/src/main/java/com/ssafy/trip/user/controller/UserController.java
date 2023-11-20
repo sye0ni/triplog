@@ -1,6 +1,8 @@
 package com.ssafy.trip.user.controller;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.trip.user.model.UserDto;
+import com.ssafy.trip.user.model.UserPhotoDto;
 import com.ssafy.trip.user.model.service.UserService;
 import com.ssafy.trip.util.JWTUtil;
 
@@ -291,6 +294,21 @@ public class UserController {
 			System.out.println("성공");
 			return new ResponseEntity<String>("1", HttpStatus.OK);
 		}
+	}
+	
+	// 나의 게시글 조회 ; 
+	@GetMapping("/{userId}/photo")
+	public ResponseEntity<?> getPhotos(@PathVariable String userId) throws Exception{
+		logger.error("getPhotos  : {}", userId);
+		
+		List<UserPhotoDto> list=userService.getPhotos(userId);
+		if(list != null && !list.isEmpty()) {
+			return ResponseEntity
+					.status(HttpStatus.OK)
+					.body(list);
+		}
+		
+		return new ResponseEntity<List>(Collections.EMPTY_LIST, HttpStatus.OK);
 	}
 	
 }

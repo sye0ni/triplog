@@ -99,4 +99,29 @@
 		where user_id = #{userId}
 	</update>
 	
+	<select id="getPhotos" parameterType="String" resultType="userPhotoDto">
+		    SELECT 
+				    b.board_photo_id AS boardPhotoId,
+				    b.like AS `like`,
+				    CONCAT(t.save_folder, '/', t.save_file) AS thumbnail,
+				    (
+				        SELECT COUNT(*)
+				        FROM comment c
+				        WHERE c.board_id = b.board_photo_id
+				    ) AS commentCnt,
+				    SUBSTRING(b.register_time, 1, 10) AS registerTime,
+				   concat(s.sigun_name, b.place) location
+				FROM
+				    board_photo b
+				INNER JOIN
+				    thumbnail t ON b.thumbnail_id = t.thumbnail_id
+				LEFT JOIN
+				    sigun s ON b.sido_code = s.sido_code 
+				          AND COALESCE(b.gugun_code, 0) = COALESCE(s.gugun_code, 0) 
+				WHERE
+    		b.user_id = #{userId};
+	</select>
+	
+
+	
 </mapper>

@@ -73,8 +73,8 @@ private static final Logger logger = LoggerFactory.getLogger(PhotoController.cla
 	@PostMapping
 	public ResponseEntity<?> writePhoto(@RequestPart("photoDto") BoardPhotoDto boardPhotoDto, @RequestPart(value="file",required=false) List<MultipartFile> files) throws Exception {
 		
-		System.out.println("================ 들어온 dto : "+boardPhotoDto.toString());
-		System.out.println(files);
+//		System.out.println("================ 들어온 dto : "+boardPhotoDto.toString());
+//		System.out.println(files);
 		
 		// FileUpload 관련 설정
 		logger.debug("MultipartFile.isEmpty : {}", files.get(0).isEmpty());
