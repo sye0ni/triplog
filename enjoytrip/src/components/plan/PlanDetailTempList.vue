@@ -28,9 +28,9 @@ const { storeBox } = storeToRefs(planStore);
       <div style="background-color: antiquewhite; height: 100%">
         <draggable
           v-model="storeBox"
-          group="people"
+          group="plan"
           @start="drag = true"
-          @end="drag = false"
+          @end="drag = true"
           item-key="contentId"
         >
           <template #item="{ element }">

@@ -34,7 +34,6 @@ onMounted(() => {
         <draggable
           v-model="planBox[nth - 1]"
           group="plan"
-          tag="plan"
           @start="drag = true"
           @end="drag = true"
           item-key="contentId"
