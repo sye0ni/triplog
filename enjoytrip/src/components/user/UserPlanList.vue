@@ -60,10 +60,15 @@ onMounted(() => {
 
 <template>
   <div class="container">
+    <div class="right dropdown" @click="dropMenu"></div>
     <div class="title">여행 계획 목록</div>
     <hr />
     <div class="innerContainer">
-      <UserPlanListItem v-for="item in planList" :key="item.planId" :item="item" />
+      <UserPlanListItem
+        v-for="item in planList"
+        :key="item.planId"
+        :item="item"
+      />
     </div>
   </div>
 </template>
@@ -97,12 +102,14 @@ input:hover {
 }
 
 .innerContainer {
-  /* display: flex; */
-  /* flex-direction: column; */
+  display: flex;
+  flex-direction: column;
+  /* margin: auto; */
   width: 100%;
   height: 100%;
   /* justify-content: center; */
-  /* align-items: center; */
+  align-items: center;
+  overflow-y: auto;
 }
 
 .title {

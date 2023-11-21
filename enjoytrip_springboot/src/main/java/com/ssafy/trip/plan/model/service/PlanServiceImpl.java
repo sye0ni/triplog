@@ -84,6 +84,21 @@ public class PlanServiceImpl implements PlanService {
 	public List<PlanListDto> planList(String userId) {
 		return planMapper.planList(userId);
 	}
+	
+	@Override
+	public int modifyPlanName(String planName, int planId) {
+		return planMapper.modifyPlanName(planName, planId);
+	}
+	
+	@Override
+	public int modifyPlanDate(Map<String, String> map) {
+		return planMapper.modifyPlanDate(map);
+	}
+	
+	@Override
+	public int detelePlan(String planId) {
+		return planMapper.detelePlan(planId);
+	}
 
 	@Override
 	public void makeWishlist(WishlistModifyDto wishlistModifyDto) {

@@ -32,6 +32,10 @@ public interface PlanMapper {
 	
 	List<PlanListDetailDto> getPlan(Map<String, String> map); // int planId, String userId
 	List<PlanListDto> planList(String userId); // .. PlanDto에 다 담아
+
+	int modifyPlanName(String planName, int planId);
+	int modifyPlanDate(Map<String, String> map);
+	int detelePlan(String planId);
 	
 	// wishlist
 	List<AttractionInfoDto> wishlist(String userId);

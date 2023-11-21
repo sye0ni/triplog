@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.trip.plan.model.AttractionDto;
@@ -174,6 +176,32 @@ public class PlanController {
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(planlist);
+	}
+	
+	@PutMapping("/{planId}")
+	private ResponseEntity<?> modifyPlan(@PathVariable String planId, @RequestBody Map<String, String> map){
+		logger.debug("modifyPlan : {}", map);
+		// 여행 날짜 or 계획 이름 변경
+		// type: planName -> value:
+		// type: date -> startDate, endDate
+		
+		if(map.get("type").equals("planName")) {
+			
+		} else {
+			
+		}
+		
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(null);
+	}
+	
+	
+	@DeleteMapping("/{planId}")
+	private ResponseEntity<?> deletePlan(@PathVariable String planId){
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(null);
 	}
 	
 	@GetMapping(value = "/wishlist/{userId}")

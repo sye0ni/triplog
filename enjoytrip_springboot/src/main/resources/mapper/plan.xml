@@ -138,10 +138,6 @@
 	    WHERE p.plan_id = #{planId} AND p.user_plan_nth = #{userPlanNth}
 	</insert>
     
-    <!--<select id="planList" parameterType="string" resultMap="planListDto">
-
-    </select> -->
-    
     <select id="planList" parameterType="string" resultMap="planList">
     	select plan_id, user_plan_nth, sido_code, gugun_code, start_date, end_date, plan_name
 		from plan 
@@ -149,6 +145,20 @@
 		order by plan_id desc
     </select>
     
+    <update id="modifyPlanName" parameterType="string">
+    
+    </update>
+    
+    <update id="modifyPlanDate" parameterType="string">
+    
+    </update>
+
+	<delete id="deletePlan" parameterType="string">
+		delete from plan
+		where plan_id = #{planId};
+	</delete>
+
+	<!-- wish -->    
     <select id="wishlist" parameterType="string" resultMap="attractionInfo">
     	select a.content_id, content_type_id, title, addr1, addr2, zipcode, tel, first_image, first_image2, readcount, sido_code, gugun_code, latitude, longitude, mlevel
 		from wishlist w, attraction_info a
