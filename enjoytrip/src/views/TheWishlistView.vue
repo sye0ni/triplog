@@ -112,6 +112,7 @@ const moveMap = function (arg) {
 </template>
 
 <style scoped>
+
 * {
   box-sizing: border-box;
 }

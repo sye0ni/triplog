@@ -46,14 +46,19 @@ const logout = async () => {
   /* align-items: baseline; */
   align-items: center;
   padding: 10px 5%;
+  background-color: white;
+  z-index:1030;
+
+  box-shadow: 0px 0px 10px 1px rgb(200, 200, 200);
+
 }
 
 .fixed-top {
-  position: static;
+  position: absolute;
   top: 0;
   right: 0;
   left: 0;
-  z-index: 1030; /* 필요에 따라 조절할 수 있습니다. */
+  /* z-index: 1030;  */
 }
 
 .sitename {

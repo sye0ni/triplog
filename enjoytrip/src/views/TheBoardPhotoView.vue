@@ -12,6 +12,7 @@
 </template>
 
 <style scoped>
+
 .titleBox {
   display: flex;
   justify-content: center;

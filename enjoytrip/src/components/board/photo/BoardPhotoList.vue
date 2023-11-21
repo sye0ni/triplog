@@ -300,7 +300,7 @@ input:focus {
 
 .listItem {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     flex-wrap: wrap;
     align-items: center;
 }
@@ -308,7 +308,8 @@ input:focus {
 .listContainer {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
+    justify-content: space-between;
 }
 
 .spinner {
