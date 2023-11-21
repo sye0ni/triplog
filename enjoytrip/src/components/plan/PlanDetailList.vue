@@ -21,8 +21,8 @@ onMounted(() => {
 <template>
   <div style="width: 100%">
     <div class="container">
-      <div>{{ nth }}일차</div>
-      <div style="background-color: aquamarine; min-height: 100px; width: 100%">
+      <div class="nth">{{ nth }}일차</div>
+      <div class="itemContainer" style="min-height: 100px; width: 100%">
         <draggable
           v-model="planBox[nth - 1]"
           group="plan"
@@ -30,8 +30,8 @@ onMounted(() => {
           @end="drag = true"
           item-key="contentId"
         >
-          <template #item="{ element }">
-            <PlanDetailListItem :item="element" />
+          <template #item="{ element, index }">
+            <PlanDetailListItem :item="element" :order="index" />
           </template>
         </draggable>
       </div>
@@ -43,25 +43,28 @@ onMounted(() => {
 .container {
   min-height: 100px;
   width: 100%;
-  background-color: azure;
-  border: 1px solid powderblue;
+  /* max-width: 300px; */
   overflow-y: auto;
+  /* border: 1px solid black; */
+  border-bottom: 1px solid rgb(197, 197, 197);
+  margin-bottom: 10px;
 }
+
 .title {
   text-align: center;
   margin-bottom: 20px;
 }
 
 .itemContainer {
-  /* background-color: aqua; */
-  height: 100%;
-  height: 80vh;
-  width: 100%;
-  /* width: 200px; */
-
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
+}
+
+.nth {
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding-bottom: 10px;
+  text-align: center;
 }
 </style>
