@@ -2,30 +2,29 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import VSelect from "@/components/common/VSelect.vue";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
-import { registPlanNthDetail } from "@/api/plan";
+import { getPlan } from "@/api/plan";
 import { storeToRefs } from "pinia";
 import { usePlanStore } from "@/stores/plan";
 import { jwtDecode } from "jwt-decode";
-import { useRouter } from "vue-router";
-import PlanSearch from "@/components/common/PlanSearch.vue";
-import PlanDetailTempList from "@/components/plan/PlanDetailTempList.vue";
-import PlanDetailList from "./PlanDetailList.vue";
-import WishlistDetail from "./WishlistDetail.vue";
+import { useRouter, useRoute } from "vue-router";
+import UserPlanDetailList from "@/components/user/UserPlanDetailList.vue";
+import WishlistDetail from "@/components/plan/WishlistDetail.vue";
 
 const planStore = usePlanStore();
 const router = useRouter();
+const route = useRoute();
 
-const { planCreateInfo, planBox } = storeToRefs(planStore);
+const { planDetailBox } = storeToRefs(planStore);
 
 const startpos = ref(0);
 const diffpos = ref(0);
 const isEnable = ref(false);
 const range = 50;
-const leftWidth = ref("70%");
+const leftWidth = ref("50%");
 const rightWidth = ref("100%");
 const separatorWidth = ref("3px");
 
-const MIN_WIDTH = 1100; // 최소 허용 너비
+const MIN_WIDTH = 800; // 최소 허용 너비
 const MAX_WIDTH = window.innerWidth; // 최대 허용 너비 (현재 창 너비에서 100px 제외)
 
 const onMouseMove = (event) => {
@@ -35,12 +34,10 @@ const onMouseMove = (event) => {
     const width = window.innerWidth / 2;
 
     if (diffpos.value > -(width - range) && diffpos.value < width - range) {
-      console.log("move ", diffpos.value, width, range);
       let newWidth = width - diffpos.value;
       newWidth = Math.max(MIN_WIDTH, Math.min(newWidth, MAX_WIDTH)); // Ensure it stays within the limits
 
       leftWidth.value = newWidth + "px";
-      // leftWidth.value = width - diffpos.value + "px";
     }
   }
 };
@@ -56,70 +53,47 @@ const onMouseDown = (event) => {
   document.addEventListener("mousemove", onMouseMove);
   document.addEventListener("mouseup", onMouseUp);
 };
-
-const attractionList = ref([]);
-const startMap = function (arg) {
-  // kakao map 으로 attraction list 전달
-  // console.log("검색결과!!!");
-  // console.log(arg);
-  attractionList.value = arg;
-};
-
-const showModal = ref(false);
-
-const toggleModal = () => {
-  showModal.value = !showModal.value;
-};
-
-const attraction = ref({});
-const showDetail = function (arg) {
-  // console.log(arg); // 받아온 여행지를 wishlistdetail 로 넘겨야함
-  attraction.value = arg;
-  // console.log(attraction.value);
-  toggleModal();
-};
-
 // --- 페이지 나누기 끝
 
-// --- planCreateInfo
-
+// --- 여행계획 얻기
 const param = ref({
-  list: "",
-  planId: "",
-  userPlanNth: "",
+  userId: "",
 });
 
-const goMakePlanDetail = function () {
-  console.log("go make plan!!");
+const period = ref();
 
-  // param.value.planBox = JSON.parse(JSON.stringify(planBox.value[0]));
-  // console.log(JSON.parse(JSON.stringify(planBox.value[0])), "gg");
-  // console.log(param.value);
-
-  for (let i = 0; i < planBox.value.length; i++) {
-    console.log(i);
-    param.value.planId = planCreateInfo.value.planId;
-    param.value.list = planBox.value[i];
-    param.value.userPlanNth = i + 1;
-
-    registPlanNthDetail(
-      param.value,
-      ({ data }) => {
-        console.log("data", data);
-      },
-      (error) => {
-        console.log(error);
-        alert("계획 등록에 실패했습니다.");
-        return;
+onMounted(() => {
+  let token = sessionStorage.getItem("accessToken");
+  let decodeToken = jwtDecode(token);
+  console.log("route ", route.params);
+  //   let planId = toString(route.params);
+  param.value.userId = decodeToken.userId;
+  console.log("userId", decodeToken.userId);
+  getPlan(
+    route.params.planId,
+    param.value,
+    ({ data }) => {
+      console.log("plan data", data);
+      //   planList.value = [];
+      planDetailBox.value = [];
+      period.value = data[0].period;
+      console.log("period", period.value);
+      for (let i = 0; i < period.value; i++) {
+        planDetailBox.value.push([]);
       }
-    );
-  }
 
-  alert("계획 생성 완료!");
-  let tmp = { planId: planCreateInfo.value.planId };
+      for (let i = 0; i < data.length; i++) {
+        console.log(data[i].userPlanNth - 1);
+        planDetailBox.value[data[i].userPlanNth - 1].push(data[i]);
+      }
 
-  router.push({ name: "plan-list-detail", params: { planId: planCreateInfo.value.planId } });
-};
+      console.log("planDetailBox", planDetailBox.value);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+});
 </script>
 
 <template>
@@ -131,19 +105,9 @@ const goMakePlanDetail = function () {
       <div class="d1" :style="{ width: leftWidth }">
         <!--  -->
         <div class="subContainer">
-          <div class="subItem search">
-            검색
-            <PlanSearch @send-attrlist="startMap" @move-map="moveMap" @show-detail="showDetail" />
-            <button class="makeBtn" @click="goMakePlanDetail">만들기</button>
-          </div>
-
-          <div class="subItem tempBox">
-            보관함
-            <PlanDetailTempList />
-          </div>
+          <!-- <div class="subTitle">여행계획</div> -->
           <div class="subItem plan">
-            <div class="subTitle">여행계획</div>
-            <PlanDetailList v-for="index in planCreateInfo.period" :key="index" :nth="index" />
+            <UserPlanDetailList v-for="index in period" :key="index" :nth="index" />
           </div>
         </div>
       </div>
@@ -199,17 +163,18 @@ const goMakePlanDetail = function () {
 }
 
 .subContainer {
-  display: flex;
+  /* display: flex; */
 }
 
 .subItem {
-  border-right: 2px solid #b8b8b8;
-  height: 85vh;
+  /* border-right: 2px solid #b8b8b8; */
+  height: 80vh;
+  /* height: 100%; */
   width: 100%;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   /* justify-content: center; */
-  align-items: center;
+  /* align-items: center; */
   /* margin-bottom: 20px; */
 }
 
@@ -223,6 +188,7 @@ const goMakePlanDetail = function () {
   margin-right: -1px;
   background-color: white;
   z-index: 2;
+  overflow-x: auto;
   /* border: 1px solid #b8b8b8; */
 }
 
@@ -262,7 +228,6 @@ const goMakePlanDetail = function () {
   align-items: center; */
   padding: 10px;
   padding-top: 0px;
-  overflow-y: auto;
 }
 
 .subTitle {

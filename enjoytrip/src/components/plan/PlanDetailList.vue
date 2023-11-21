@@ -14,7 +14,7 @@ const props = defineProps({ nth: Number });
 
 onMounted(() => {
   console.log("detaillist onmounted ", props.nth, planBox.value);
-  planBox.value.push([]);
+  // planBox.value.push([]);
 });
 </script>
 

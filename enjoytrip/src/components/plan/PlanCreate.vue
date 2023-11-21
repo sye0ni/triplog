@@ -98,8 +98,13 @@ const createPlan = function () {
       planCreateInfo.value.gugunCode = data.planDto.gugunCode;
       planCreateInfo.value.startDate = data.planDto.startDate;
       planCreateInfo.value.endDate = data.planDto.endDate;
+      planCreateInfo.value.planId = data.planDto.planId;
 
       planBox.value = [];
+
+      for (let i = 0; i < data.period; i++) {
+        planBox.value.push([]);
+      }
       console.log(planCreateInfo + " , " + planCreateInfo.value);
       router.push({ name: "plan-wishlist" });
     },
@@ -118,11 +123,7 @@ const createPlan = function () {
       <div class="line1">
         <div class="subTitle">여행지</div>
         <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
-        <VSelect
-          :selectOption="selectOptionGugun"
-          @onKeySelect="changeKey2"
-          :index="gugunCode"
-        />
+        <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" />
       </div>
       <hr />
       <div class="line2">

@@ -24,13 +24,10 @@ const deleteItem = function () {
     <div class="container">
       <div>
         <div class="title">{{ item.title }}</div>
-        <div class="addr">{{ item.addr1 }}</div>
+        <div class="addr">{{ item.addr1 }} {{ item.addr2 }}</div>
       </div>
       <div class="out" title="보관함에서제거" @click="deleteItem">
-        <i
-          class="fa-solid fa-right-to-bracket fa-flip-both"
-          style="color: #d20000"
-        ></i>
+        <i class="fa-solid fa-right-to-bracket fa-flip-both" style="color: #d20000"></i>
       </div>
     </div>
   </div>

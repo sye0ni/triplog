@@ -156,11 +156,12 @@ onMounted(() => {
 
 const goPlanList = function () {
   console.log("여행 계획 목록 바로가기");
+  router.push({ name: "plan-list" });
 };
 
 const goPhotoList = function () {
   console.log("내 글 목록 바로가기");
-  router.push({name:"user-myphoto"})
+  router.push({ name: "user-myphoto" });
 };
 
 const goWhishlist = function () {
@@ -179,12 +180,7 @@ const goWhishlist = function () {
           {{ userInfo.userId }}({{ userInfo.userName }})님
           <button @click="nameModify">수정하기</button>
           <div v-show="isNameModifying" class="nameEdit">
-            <input
-              id="nameEdit"
-              type="text"
-              v-model="nameRef"
-              ref="nameInput"
-            />
+            <input id="nameEdit" type="text" v-model="nameRef" ref="nameInput" />
             <hr style="width: 200px" />
           </div>
         </div>

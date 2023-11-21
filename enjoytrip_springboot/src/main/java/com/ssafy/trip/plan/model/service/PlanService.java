@@ -7,8 +7,10 @@ import com.ssafy.trip.plan.model.AttractionDto;
 import com.ssafy.trip.plan.model.AttractionInfoDto;
 import com.ssafy.trip.plan.model.GugunDto;
 import com.ssafy.trip.plan.model.PlanDto;
+import com.ssafy.trip.plan.model.PlanListDetailDto;
 import com.ssafy.trip.plan.model.PlanListDto;
-import com.ssafy.trip.plan.model.Wishlist;
+import com.ssafy.trip.plan.model.PlanNthDetailRegistDto;
+import com.ssafy.trip.plan.model.SidoGugunNameDto;
 import com.ssafy.trip.plan.model.WishlistModifyDto;
 
 public interface PlanService {
@@ -17,14 +19,16 @@ public interface PlanService {
 	public List<AttractionDto> attractionList(Map<String, String> map);
 	public List<GugunDto> gugun(int sidoCode);
 	public AttractionDto getAttraction(int contentId);
+	String sidoGugunName(int sidoCode, int gugunCode);
+	
 	
 	// plan
 	void registPlan(PlanDto planDto);
 	int getPlanPeriod(int planId);
 	void registPlanNth(Map<String, Integer> map); // planId, 여행날짜 전달(1,2,3)
-//	void registPlanNthDetail(List<PlanNthDetailDto> list); // ??
+	int registPlanNthDetail(PlanNthDetailRegistDto registDto);
 	
-	List<PlanListDto> getPlan(Map<String, String> map);
+	List<PlanListDetailDto> getPlan(Map<String, String> map);
 	List<PlanListDto> planList(String userId); // PlanDto에 다 담아
 	
 	// wishlist

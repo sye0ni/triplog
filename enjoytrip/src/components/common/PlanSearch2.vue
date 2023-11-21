@@ -89,8 +89,7 @@ const changeKey2 = (val) => {
       attractionList.value.push(data[i]);
       sendAttrList.value.push(data[i]);
     }
-      emits('sendAttrlist', sendAttrList.value);
-
+    emits("sendAttrlist", sendAttrList.value);
   }),
     (error) => {
       console.log(error);
@@ -116,7 +115,7 @@ const changeRadio = function (val) {
     param.value.contentTypeId == ""
   ) {
     return;
-  } // 선택되지 않은 값이 있으면 x 
+  } // 선택되지 않은 값이 있으면 x
 
   getAttractionList(
     param.value,
@@ -138,7 +137,7 @@ const changeRadio = function (val) {
         sendAttrList.value.push(data[i]);
       } // attractionList 생성
 
-      emits('sendAttrlist', sendAttrList.value);
+      emits("sendAttrlist", sendAttrList.value);
     },
     (error) => {
       console.log(error);
@@ -176,6 +175,7 @@ const makeWishlist = function () {
 
   wishParam.value.userId = decodeToken.userId;
   wishParam.value.wishlist = wishlist.value;
+  console.log("wishparam", wishParam.value);
   modifyWishlist(
     wishParam.value,
     ({ data }) => {
@@ -190,12 +190,12 @@ const makeWishlist = function () {
 
 const showDetail = function (arg) {
   emits("showDetail", arg);
-}
+};
 
-// 여행지 하나 클릭 
+// 여행지 하나 클릭
 const moveMap = function (arg) {
   emits("moveMap", arg);
-}
+};
 </script>
 
 <template>

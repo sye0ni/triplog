@@ -68,8 +68,18 @@ const router = createRouter({
         {
           path: "myphoto",
           name: "user-myphoto",
-          component:()=>import("@/components/user/UserMyphoto.vue"),
-        }
+          component: () => import("@/components/user/UserMyphoto.vue"),
+        },
+        {
+          path: "plan/list",
+          name: "plan-list",
+          component: () => import("@/components/user/userPlanList.vue"),
+        },
+        {
+          path: "plan/list/:planId",
+          name: "plan-list-detail",
+          component: () => import("@/components/user/userPlanDetail.vue"),
+        },
       ],
     },
     {
@@ -109,8 +119,7 @@ const router = createRouter({
         {
           path: "",
           name: "board-photo-list",
-          component: () =>
-            import("@/components/board/photo/BoardPhotoList.vue"),
+          component: () => import("@/components/board/photo/BoardPhotoList.vue"),
         },
       ],
     },

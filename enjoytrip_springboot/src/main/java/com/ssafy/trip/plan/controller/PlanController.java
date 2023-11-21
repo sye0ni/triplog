@@ -25,8 +25,10 @@ import com.ssafy.trip.plan.model.AttractionDto;
 import com.ssafy.trip.plan.model.AttractionInfoDto;
 import com.ssafy.trip.plan.model.GugunDto;
 import com.ssafy.trip.plan.model.PlanDto;
+import com.ssafy.trip.plan.model.PlanListDetailDto;
 import com.ssafy.trip.plan.model.PlanListDto;
-import com.ssafy.trip.plan.model.PlanNthDetailDto;
+import com.ssafy.trip.plan.model.PlanNthDetailMakeDto;
+import com.ssafy.trip.plan.model.PlanNthDetailRegistDto;
 import com.ssafy.trip.plan.model.WishlistModifyDto;
 import com.ssafy.trip.plan.model.service.PlanService;
 
@@ -84,6 +86,16 @@ public class PlanController {
 				.body(attractionDto);
 	}
 	
+	@GetMapping("/location/name")
+	private ResponseEntity<?> getSidoGugunName(@RequestParam int sidoCode, @RequestParam int gugunCode) {
+		String name = planService.sidoGugunName(sidoCode, gugunCode);
+		logger.debug("sido gugun name : {}", name);
+		
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(name);
+	}
+	
 	@PostMapping
 	@Transactional
 	private ResponseEntity<?> registPlan(@RequestBody PlanDto planDto) {
@@ -111,8 +123,24 @@ public class PlanController {
 	
 	@PostMapping(value="/detail")
 	@Transactional
-	private ResponseEntity<?> registPlanDetail(@RequestBody PlanNthDetailDto dto) {
-		System.out.println("planNthDetailDto"+dto);
+	private ResponseEntity<?> registPlanDetail(@RequestBody PlanNthDetailMakeDto makeDto) {
+		System.out.println("planNthDetailDto"+makeDto);
+		
+		//
+		int tmp = -1;
+		List<AttractionDto> list = makeDto.getList();
+		for(int i = 0; i < list.size(); i++) {
+			PlanNthDetailRegistDto registDto = new PlanNthDetailRegistDto();
+			registDto.setContentId(list.get(i).getContentId());
+			registDto.setOrder(i+1);
+			registDto.setPlanId(makeDto.getPlanId());
+			registDto.setUserPlanNth(makeDto.getUserPlanNth());
+			
+			System.out.println(registDto);
+			tmp = planService.registPlanNthDetail(registDto);
+		}
+		
+		System.out.println("result" + tmp);
 		
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
@@ -126,14 +154,18 @@ public class PlanController {
 		Map<String, String> map = new HashMap<>();
 		map.put("planId", planId+"");
 		map.put("userId", userId);
-		List<PlanListDto> planlist = planService.getPlan(map);
+		List<PlanListDetailDto> planlist = planService.getPlan(map);
 		
 //		logger.debug("get Plan planDto: {}", planDto);
+		
+		int period = planService.getPlanPeriod(planId);
+		planlist.get(0).setPeriod(period);
 		
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(planlist);
 	}
+	
 	@GetMapping
 	private ResponseEntity<?> planList(@RequestParam String userId) {
 		List<PlanListDto> planlist = planService.planList(userId);

@@ -36,7 +36,7 @@ onMounted(() => {
       </div>
       <div>
         <div class="title">{{ item.title }}</div>
-        <div class="addr">{{ item.addr1 }}</div>
+        <div class="addr">{{ item.addr1 }} {{ item.addr2 }}</div>
       </div>
     </div>
   </div>
