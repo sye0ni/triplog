@@ -56,41 +56,25 @@ const onMouseDown = (event) => {
   document.addEventListener("mouseup", onMouseUp);
 };
 
-const attractionList = ref([]);
-const startMap = function (arg) {
-  // kakao map 으로 attraction list 전달
-  // console.log("검색결과!!!");
-  // console.log(arg);
-  attractionList.value = arg;
-}
-
-
 // --- 페이지 나누기 끝
 
 // --- planCreateInfo
 
 // --- 지도
-const selectAttr = ref({});
-const moveMap = function (arg) {
-  console.log("선택한 요소!!!");
-  // console.log(arg);
-  selectAttr.value = arg;
-}
-
 </script>
 
 <template>
   <div>
     <div class="borderContainer">
       <div class="d2 mapContainer" :style="{ width: rightWidth }">
-        <VKakaoMap :attractionList='attractionList' :attraction='selectAttr'/>
+        <VKakaoMap />
       </div>
       <div class="d1" :style="{ width: leftWidth }">
         <!--  -->
         <div class="subContainer">
           <div class="subItem search">
             검색
-            <PlanSearch @send-attrlist='startMap' @move-map='moveMap'/>
+            <PlanSearch />
             <button class="makeBtn">만들기</button>
           </div>
 
@@ -100,19 +84,11 @@ const moveMap = function (arg) {
           </div>
           <div class="subItem plan">
             <div class="subTitle">여행계획</div>
-            <PlanDetailList
-              v-for="index in planCreateInfo.period"
-              :key="index"
-              :nth="index"
-            />
+            <PlanDetailList v-for="index in planCreateInfo.period" :key="index" :nth="index" />
           </div>
         </div>
       </div>
-      <div
-        class="d3"
-        :style="{ left: leftWidth }"
-        @mousedown="onMouseDown"
-      ></div>
+      <div class="d3" :style="{ left: leftWidth }" @mousedown="onMouseDown"></div>
     </div>
   </div>
 </template>

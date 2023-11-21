@@ -65,6 +65,7 @@ onMounted(() => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-right: 5px;
 }
 .order {
   display: flex;
@@ -80,7 +81,7 @@ onMounted(() => {
 }
 
 .type {
-  /* text-align: center; */
+  text-align: center;
   font-size: 0.6rem;
   /* font-weight: bold;  */
   width: 40px;

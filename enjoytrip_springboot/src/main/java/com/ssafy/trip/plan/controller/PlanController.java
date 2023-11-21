@@ -26,6 +26,7 @@ import com.ssafy.trip.plan.model.AttractionInfoDto;
 import com.ssafy.trip.plan.model.GugunDto;
 import com.ssafy.trip.plan.model.PlanDto;
 import com.ssafy.trip.plan.model.PlanListDto;
+import com.ssafy.trip.plan.model.PlanNthDetailDto;
 import com.ssafy.trip.plan.model.WishlistModifyDto;
 import com.ssafy.trip.plan.model.service.PlanService;
 
@@ -106,6 +107,16 @@ public class PlanController {
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
 				.body(map);
+	}
+	
+	@PostMapping(value="/detail")
+	@Transactional
+	private ResponseEntity<?> registPlanDetail(@RequestBody PlanNthDetailDto dto) {
+		System.out.println("planNthDetailDto"+dto);
+		
+		return ResponseEntity
+				.status(HttpStatus.CREATED)
+				.body(null);
 	}
 	
 	@GetMapping(value = "/{planid}")
