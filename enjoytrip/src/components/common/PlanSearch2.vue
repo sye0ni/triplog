@@ -192,6 +192,7 @@ const showDetail = function (arg) {
   emits("showDetail", arg);
 }
 
+// 여행지 하나 클릭 
 const moveMap = function (arg) {
   emits("moveMap", arg);
 }

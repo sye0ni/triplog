@@ -56,25 +56,41 @@ const onMouseDown = (event) => {
   document.addEventListener("mouseup", onMouseUp);
 };
 
+const attractionList = ref([]);
+const startMap = function (arg) {
+  // kakao map 으로 attraction list 전달
+  // console.log("검색결과!!!");
+  // console.log(arg);
+  attractionList.value = arg;
+}
+
+
 // --- 페이지 나누기 끝
 
 // --- planCreateInfo
 
 // --- 지도
+const selectAttr = ref({});
+const moveMap = function (arg) {
+  console.log("선택한 요소!!!");
+  // console.log(arg);
+  selectAttr.value = arg;
+}
+
 </script>
 
 <template>
   <div>
     <div class="borderContainer">
       <div class="d2 mapContainer" :style="{ width: rightWidth }">
-        <VKakaoMap />
+        <VKakaoMap :attractionList='attractionList' :attraction='selectAttr'/>
       </div>
       <div class="d1" :style="{ width: leftWidth }">
         <!--  -->
         <div class="subContainer">
           <div class="subItem search">
             검색
-            <PlanSearch />
+            <PlanSearch @send-attrlist='startMap' @move-map='moveMap'/>
             <button class="makeBtn">만들기</button>
           </div>
 

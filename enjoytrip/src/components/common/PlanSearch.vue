@@ -16,6 +16,8 @@ const router = useRouter();
 // -- 구군 얻어오기 시작
 const { sidoCode, attractionType } = storeToRefs(planStore);
 
+const emits = defineEmits(["sendAttrlist", "moveMap"]);
+
 const selectOptionSido = sidoCode;
 let selectOptionGugun = ref([{ text: "구/군", value: "" }]);
 
@@ -74,9 +76,12 @@ const changeKey2 = (val) => {
   getAttractionList(param.value, ({ data }) => {
     console.log(data.length + "get attractionList ,", data);
     attractionList.value = [];
+    sendAttrList.value.length = 0;
     for (let i = 0; i < data.length; i++) {
       attractionList.value.push(data[i]);
+      sendAttrList.value.push(data[i]);
     }
+    emits('sendAttrList', sendAttrList.value);
   }),
     (error) => {
       console.log(error);
@@ -87,6 +92,8 @@ const changeKey2 = (val) => {
 const attractionList = ref([]);
 
 const type = ref("");
+
+const sendAttrList = ref([]);
 
 const changeRadio = function (val) {
   console.log("change!!", val);
@@ -108,15 +115,23 @@ const changeRadio = function (val) {
     ({ data }) => {
       console.log(data.length + "get attractionList ,", data);
       attractionList.value.length = 0;
+      sendAttrList.value.length = 0;
       for (let i = 0; i < data.length; i++) {
         attractionList.value.push(data[i]);
+        sendAttrList.value.push(data[i]);
       }
+
+      emits('sendAttrlist', sendAttrList.value);
     },
     (error) => {
       console.log(error);
     }
   );
 };
+
+const moveMap = function (arg) {
+  emits("moveMap", arg);
+}
 
 onMounted(() => {
   console.log("planSearch!!", attractionType);
@@ -165,6 +180,7 @@ onMounted(() => {
               v-for="item in attractionList"
               :key="item.contentId"
               :item="item"
+              @select-attr="moveMap"
             />
           </tbody>
         </table>

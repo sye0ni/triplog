@@ -8,6 +8,7 @@ const planStore = usePlanStore();
 const { storeBox } = storeToRefs(planStore);
 
 const props = defineProps({ item: Object });
+const emits = defineEmits(["selectAttr"]);
 
 const addEvent = function () {
   console.log("add");
@@ -24,17 +25,18 @@ const addEvent = function () {
 };
 
 const attractionClick = function () {
-  console.log("지도 이동해야...");
+  // console.log("지도 이동해야...");
+  emits("selectAttr", props.item);
 };
 </script>
 
 <template>
-  <tr class="line" @click="attractionClick">
+  <tr class="line">
     <!-- <td><img :src="item.firstImage" alt="" /></td> -->
-    <td :title="item.title">
+    <td :title="item.title" @click="attractionClick">
       <b class="name">{{ item.title }}</b>
     </td>
-    <td :title="item.addr1">
+    <td :title="item.addr1" @click="attractionClick">
       <span>{{ item.addr1 }}</span>
     </td>
     <td class="put" @click="addEvent" title="보관함에 담기">
