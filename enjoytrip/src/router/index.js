@@ -8,6 +8,27 @@ import AccountView from "@/views/TheAccountView.vue";
 import BoardPhotoView from "@/views/TheBoardPhotoView.vue";
 import UserView from "@/views/TheUserView.vue";
 
+import { storeToRefs } from "pinia";
+import { useMemberStore } from "@/stores/user";
+
+const onlyAuthUser = async (to, from, next) => {
+  const memberStore = useMemberStore();
+  const { userInfo, isValidToken } = storeToRefs(memberStore);
+  const { getUserInfo } = memberStore;
+
+  let token = sessionStorage.getItem("accessToken");
+
+  if (userInfo.value != null && token) {
+    await getUserInfo(token);
+  }
+  if (!isValidToken.value || userInfo.value === null) {
+    next({ name: "user-login" });
+  } else {
+    next();
+  }
+};
+
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -35,21 +56,25 @@ const router = createRouter({
         {
           path: "idsearch",
           name: "user-id-search",
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/user/AccountIdSearch.vue"),
         },
         {
           path: "pwdcheck",
           name: "user-pwd-check",
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/user/AccountPwdCheck.vue"),
         },
         {
           path: "pwdmodify",
           name: "user-pwd-modify",
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/user/AccountPwdModify.vue"),
         },
         {
           path: "pwdsearch",
           name: "user-pwd-search",
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/user/AccountPwdSearch.vue"),
         },
       ],
@@ -63,21 +88,25 @@ const router = createRouter({
         {
           path: "mypage",
           name: "user-mypage",
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/user/UserMypage.vue"),
         },
         {
           path: "myphoto",
           name: "user-myphoto",
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/user/UserMyphoto.vue"),
         },
         {
           path: "plan/list",
           name: "plan-list",
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/user/userPlanList.vue"),
         },
         {
           path: "plan/list/:planId",
           name: "plan-list-detail",
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/user/userPlanDetail.vue"),
         },
       ],
@@ -91,16 +120,19 @@ const router = createRouter({
         {
           path: "",
           name: "plan-create",
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/plan/PlanCreate.vue"),
         },
         {
           path: "wishlist",
           name: "plan-wishlist",
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/plan/PlanWishlist.vue"),
         },
         {
           path: "detail",
           name: "plan-detail",
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/plan/PlanDetail.vue"),
         },
       ],
@@ -108,6 +140,7 @@ const router = createRouter({
     {
       path: "/wishlist",
       name: "wishlist",
+      beforeEnter: onlyAuthUser,
       component: WishlistView,
     },
     {
@@ -142,6 +175,7 @@ const router = createRouter({
         {
           path: "write",
           name: "board-qna-write",
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/board/qna/BoardQnAWrite.vue"),
         },
       ],

@@ -9,6 +9,7 @@ import { useMemberStore } from "@/stores/user";
 import InfiniteLoading from "v3-infinite-loading";
 import "v3-infinite-loading/lib/style.css";
 import { storeToRefs } from "pinia";
+import { jwtDecode } from "jwt-decode";
 
 const memberStore = useMemberStore();
 const { isLogin, userInfo } = storeToRefs(memberStore);
@@ -36,6 +37,14 @@ const selectedArea = ref(""); // 지역 select 값
 
 
 onMounted(() => {
+
+    let token = sessionStorage.getItem("accessToken");
+    if (token != null) {
+        let decodeToken = jwtDecode(token);
+        param.value.userId = decodeToken.userId;
+        console.log(param.value.userId);
+    }
+
     // 시 군 받아와 
     getSigun(
         ({ data }) => {
@@ -53,10 +62,9 @@ onMounted(() => {
             console.log(error);
         }
     )
-
-    if (isLogin.value) {
-        param.value.userId = userInfo.value.userId;
-    }
+    // if (isLogin.value) {
+    //     param.value.userId = userInfo.value.userId;
+    // }
 })
 
 const param = ref({
@@ -68,11 +76,6 @@ const param = ref({
     userId: ""
 })
 
-// const paramWatcher = watch(param, (newValue, oldValue) => {
-//     if (newValue !== oldValue) {
-//         infiniteHandler();
-//     }
-// }, { deep: true });
 
 
 // 정렬 
@@ -124,7 +127,7 @@ const searchWord = () => {
         param.value.guguncode = "",
         param.value.page = 1;
 
-    console.log("파라미터 상태", param.value);
+    // console.log("파라미터 상태", param.value);
 
     selectedArea.value = "";
     selectedSort.value = '';
@@ -138,13 +141,11 @@ let photos = ref([]); // 받아올 photoList 배열
 const message = ref('');
 
 
-
 const infiniteHandler = async $state => {
 
-    console.log("스크롤 로딩!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    console.log("page=", param.value.page); // 현재 페이지
-    console.log("photo=", photos.value);
-
+    //console.log("스크롤 로딩!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    //console.log("page=", param.value.page); // 현재 페이지
+    //console.log("photo=", photos.value);
 
     // page + 1 씩 하면서 반복적으로 4개씩 받아오기 
     await listPhoto(
@@ -172,10 +173,20 @@ const infiniteHandler = async $state => {
 }
 
 
-const writeModal = ref(false);
+const writeModal = ref(false); // 모달 안열림 
 const isWriteModalOpen = function () {
-    writeModal.value = !writeModal.value;
+
+    console.log("유저아이디:", param.value.userId);
+
+    if (param.value.userId != null && param.value.userId.length != 0) {
+        writeModal.value = !writeModal.value;
+    }
+
+    else {
+        alert("로그인 하세요!!");
+    }
 }
+
 
 
 const detailModal = ref(false);
@@ -215,12 +226,12 @@ const getIdentifier = ref(0);
                 </div>
                 <div>
                     <!-- 로그인해야 보임 -->
-                    <template v-if="isLogin">
-                        <button type="button" id="writeButton" @click="isWriteModalOpen">글쓰기</button>
-                        <Transition v-if="writeModal">
-                            <BoardPhotoWrite @cancel-write='isWriteModalOpen' @write-photo="isReload" />
-                        </Transition>
-                    </template>
+                    <!-- <template v-if="isLogin"> -->
+                    <button type="button" id="writeButton" @click="isWriteModalOpen">글쓰기</button>
+                    <Transition v-if="writeModal">
+                        <BoardPhotoWrite @cancel-write='isWriteModalOpen' @write-photo="isReload" />
+                    </Transition>
+                    <!-- </template> -->
                 </div>
             </div>
         </div>

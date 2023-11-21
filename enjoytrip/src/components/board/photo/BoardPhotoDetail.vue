@@ -5,6 +5,7 @@ import BoardPhotoCommentItem from "./item/BoardPhotoCommentItem.vue";
 import { useMemberStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { useRoute, useRouter } from "vue-router";
+import { jwtDecode } from "jwt-decode";
 
 const router = useRouter();
 
@@ -16,6 +17,7 @@ const emit = defineEmits(['cancelDetail', 'deleteDetail']);
 
 const memberStore = useMemberStore();
 const { isLogin, userInfo } = storeToRefs(memberStore);
+const currUserId = ref();
 
 const photo = ref({}); // 게시글 dto
 const comments = ref([]);
@@ -40,6 +42,13 @@ onMounted(() => {
     getComment();
 
     isLikeState.value = props.photoEmit.isLike;
+
+    let token = sessionStorage.getItem("accessToken");
+    if (token != null) {
+        let decodeToken = jwtDecode(token);
+        currUserId.value = decodeToken.userId; // 현재 로그인한 유저 저장 
+    }
+
 });
 
 const detailPhoto = () => {
@@ -109,7 +118,7 @@ const writeComments = () => {
     // console.log("입력한 댓글:", comment.value);
     // console.log("현재 유저:", userInfo.value.userId);
 
-    if (!isLogin.value) {
+    if (currUserId.value == null) {
         alert("로그인 하세요!");
         comment.value = '';
     }
@@ -119,7 +128,7 @@ const writeComments = () => {
     else {
         let commentJson = {
             content: comment.value,
-            userId: userInfo.value.userId
+            userId: currUserId.value
         };
 
         writeComment(
@@ -184,7 +193,7 @@ const deleteComments = (arg) => {
 }
 
 const alertComment = () => {
-    if (!isLogin.value) {
+    if (currUserId.value == null) {
         alert("로그인 하세요!");
     }
 }
@@ -194,7 +203,7 @@ const isLikeState = ref(0);
 
 const updateIsLike = function () {
 
-    if (!isLogin.value) {
+    if (currUserId.value == null) {
         alert("로그인 하세요!");
     }
 
@@ -256,7 +265,7 @@ const updateIsLike = function () {
                                 <span id="userId" style="font-weight: bold;">{{ photo.userId }}</span>
                                 <div class="box2-1-1">
                                     <!-- <i class="fa-solid fa-ellipsis"></i> -->
-                                    <template v-if="isLogin && userInfo.userId == photo.userId">
+                                    <template v-if="currUserId == photo.userId">
                                         <button @click.prevent='modifyContent'>수정</button>
                                         <button @click.prevent='deletePhotos'>삭제</button>
                                     </template>

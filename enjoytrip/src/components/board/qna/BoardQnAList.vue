@@ -70,18 +70,13 @@ const moveWrite = () => {
     <div class="button">
       <div class="find">
         <VSelect :selectOption="selectOption" @onKeySelect="changeKey" />
-        <input
-          type="text"
-          v-model="param.word"
-          placeholder="검색어..."
-          @keyup.enter="getArticleList"
-        />
+        <input type="text" v-model="param.word" placeholder="검색어..." @keyup.enter="getArticleList" />
         <button id="findButton" @click="getArticleList">
           <i class="fa-solid fa-magnifying-glass" style="color: #000000"></i>
         </button>
       </div>
 
-      <!-- 로그인해야 보임 -->
+      <!-- 로그인해야 갈 수 있음 -->
       <button type="button" @click="moveWrite" id="wirteButton">글작성</button>
     </div>
     <table class="table custom-table">
@@ -97,21 +92,13 @@ const moveWrite = () => {
         </tr>
       </thead>
       <tbody>
-        <BoardQnaListItem
-          v-for="article in articles"
-          :key="article.boardQnaId"
-          :article="article"
-        ></BoardQnaListItem>
+        <BoardQnaListItem v-for="article in articles" :key="article.boardQnaId" :article="article"></BoardQnaListItem>
       </tbody>
     </table>
   </div>
 
   <div class="pgnv">
-    <PageNavigation
-      :current-page="currentPage"
-      :total-page="totalPage"
-      @pageChange="onPageChange"
-    ></PageNavigation>
+    <PageNavigation :current-page="currentPage" :total-page="totalPage" @pageChange="onPageChange"></PageNavigation>
   </div>
 </template>
 

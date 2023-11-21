@@ -2,15 +2,20 @@
 import { ref, onMounted } from "vue";
 import { useMemberStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
+import { jwtDecode } from "jwt-decode";
 
 const toggleContentState = ref(true);
 const memberStore = useMemberStore();
 const { isLogin, userInfo } = storeToRefs(memberStore);
 
+const currUserId = ref('');
+
 onMounted(() => {
-    // console.log(userInfo.value.userId);
-    // console.log(props.comment.userId);
-    // console.log(isLogin.value);
+    let token = sessionStorage.getItem("accessToken");
+    if (token != null) {
+        let decodeToken = jwtDecode(token);
+        currUserId.value = decodeToken.userId; // 현재 로그인한 유저 저장 
+    }
 });
 
 const props = defineProps({
@@ -59,7 +64,7 @@ const deletePhotos = function () {
             <span id="userId" style="font-weight: bold;">{{ comment.userId }}</span>
             <!-- 작성자의 경우에만 보이게 -->
             <div class="box1-1">
-                <template v-if="isLogin && comment.userId==userInfo.userId">
+                <template v-if="comment.userId == currUserId">
                     <button @click.prevent='modifyComments'>수정</button>
                     <button @click.prevent='deletePhotos'>삭제</button>
                 </template>

@@ -2,6 +2,9 @@
 import BoardQnAFormItem from "./item/BoardQnAFormItem.vue";
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useMemberStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
+import { jwtDecode } from "jwt-decode";
 import {
   getArticle,
   getComments,
@@ -14,11 +17,15 @@ import {
 
 const route = useRoute();
 const router = useRouter();
-const userId = ref("admin");
 const { articleno } = route.params; // 질문 번호
 
 const article = ref({});
 const comments = ref([]);
+
+const memberStore = useMemberStore();
+const { isLogin, userInfo } = storeToRefs(memberStore);
+
+const currUserId = ref("");
 
 onMounted(() => {
   // 질문 얻어오기
@@ -26,6 +33,14 @@ onMounted(() => {
 
   // 답변 얻어오기
   getComment();
+
+  let token = sessionStorage.getItem("accessToken");
+  if (token != null) {
+    let decodeToken = jwtDecode(token);
+    currUserId.value = decodeToken.userId; // 현재 로그인한 유저 저장 
+  }
+
+  // console.log("로그인한 유저:", currUserId.value);
 });
 
 const detailArticle = () => {
@@ -95,7 +110,7 @@ const writeComments = function (...args) {
 
   let commentJson = {
     content: args[1],
-    userId: "admin",
+    userId: currUserId
   };
 
   writeComment(
@@ -168,7 +183,7 @@ const list = function () {
     </div>
 
     <!-- (관리자라면) 답변 등록 -->
-    <template v-if="userId === 'admin'">
+    <template v-if="currUserId === 'admin'">
       <!-- 현재 로그인한 유저가 관리자인가?-->
       <div>
         <BoardQnAFormItem :article="article" @write-comment="writeComments" type="write" />

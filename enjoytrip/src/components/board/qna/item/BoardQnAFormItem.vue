@@ -1,9 +1,9 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useMemberStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
-
+import { jwtDecode } from "jwt-decode";
 
 const memberStore = useMemberStore();
 const { isLogin, userInfo } = storeToRefs(memberStore);
@@ -15,7 +15,15 @@ const props = defineProps({
 
 const emit = defineEmits(["modifyEvent", "writeComment", "deleteArticle"]);
 
-const router = useRouter();
+const currUserId = ref("");
+onMounted(() => {
+  let token = sessionStorage.getItem("accessToken");
+  if (token != null) {
+    let decodeToken = jwtDecode(token);
+    currUserId.value = decodeToken.userId;
+  }
+})
+
 
 // 댓글 작성 펼치기 기능
 const toggleCommentState = ref(false);
@@ -130,10 +138,10 @@ const deleteArticle = function (event) {
         </div>
 
         <div class="box1-2">
-          <template v-if="isLogin && userInfo.userId === article.userId">
-          <!-- 작성자한테만 보이게 => 나중에 수정하기 -->
-          <button class='noBorderBtn' @click="toggleChange">수정</button>
-          <button class='noBorderBtn' @click="deleteArticle">삭제</button>
+          <template v-if="currUserId === article.userId">
+            <!-- 작성자한테만 보이게 => 나중에 수정하기 -->
+            <button class='noBorderBtn' @click="toggleChange">수정</button>
+            <button class='noBorderBtn' @click="deleteArticle">삭제</button>
           </template>
           <!-- </template> -->
           <span>{{ article.userId }}
@@ -150,7 +158,7 @@ const deleteArticle = function (event) {
 
     <!-- 답글 등록 -->
     <template v-else>
-      <template v-if="isLogin && userInfo.userId == 'admin'">
+      <template v-if="currUserId == 'admin'">
         <div class="box3" @click="toggleCommentReset">
           <button>답글 작성</button>
         </div>
