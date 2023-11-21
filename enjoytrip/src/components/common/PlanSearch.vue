@@ -136,6 +136,11 @@ const moveMap = function (arg) {
 onMounted(() => {
   console.log("planSearch!!", attractionType);
 });
+
+const showDetail = function (arg) {
+  emits("showDetail", arg);
+}
+
 </script>
 
 <template>
@@ -170,6 +175,9 @@ onMounted(() => {
             <tr>
               <th scope="col" class="title">제목</th>
               <th scope="col" class="addr">주소</th>
+              <th scope="col" class="detail" title="상세보기">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+              </th>
               <th scope="col" class="put">
                 <i class="fa-solid fa-inbox" style="color: #990000"></i>
               </th>
@@ -181,6 +189,7 @@ onMounted(() => {
               :key="item.contentId"
               :item="item"
               @select-attr="moveMap"
+              @show-detail="showDetail"
             />
           </tbody>
         </table>
@@ -190,6 +199,14 @@ onMounted(() => {
 </template>
 
 <style scoped>
+
+.detail {
+  width: 40px;
+  padding: 0px;
+  /* display: flex; */
+  /* justify-content: center; */
+}
+
 * {
   box-sizing: border-box;
 }

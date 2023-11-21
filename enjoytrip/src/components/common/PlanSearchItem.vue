@@ -28,6 +28,12 @@ const attractionClick = function () {
   // console.log("지도 이동해야...");
   emits("selectAttr", props.item);
 };
+
+const showDetails = function () {
+  console.log("상세보기");
+  console.log(props.item); // 받은 고대로 돌려줘 
+  emits("showDetail", props.item);
+}
 </script>
 
 <template>
@@ -39,6 +45,7 @@ const attractionClick = function () {
     <td :title="item.addr1" @click="attractionClick">
       <span>{{ item.addr1 }}</span>
     </td>
+    <td title="상세보기"><i class="fa-solid fa-magnifying-glass" @click='showDetails'></i></td>
     <td class="put" @click="addEvent" title="보관함에 담기">
       <i class="fa-solid fa-right-to-bracket" style="color: #d20000"></i>
     </td>
@@ -74,4 +81,5 @@ img {
 .line {
   cursor: pointer;
 }
+
 </style>

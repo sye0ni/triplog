@@ -10,6 +10,7 @@ import { useRouter } from "vue-router";
 import PlanSearch from "@/components/common/PlanSearch.vue";
 import PlanDetailTempList from "@/components/plan/PlanDetailTempList.vue";
 import PlanDetailList from "./PlanDetailList.vue";
+import WishlistDetail from "./WishlistDetail.vue";
 
 const planStore = usePlanStore();
 const router = useRouter();
@@ -56,6 +57,28 @@ const onMouseDown = (event) => {
   document.addEventListener("mouseup", onMouseUp);
 };
 
+const attractionList = ref([]);
+const startMap = function (arg) {
+  // kakao map 으로 attraction list 전달
+  // console.log("검색결과!!!");
+  // console.log(arg);
+  attractionList.value = arg;
+};
+
+const showModal = ref(false);
+
+const toggleModal = () => {
+  showModal.value = !showModal.value;
+};
+
+const attraction = ref({});
+const showDetail = function (arg) {
+  // console.log(arg); // 받아온 여행지를 wishlistdetail 로 넘겨야함
+  attraction.value = arg;
+  // console.log(attraction.value);
+  toggleModal();
+};
+
 // --- 페이지 나누기 끝
 
 // --- planCreateInfo
@@ -74,7 +97,7 @@ const onMouseDown = (event) => {
         <div class="subContainer">
           <div class="subItem search">
             검색
-            <PlanSearch />
+            <PlanSearch @send-attrlist="startMap" @move-map="moveMap" @show-detail="showDetail" />
             <button class="makeBtn">만들기</button>
           </div>
 
@@ -89,6 +112,11 @@ const onMouseDown = (event) => {
         </div>
       </div>
       <div class="d3" :style="{ left: leftWidth }" @mousedown="onMouseDown"></div>
+      <div class="modal">
+        <Transition v-if="showModal">
+          <WishlistDetail @click="toggleModal" :attraction="attraction" />
+        </Transition>
+      </div>
     </div>
   </div>
 </template>
@@ -96,6 +124,15 @@ const onMouseDown = (event) => {
 <style scoped>
 * {
   box-sizing: border-box;
+}
+
+.modal {
+  /* position:relative; */
+  position: fixed;
+  top: 20%;
+  right: 20%;
+  /* background-color: gray; */
+  z-index: 3;
 }
 
 .makeBtn {
