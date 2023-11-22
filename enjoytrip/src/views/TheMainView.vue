@@ -12,33 +12,6 @@ const goPhoto = function () {
     router.push({ name: "board-photo-list" });
 }
 
-
-onMounted(() => {
-    const sc1 = document.createElement("script");
-    sc1.src = "https://code.jquery.com/jquery-3.7.1.min.js";
-    sc1.integrity = "sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=";
-    sc1.crossOrigin = "anonymous";
-    sc1.defer = true;
-
-    const sc2 = document.createElement("script");
-    sc2.src = "src/fullpage/jquery.fullPage.js";
-    sc2.defer = true;
-
-    const sc3 = document.createElement("script");
-    sc3.src = "src/fullpage/main.js";
-    sc3.defer = true;
-
-    sc1.onload = () => {
-        document.head.appendChild(sc2);
-        sc2.onload = () => {
-            document.head.appendChild(sc3);
-        };
-    };
-
-    document.head.appendChild(sc1);
-});
-
-
 </script>
 <template>
     <main id="fullpage">
@@ -52,7 +25,7 @@ onMounted(() => {
             </div>
         </section>
         <section id="sec2" class="section">
-            <div class='frame2'>
+            <div id='frame2'>
                 <span id='frame2Title'>EnjoyTrip 과 함께 계획을 세워보세요!</span>
                 <img src='../assets/main/southkorea.png'>
                 <!-- <img src='../assets/map.png'> -->
@@ -60,7 +33,7 @@ onMounted(() => {
             </div>
         </section>
         <section id="sec3" class="section">
-            <div class='frame3'>
+            <div id='frame3'>
                 <div class='frame3Title'>
                     여행 사진을 함께 공유해보세요!
                 </div>
@@ -79,10 +52,9 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
 /* section1 */
 
-#frame{
+#frame {
     width: 100vw;
     height: 100vh;
 }
@@ -106,14 +78,14 @@ onMounted(() => {
 /* section2 */
 
 
-.frame2 {
-    margin-top: 10%;
+#frame2 {
+    /* margin-top: 10%; */
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
 }
 
 #frame2Title {
@@ -137,7 +109,7 @@ onMounted(() => {
     border: 2px solid #ca0f0f;
 }
 
-.frame2 img {
+#frame2 img {
     height: 50%;
     width: 30%;
     border: 2px white solid;
@@ -146,39 +118,37 @@ onMounted(() => {
     padding: 5px;
 }
 
-/* frame3 */ 
+/* frame3 */
 
-.frame3{
+#frame3 {
     display: flex;
     flex-direction: column;
-    height: 100%;
     align-items: center;
-    justify-content:space-evenly;
+    justify-content: space-evenly;
+    width: 100vw;
+    height: 100vh;
+}
 
-} 
-
-.frame3Images{
-    display:flex;
+.frame3Images {
+    display: flex;
     /* justify-content: space-between; */
-    gap : 50px;
+    gap: 50px;
 }
 
 .frame3Images img {
-    height: 300px; 
-    width: 300px; 
+    height: 300px;
+    width: 300px;
     border-radius: 13px;
     padding: 5px;
     cursor: pointer;
 }
 
-.frame3Images img:hover{
+.frame3Images img:hover {
     filter: brightness(0.5);
 }
 
-.frame3Title{
+.frame3Title {
     font-size: 2rem;
     font-weight: bold;
 }
-
-
 </style>

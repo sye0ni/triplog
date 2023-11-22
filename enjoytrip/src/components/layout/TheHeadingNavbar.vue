@@ -49,16 +49,15 @@ const logout = async () => {
   background-color: white;
   z-index:1030;
 
-  box-shadow: 0px 0px 10px 1px rgb(200, 200, 200);
-
 }
 
 .fixed-top {
-  position: absolute;
+  position: static;
+  /* position:fixed; */
   top: 0;
   right: 0;
   left: 0;
-  /* z-index: 1030;  */
+  z-index: 1030; 
 }
 
 .sitename {

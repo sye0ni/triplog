@@ -6,16 +6,11 @@ import TheHeadingNavbar from "/src/components/layout/TheHeadingNavbar.vue";
 <template>
   <TheHeadingNavbar />
 
-  <div id='routerview'>
+  <RouterView />
 
-      <RouterView />
-  </div>
   
 </template>
 
 <style scoped>
-#routerview{
-  margin-top:63px;
-}
 
 </style>
