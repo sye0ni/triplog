@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService{
 		
 		// TODO : 여행 계획 삭제 
 		
-		// TODO : 찜 목록 삭제 
+		// TODO : 찜 목록 삭제, 사진 좋아요 삭제
 	
 		
 		return userMapper.delete(userId);

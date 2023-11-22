@@ -75,13 +75,11 @@ const toggleModal = () => {
 
 const attraction = ref({});
 const showDetail = function (arg) {
-  // console.log(arg); // 받아온 여행지를 wishlistdetail 로 넘겨야함
   attraction.value = arg;
-  // console.log(attraction.value);
   toggleModal();
 };
 
-// --- planCreateInfo
+// -- 지도 끝
 
 const param = ref({
   list: "",
@@ -89,19 +87,16 @@ const param = ref({
   userPlanNth: "",
 });
 
-const goMakePlanDetail = function () {
-  console.log("go make plan!!");
+const period = ref();
 
-  // param.value.planBox = JSON.parse(JSON.stringify(planBox.value[0]));
-  // console.log(JSON.parse(JSON.stringify(planBox.value[0])), "gg");
-  // console.log(param.value);
+const goModifyPlan = function () {
+  console.log("go modify plan!!");
 
   for (let i = 0; i < planBox.value.length; i++) {
     console.log(i);
     param.value.planId = planCreateInfo.value.planId;
     param.value.list = planBox.value[i];
     param.value.userPlanNth = i + 1;
-
     registPlanNthDetail(
       param.value,
       ({ data }) => {
@@ -109,17 +104,23 @@ const goMakePlanDetail = function () {
       },
       (error) => {
         console.log(error);
-        alert("계획 등록에 실패했습니다.");
+        alert("계획 수정에 실패했습니다.");
         return;
       }
     );
   }
 
-  alert("계획 생성 완료!");
+  alert("계획 수정이 완료되었습니다.");
   let tmp = { planId: planCreateInfo.value.planId };
 
   router.push({ name: "plan-list-detail", params: { planId: planCreateInfo.value.planId } });
 };
+
+// --
+onMounted(() => {
+  console.log("modify onMounted", planBox.value.length);
+  period.value = planBox.value.length;
+});
 </script>
 
 <template>
@@ -134,7 +135,7 @@ const goMakePlanDetail = function () {
           <div class="subItem search">
             검색
             <PlanSearch @send-attrlist="startMap" @move-map="moveMap" @show-detail="showDetail" />
-            <button class="makeBtn" @click="goMakePlanDetail">만들기</button>
+            <button class="modifyBtn" @click="goModifyPlan">수정완료</button>
           </div>
 
           <div class="subItem tempBox">
@@ -143,7 +144,7 @@ const goMakePlanDetail = function () {
           </div>
           <div class="subItem plan">
             <div class="subTitle">여행계획</div>
-            <PlanDetailList v-for="index in planCreateInfo.period" :key="index" :nth="index" />
+            <PlanDetailList v-for="index in period" :key="index" :nth="index" />
           </div>
         </div>
       </div>
@@ -171,7 +172,7 @@ const goMakePlanDetail = function () {
   z-index: 3;
 }
 
-.makeBtn {
+.modifyBtn {
   /* position: absolute; */
   /* z-index: 10; */
   /* right: 0; */

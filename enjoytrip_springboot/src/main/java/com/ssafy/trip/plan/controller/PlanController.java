@@ -38,66 +38,57 @@ import com.ssafy.trip.plan.model.service.PlanService;
 @CrossOrigin("*")
 @RestController
 public class PlanController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(PlanController.class);
-	
+
 	private PlanService planService;
-	
+
 	@Autowired
 	public PlanController(PlanService planService) {
 		super();
 		this.planService = planService;
 	}
-	
-	
+
 	// query string으로 sidoCode, gugunCode, contentType 받음
 	@GetMapping(value = "/detail/attraction")
 	private ResponseEntity<?> attractionList(@RequestParam Map<String, String> map) {
 		logger.debug("attraction list call");
-		
+
 		List<AttractionDto> list = planService.attractionList(map);
-		if(list != null && !list.isEmpty()) {
-			return ResponseEntity
-					.status(HttpStatus.OK)
-					.body(list);
+		if (list != null && !list.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(list);
 		}
-		
+
 		return new ResponseEntity<List>(Collections.EMPTY_LIST, HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = "/detail/attraction/gugun")
 	private ResponseEntity<?> gugun(@RequestParam int sidoCode) {
 		logger.debug("gugun sidoCode : {}", sidoCode);
 		System.out.println("gugun sidoCode: " + sidoCode);
-		
+
 		List<GugunDto> list = planService.gugun(sidoCode);
-		
+
 		System.out.println("gugun sidoCode List: " + list);
-		
-		return ResponseEntity
-				.status(HttpStatus.OK)
-				.body(list);
+
+		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
-	
+
 	@GetMapping(value = "/detail/attraction/{contentId}")
 	private ResponseEntity<?> getAttraction(@PathVariable int contentId) {
 		AttractionDto attractionDto = planService.getAttraction(contentId);
-		
-		return ResponseEntity
-				.status(HttpStatus.OK)
-				.body(attractionDto);
+
+		return ResponseEntity.status(HttpStatus.OK).body(attractionDto);
 	}
-	
+
 	@GetMapping("/location/name")
 	private ResponseEntity<?> getSidoGugunName(@RequestParam int sidoCode, @RequestParam int gugunCode) {
 		String name = planService.sidoGugunName(sidoCode, gugunCode);
 		logger.debug("sido gugun name : {}", name);
-		
-		return ResponseEntity
-				.status(HttpStatus.OK)
-				.body(name);
+
+		return ResponseEntity.status(HttpStatus.OK).body(name);
 	}
-	
+
 	@PostMapping
 	@Transactional
 	private ResponseEntity<?> registPlan(@RequestBody PlanDto planDto) {
@@ -105,131 +96,122 @@ public class PlanController {
 		System.out.println("registPlan planId : " + planDto.getPlanId());
 
 		int period = planService.getPlanPeriod(planDto.getPlanId());
-		
-		for(int i = 1; i <= period; i++) {
+
+		for (int i = 1; i <= period; i++) {
 			Map<String, Integer> map = new HashMap<>();
 			map.put("period", i);
 			map.put("planId", planDto.getPlanId());
 			planService.registPlanNth(map);
 			System.out.println("map " + map);
 		}
-		
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("period", period);
 		map.put("planDto", planDto);
-		
-		return ResponseEntity
-				.status(HttpStatus.CREATED)
-				.body(map);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(map);
 	}
-	
-	@PostMapping(value="/detail")
+
+	@PostMapping(value = "/detail")
 	@Transactional
 	private ResponseEntity<?> registPlanDetail(@RequestBody PlanNthDetailMakeDto makeDto) {
-		System.out.println("planNthDetailDto"+makeDto);
-		
+		System.out.println("planNthDetailDto" + makeDto);
+
+		logger.debug("삭제 시작");
+		// 세부계획 삭제하고 다시 넣음..
+		planService.deletePlanNthDetail(makeDto.getPlanId());
+		logger.debug("삭제 끝");
+
 		//
+		logger.debug("등록 시작");
 		int tmp = -1;
 		List<AttractionDto> list = makeDto.getList();
-		for(int i = 0; i < list.size(); i++) {
+		for (int i = 0; i < list.size(); i++) {
 			PlanNthDetailRegistDto registDto = new PlanNthDetailRegistDto();
 			registDto.setContentId(list.get(i).getContentId());
-			registDto.setOrder(i+1);
+			registDto.setOrder(i + 1);
 			registDto.setPlanId(makeDto.getPlanId());
 			registDto.setUserPlanNth(makeDto.getUserPlanNth());
-			
+
 			System.out.println(registDto);
 			tmp = planService.registPlanNthDetail(registDto);
 		}
-		
+		logger.debug("등록 끝");
+
 		System.out.println("result" + tmp);
-		
-		return ResponseEntity
-				.status(HttpStatus.CREATED)
-				.body(null);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(null);
 	}
-	
+
 	@GetMapping(value = "/{planid}")
 	private ResponseEntity<?> getPlan(@PathVariable("planid") int planId, @RequestParam String userId) {
 		System.out.println("plan id ::: " + planId + " userId ::: " + userId);
-		
+
 		Map<String, String> map = new HashMap<>();
-		map.put("planId", planId+"");
+		map.put("planId", planId + "");
 		map.put("userId", userId);
 		List<PlanListDetailDto> planlist = planService.getPlan(map);
-		
+
 //		logger.debug("get Plan planDto: {}", planDto);
-		
+
 		int period = planService.getPlanPeriod(planId);
 		planlist.get(0).setPeriod(period);
-		
-		return ResponseEntity
-				.status(HttpStatus.OK)
-				.body(planlist);
+
+		return ResponseEntity.status(HttpStatus.OK).body(planlist);
 	}
-	
+
 	@GetMapping
 	private ResponseEntity<?> planList(@RequestParam String userId) {
 		List<PlanListDto> planlist = planService.planList(userId);
 		logger.debug("planList : {}", planlist);
-		
-		return ResponseEntity
-				.status(HttpStatus.OK)
-				.body(planlist);
+
+		return ResponseEntity.status(HttpStatus.OK).body(planlist);
 	}
-	
+
 	@PutMapping("/{planId}")
-	private ResponseEntity<?> modifyPlan(@PathVariable String planId, @RequestBody Map<String, String> map){
+//	private ResponseEntity<?> modifyPlan(@PathVariable String planId, @RequestBody String map){
+	private ResponseEntity<?> modifyPlan(@PathVariable String planId, @RequestBody Map<String, String> map) {
 		logger.debug("modifyPlan : {}", map);
-		// 여행 날짜 or 계획 이름 변경
-		// type: planName -> value:
-		// type: date -> startDate, endDate
+		System.out.println(map.get("type"));
+		// 여행 날짜 or 계획 이름 변경 planId, planName
+		// type: planName -> planName:값
+		// type: planDate -> startDate, endDate
+
+		map.put("planId", planId);
 		
-		if(map.get("type").equals("planName")) {
-			
-		} else {
-			
-		}
-		
-		return ResponseEntity
-				.status(HttpStatus.OK)
-				.body(null);
+		planService.modifyPlan(map);
+
+		return ResponseEntity.status(HttpStatus.OK).body("1");
 	}
-	
-	
+
 	@DeleteMapping("/{planId}")
-	private ResponseEntity<?> deletePlan(@PathVariable String planId){
-		return ResponseEntity
-				.status(HttpStatus.OK)
-				.body(null);
+	private ResponseEntity<?> deletePlan(@PathVariable String planId) {
+		planService.detelePlan(Integer.parseInt(planId));
+
+		return ResponseEntity.status(HttpStatus.OK).body(null);
 	}
-	
+
 	@GetMapping(value = "/wishlist/{userId}")
-	private ResponseEntity<?> wishlist(@PathVariable String userId){
+	private ResponseEntity<?> wishlist(@PathVariable String userId) {
 		List<AttractionInfoDto> attractionInfoDto = planService.wishlist(userId);
 		System.out.println("userid " + userId);
 		System.out.println("wishlist " + attractionInfoDto);
-		
-		return ResponseEntity
-				.status(HttpStatus.OK)
-				.body(attractionInfoDto);
+
+		return ResponseEntity.status(HttpStatus.OK).body(attractionInfoDto);
 	}
-	
-	@PutMapping(value="/wishlist")
+
+	@PutMapping(value = "/wishlist")
 	@Transactional
 	private ResponseEntity<?> modifyWishlist(@RequestBody WishlistModifyDto wishlistModifyDto) {
 		System.out.println("wishlist modify!! " + wishlistModifyDto);
-		
-		for(int i = 0; i < wishlistModifyDto.getWishlist().size(); i++) {
+
+		for (int i = 0; i < wishlistModifyDto.getWishlist().size(); i++) {
 			wishlistModifyDto.getWishlist().get(i).setUserId(wishlistModifyDto.getUserId());
 		}
-		
+
 		planService.makeWishlist(wishlistModifyDto);
-		
-		
+
 		// 에러처리??
-		return ResponseEntity
-				.status(HttpStatus.OK)
-				.body("찜목록 추가 완료");
+		return ResponseEntity.status(HttpStatus.OK).body("찜목록 추가 완료");
 	}
 }
