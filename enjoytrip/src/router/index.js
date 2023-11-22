@@ -154,7 +154,8 @@ const router = createRouter({
         {
           path: "",
           name: "board-photo-list",
-          component: () => import("@/components/board/photo/BoardPhotoList.vue"),
+          component: () =>
+            import("@/components/board/photo/BoardPhotoList.vue"),
         },
       ],
     },
