@@ -23,9 +23,10 @@ const isEnable = ref(false);
 const range = 50;
 const leftWidth = ref("70%");
 const rightWidth = ref("100%");
+const separatorWidth = ref("3px");
 
 const MIN_WIDTH = 1100; // 최소 허용 너비
-const MAX_WIDTH = window.innerWidth; // 최대 허용 너비
+const MAX_WIDTH = window.innerWidth; // 최대 허용 너비 (현재 창 너비에서 100px 제외)
 
 const onMouseMove = (event) => {
   if (isEnable.value) {

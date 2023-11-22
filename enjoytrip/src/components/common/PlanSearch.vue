@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeMount } from "vue";
 import VSelect from "@/components/common/VSelect.vue";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
 import { gugun, getAttractionList } from "@/api/plan";
@@ -7,14 +7,16 @@ import { storeToRefs } from "pinia";
 import { usePlanStore } from "@/stores/plan";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
-import PlanSearchItem from "./PlanSearchItem.vue";
+import PlanSearchItem from "@/components/common/PlanSearchItem.vue";
 import VRadio from "./VRadio.vue";
+import SidoSelect from "@/components/plan/item/SidoSelect.vue";
+import GugunSelect from "@/components/plan/item/GugunSelect.vue";
 
 const planStore = usePlanStore();
 const router = useRouter();
 
 // -- 구군 얻어오기 시작
-const { sidoCode, attractionType } = storeToRefs(planStore);
+const { sidoCode, attractionType, planCreateInfo } = storeToRefs(planStore);
 
 const emits = defineEmits(["sendAttrlist", "moveMap"]);
 
@@ -34,7 +36,7 @@ const changeKey = (val) => {
   console.log("시/도 선택한 조건 : " + val);
   param.value.sidoCode = val;
   param.value.gugunCode = "";
-  gugunCode.value = "1";
+  gugunCode.value = "";
   selectOptionGugun.value = [{ text: "구/군", value: "" }];
   gugun(
     param.value,
@@ -59,6 +61,7 @@ const changeKey = (val) => {
 const changeKey2 = (val) => {
   console.log("구/군 선택" + val);
   param.value.gugunCode = val;
+  gugunCode.value = val;
   console.log(param.value);
 
   if (val == "") {
@@ -81,7 +84,7 @@ const changeKey2 = (val) => {
       attractionList.value.push(data[i]);
       sendAttrList.value.push(data[i]);
     }
-    emits('sendAttrList', sendAttrList.value);
+    emits("sendAttrList", sendAttrList.value);
   }),
     (error) => {
       console.log(error);
@@ -121,7 +124,7 @@ const changeRadio = function (val) {
         sendAttrList.value.push(data[i]);
       }
 
-      emits('sendAttrlist', sendAttrList.value);
+      emits("sendAttrlist", sendAttrList.value);
     },
     (error) => {
       console.log(error);
@@ -131,16 +134,40 @@ const changeRadio = function (val) {
 
 const moveMap = function (arg) {
   emits("moveMap", arg);
-}
-
-onMounted(() => {
-  console.log("planSearch!!", attractionType);
-});
+};
 
 const showDetail = function (arg) {
   emits("showDetail", arg);
-}
+};
 
+const planSidoCode = ref();
+onBeforeMount(() => {
+  console.log("planSearch!!", attractionType);
+  planSidoCode.value = planCreateInfo.value.sidoCode;
+  console.log("planSidoCode:", planSidoCode.value);
+
+  param.value.sidoCode = planSidoCode.value;
+  param.value.gugunCode = planCreateInfo.value.gugunCode;
+  gugunCode.value = planCreateInfo.value.gugunCode;
+  gugun(
+    param.value,
+    ({ data }) => {
+      for (let i = 0; i < data.length; i++) {
+        const tmp = {
+          text: "",
+          value: "",
+        };
+
+        tmp.text = data[i].gugunName;
+        tmp.value = data[i].gugunCode;
+        selectOptionGugun.value.push(tmp);
+      }
+    },
+    (error) => {
+      console.log("시도 선택 error ", error);
+    }
+  );
+});
 </script>
 
 <template>
@@ -148,8 +175,18 @@ const showDetail = function (arg) {
     <!--  -->
     <div class="subItem search">
       <div class="select">
-        <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
+        <!-- <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
         <VSelect
+          :selectOption="selectOptionGugun"
+          @onKeySelect="changeKey2"
+          :index="gugunCode"
+        /> -->
+        <SidoSelect
+          :selectOption="selectOptionSido"
+          @onKeySelect="changeKey"
+          :index="planSidoCode"
+        />
+        <GugunSelect
           :selectOption="selectOptionGugun"
           @onKeySelect="changeKey2"
           :index="gugunCode"
@@ -176,7 +213,7 @@ const showDetail = function (arg) {
               <th scope="col" class="title">제목</th>
               <th scope="col" class="addr">주소</th>
               <th scope="col" class="detail" title="상세보기">
-                  <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-solid fa-magnifying-glass"></i>
               </th>
               <th scope="col" class="put">
                 <i class="fa-solid fa-inbox" style="color: #990000"></i>
@@ -199,7 +236,6 @@ const showDetail = function (arg) {
 </template>
 
 <style scoped>
-
 .detail {
   width: 40px;
   padding: 0px;
