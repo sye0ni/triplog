@@ -67,6 +67,7 @@ const changeKey = (val) => {
 const changeKey2 = (val) => {
   console.log("구/군 선택" + val);
   param.value.gugunCode = val;
+  gugunCode.value = val;
   searchText.value = "";
   param.value.keyword = searchText.value; // 검색어 초기화
 

@@ -7,15 +7,17 @@ const markers = ref([]);
 
 const props = defineProps({
   attractionList: Array,
-  attraction: Object
+  attraction: Object,
 });
-
 
 watch(
   () => props.attraction,
   () => {
     // 이동할 위도 경도 위치를 생성합니다
-    var moveLatLon = new kakao.maps.LatLng(props.attraction.latitude, props.attraction.longitude);
+    var moveLatLon = new kakao.maps.LatLng(
+      props.attraction.latitude,
+      props.attraction.longitude
+    );
 
     // 지도 중심을 부드럽게 이동시킵니다
     // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
@@ -34,7 +36,10 @@ watch(
     positions.value = [];
     props.attractionList.forEach((attraction) => {
       let obj = {};
-      obj.latlng = new kakao.maps.LatLng(attraction.latitude, attraction.longitude);
+      obj.latlng = new kakao.maps.LatLng(
+        attraction.latitude,
+        attraction.longitude
+      );
       obj.title = attraction.title;
 
       positions.value.push(obj);
@@ -47,7 +52,6 @@ watch(
 );
 
 onMounted(() => {
-
   // kakao라는 객체가 있으면 만들어라
   if (window.kakao && window.kakao.maps) {
     initMap();
@@ -56,8 +60,9 @@ onMounted(() => {
     const script = document.createElement("script");
     // autoload=false 주의!!
     // 스크립트 로드할 때 만들어짐
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${import.meta.env.VITE_KAKAO_MAP_SERVICE_KEY
-      }&libraries=services,clusterer`;
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${
+      import.meta.env.VITE_KAKAO_MAP_SERVICE_KEY
+    }&libraries=services,clusterer`;
     /* global kakao */
     script.onload = () => kakao.maps.load(() => initMap());
     document.head.appendChild(script);
