@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 
 const props = defineProps({
   selectOption: Array,
+  index: String,
 });
 
 const emit = defineEmits(["onKeySelect"]);
@@ -13,6 +14,11 @@ const onSelect = () => {
   console.log(key.value + "선택!!!");
   emit("onKeySelect", key.value);
 };
+
+onMounted(() => {
+  console.log("sidoSelect onMounted:", props.index);
+  key.value = props.index;
+});
 </script>
 
 <template>

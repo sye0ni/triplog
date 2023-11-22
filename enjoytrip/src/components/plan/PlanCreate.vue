@@ -6,8 +6,8 @@ import { usePlanStore } from "@/stores/plan";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
 import { gugun, registPlan } from "@/api/plan";
-import SidoSelect from "./item/SidoSelect.vue";
-import GugunSelect from "./item/GugunSelect.vue";
+import SidoSelect from "@/components/plan/item/SidoSelect.vue";
+import GugunSelect from "@/components/plan/item/GugunSelect.vue";
 
 const planStore = usePlanStore();
 const { planBox } = storeToRefs(planStore);
@@ -127,7 +127,11 @@ const createPlan = function () {
         <div class="subTitle">여행지</div>
         <!-- <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
         <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" /> -->
-        <SidoSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
+        <SidoSelect
+          :selectOption="selectOptionSido"
+          @onKeySelect="changeKey"
+          index=""
+        />
         <GugunSelect
           :selectOption="selectOptionGugun"
           @onKeySelect="changeKey2"

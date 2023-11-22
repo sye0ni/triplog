@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeMount } from "vue";
 import VSelect from "@/components/common/VSelect.vue";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
 import { gugun, getAttractionList } from "@/api/plan";
@@ -7,14 +7,16 @@ import { storeToRefs } from "pinia";
 import { usePlanStore } from "@/stores/plan";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
-import PlanSearchItem from "./PlanSearchItem.vue";
+import PlanSearchItem from "@/components/common/PlanSearchItem.vue";
 import VRadio from "./VRadio.vue";
+import SidoSelect from "@/components/plan/item/SidoSelect.vue";
+import GugunSelect from "@/components/plan/item/GugunSelect.vue";
 
 const planStore = usePlanStore();
 const router = useRouter();
 
 // -- 구군 얻어오기 시작
-const { sidoCode, attractionType } = storeToRefs(planStore);
+const { sidoCode, attractionType, planCreateInfo } = storeToRefs(planStore);
 
 const emits = defineEmits(["sendAttrlist", "moveMap"]);
 
@@ -36,7 +38,7 @@ const changeKey = (val) => {
   console.log("시/도 선택한 조건 : " + val);
   param.value.sidoCode = val;
   param.value.gugunCode = "";
-  gugunCode.value = "1";
+  gugunCode.value = "";
   selectOptionGugun.value = [{ text: "구/군", value: "" }];
   searchText.value = "";
   console.log(param.value);
@@ -88,7 +90,7 @@ const changeKey2 = (val) => {
       attractionList.value.push(data[i]);
       sendAttrList.value.push(data[i]);
     }
-    emits('sendAttrList', sendAttrList.value);
+    emits("sendAttrList", sendAttrList.value);
   }),
     (error) => {
       console.log(error);
@@ -130,7 +132,7 @@ const changeRadio = function (val) {
         sendAttrList.value.push(data[i]);
       }
 
-      emits('sendAttrlist', sendAttrList.value);
+      emits("sendAttrlist", sendAttrList.value);
     },
     (error) => {
       console.log(error);
@@ -174,16 +176,40 @@ const searchAttrs = function () {
 
 const moveMap = function (arg) {
   emits("moveMap", arg);
-}
-
-onMounted(() => {
-  console.log("planSearch!!", attractionType);
-});
+};
 
 const showDetail = function (arg) {
   emits("showDetail", arg);
-}
+};
 
+const planSidoCode = ref();
+onBeforeMount(() => {
+  console.log("planSearch!!", attractionType);
+  planSidoCode.value = planCreateInfo.value.sidoCode;
+  console.log("planSidoCode:", planSidoCode.value);
+
+  param.value.sidoCode = planSidoCode.value;
+  param.value.gugunCode = planCreateInfo.value.gugunCode;
+  gugunCode.value = planCreateInfo.value.gugunCode;
+  gugun(
+    param.value,
+    ({ data }) => {
+      for (let i = 0; i < data.length; i++) {
+        const tmp = {
+          text: "",
+          value: "",
+        };
+
+        tmp.text = data[i].gugunName;
+        tmp.value = data[i].gugunCode;
+        selectOptionGugun.value.push(tmp);
+      }
+    },
+    (error) => {
+      console.log("시도 선택 error ", error);
+    }
+  );
+});
 </script>
 
 <template>
@@ -191,14 +217,8 @@ const showDetail = function (arg) {
     <!--  -->
     <div class="subItem search">
       <div class="select">
-        <div class='selectSelect'>
-          <div class="searchInputWrapper">
-            <input class='searchInput' type='text' placeholder='검색어를 입력하세요' v-model='searchText' />
-            <i class="searchBtn fa-solid fa-magnifying-glass" @click="searchAttrs"></i>
-          </div>
-          <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
-          <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" />
-        </div>
+        <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
+        <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" />
       </div>
 
       <div class="pt-2">

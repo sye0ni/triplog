@@ -21,6 +21,11 @@ const onSelect = () => {
   console.log("selectedIndex:::", props.index);
   emit("onKeySelect", key.value);
 };
+
+onMounted(() => {
+  console.log("gugunSelect OnMouned index ", props.index);
+  key.value = props.index;
+});
 </script>
 
 <template>

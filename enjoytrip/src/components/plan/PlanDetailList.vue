@@ -12,10 +12,7 @@ const props = defineProps({ nth: Number });
 
 // -- drag
 
-onMounted(() => {
-  console.log("detaillist onmounted ", props.nth, planBox.value);
-  // planBox.value.push([]);
-});
+onMounted(() => {});
 </script>
 
 <template>
