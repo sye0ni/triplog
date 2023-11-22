@@ -89,6 +89,7 @@
 	    <if test='contentTypeId != ""'>
 	        AND ai.content_type_id = #{contentTypeId}
 	    </if> 
+
 	</select>
 
 

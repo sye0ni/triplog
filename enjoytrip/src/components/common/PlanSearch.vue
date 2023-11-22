@@ -26,9 +26,11 @@ const param = ref({
   sidoCode: "",
   gugunCode: "",
   contentTypeId: "",
+  keyword: "",
 });
 
 const gugunCode = ref("0");
+const searchText = ref("");
 
 const changeKey = (val) => {
   console.log("시/도 선택한 조건 : " + val);
@@ -36,6 +38,10 @@ const changeKey = (val) => {
   param.value.gugunCode = "";
   gugunCode.value = "1";
   selectOptionGugun.value = [{ text: "구/군", value: "" }];
+  searchText.value = "";
+  console.log(param.value);
+  param.value.keyword = searchText.value;
+
   gugun(
     param.value,
     ({ data }) => {
@@ -59,11 +65,12 @@ const changeKey = (val) => {
 const changeKey2 = (val) => {
   console.log("구/군 선택" + val);
   param.value.gugunCode = val;
-  console.log(param.value);
+  searchText.value = "";
+  param.value.keyword = searchText.value; // 검색어 초기화 
 
-  if (val == "") {
-    param.value.contentTypeId = null;
-  }
+  // if (val == "") {
+  //   param.value.contentTypeId = null;
+  // }
 
   if (
     param.value.sidoCode == "" ||
@@ -98,6 +105,8 @@ const sendAttrList = ref([]);
 const changeRadio = function (val) {
   console.log("change!!", val);
   param.value.contentTypeId = val;
+  searchText.value = "";
+  param.value.keyword = searchText.value; // 검색어 초기화 
 
   if (val == "") {
     param.value.contentTypeId = null;
@@ -129,6 +138,40 @@ const changeRadio = function (val) {
   );
 };
 
+
+// 검색어 입력시 
+const searchAttrs = function () {
+  if (searchText.value == '') {
+    alert("검색어를 입력하세요!");
+  }
+  else {
+    // console.log("검색어!!!!", searchText.value);
+    // console.log("선택1 시/도: ", param.value.sidoCode);
+    // console.log("선택2 구/군: ", param.value.gugunCode);
+    // console.log("선택3 타입: ", param.value.contentTypeId);
+
+    param.value.keyword = searchText.value;
+
+    console.log("검색어 입력: ", param.value);
+
+    getAttractionList(
+      param.value,
+      ({ data }) => {
+        attractionList.value.length = 0;
+        sendAttrList.value.length = 0;
+        for (let i = 0; i < data.length; i++) {
+          attractionList.value.push(data[i]);
+          sendAttrList.value.push(data[i]);
+        }
+        emits("sendAttrlist", sendAttrList.value);
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
+  }
+}
+
 const moveMap = function (arg) {
   emits("moveMap", arg);
 }
@@ -148,23 +191,20 @@ const showDetail = function (arg) {
     <!--  -->
     <div class="subItem search">
       <div class="select">
-        <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
-        <VSelect
-          :selectOption="selectOptionGugun"
-          @onKeySelect="changeKey2"
-          :index="gugunCode"
-        />
+        <div class='selectSelect'>
+          <div class="searchInputWrapper">
+            <input class='searchInput' type='text' placeholder='검색어를 입력하세요' v-model='searchText' />
+            <i class="searchBtn fa-solid fa-magnifying-glass" @click="searchAttrs"></i>
+          </div>
+          <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
+          <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" />
+        </div>
       </div>
 
       <div class="pt-2">
         <div class="radio">
-          <VRadio
-            v-for="attraction in attractionType"
-            :key="attraction.title"
-            :item="attraction"
-            v-model="type"
-            @changeValue="changeRadio"
-          />
+          <VRadio v-for="attraction in attractionType" :key="attraction.title" :item="attraction" v-model="type"
+            @changeValue="changeRadio" />
         </div>
         <!--  -->
       </div>
@@ -176,7 +216,7 @@ const showDetail = function (arg) {
               <th scope="col" class="title">제목</th>
               <th scope="col" class="addr">주소</th>
               <th scope="col" class="detail" title="상세보기">
-                  <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-solid fa-magnifying-glass"></i>
               </th>
               <th scope="col" class="put">
                 <i class="fa-solid fa-inbox" style="color: #990000"></i>
@@ -184,13 +224,8 @@ const showDetail = function (arg) {
             </tr>
           </thead>
           <tbody>
-            <PlanSearchItem
-              v-for="item in attractionList"
-              :key="item.contentId"
-              :item="item"
-              @select-attr="moveMap"
-              @show-detail="showDetail"
-            />
+            <PlanSearchItem v-for="item in attractionList" :key="item.contentId" :item="item" @select-attr="moveMap"
+              @show-detail="showDetail" />
           </tbody>
         </table>
       </div>
@@ -199,7 +234,6 @@ const showDetail = function (arg) {
 </template>
 
 <style scoped>
-
 .detail {
   width: 40px;
   padding: 0px;
@@ -227,9 +261,47 @@ const showDetail = function (arg) {
   align-items: center;
 }
 
-.select > * {
+/* .select > * {
   width: 250px;
   margin: 10px 0px;
+} */
+
+.searchInputWrapper {
+  display: flex;
+  align-items: center;
+  width: 250px;
+  /* 필요에 따라 조정 */
+  border: 2px solid;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 35px;
+  padding: 5px 5px;
+}
+
+
+.searchInput {
+  flex: 1;
+  padding: 5px;
+  border: none;
+  outline: none;
+  /* display: flex; */
+  /* justify-content: space-between; */
+  /* align-items: center; */
+}
+
+.selectSelect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.selectSelect>* {
+  width: 250px;
+  margin: 10px 0px;
+}
+
+.searchBtn {
+  cursor: pointer;
 }
 
 .search {
@@ -261,6 +333,7 @@ table {
   table-layout: fixed;
   width: 100%;
 }
+
 .custom-table th {
   border-bottom: 2px solid #333;
   text-align: center;

@@ -135,11 +135,7 @@ const goMakePlanDetail = function () {
         <div class="subContainer">
           <div class="subItem search">
             검색
-            <PlanSearch
-              @send-attrlist="startMap"
-              @move-map="moveMap"
-              @show-detail="showDetail"
-            />
+            <PlanSearch @send-attrlist="startMap" @move-map="moveMap" @show-detail="showDetail" />
             <button class="makeBtn" @click="goMakePlanDetail">만들기</button>
           </div>
 
@@ -149,19 +145,11 @@ const goMakePlanDetail = function () {
           </div>
           <div class="subItem plan">
             <div class="subTitle">여행계획</div>
-            <PlanDetailList
-              v-for="index in planCreateInfo.period"
-              :key="index"
-              :nth="index"
-            />
+            <PlanDetailList v-for="index in planCreateInfo.period" :key="index" :nth="index" />
           </div>
         </div>
       </div>
-      <div
-        class="d3"
-        :style="{ left: leftWidth }"
-        @mousedown="onMouseDown"
-      ></div>
+      <div class="d3" :style="{ left: leftWidth }" @mousedown="onMouseDown"></div>
       <div class="modal">
         <Transition v-if="showModal">
           <WishlistDetail @click="toggleModal" :attraction="attraction" />
