@@ -23,10 +23,9 @@ const isEnable = ref(false);
 const range = 50;
 const leftWidth = ref("70%");
 const rightWidth = ref("100%");
-const separatorWidth = ref("3px");
 
 const MIN_WIDTH = 1100; // 최소 허용 너비
-const MAX_WIDTH = window.innerWidth; // 최대 허용 너비 (현재 창 너비에서 100px 제외)
+const MAX_WIDTH = window.innerWidth; // 최대 허용 너비
 
 const onMouseMove = (event) => {
   if (isEnable.value) {
@@ -118,7 +117,10 @@ const goMakePlanDetail = function () {
   alert("계획 생성 완료!");
   let tmp = { planId: planCreateInfo.value.planId };
 
-  router.push({ name: "plan-list-detail", params: { planId: planCreateInfo.value.planId } });
+  router.push({
+    name: "plan-list-detail",
+    params: { planId: planCreateInfo.value.planId },
+  });
 };
 </script>
 
@@ -133,7 +135,11 @@ const goMakePlanDetail = function () {
         <div class="subContainer">
           <div class="subItem search">
             검색
-            <PlanSearch @send-attrlist="startMap" @move-map="moveMap" @show-detail="showDetail" />
+            <PlanSearch
+              @send-attrlist="startMap"
+              @move-map="moveMap"
+              @show-detail="showDetail"
+            />
             <button class="makeBtn" @click="goMakePlanDetail">만들기</button>
           </div>
 
@@ -143,11 +149,19 @@ const goMakePlanDetail = function () {
           </div>
           <div class="subItem plan">
             <div class="subTitle">여행계획</div>
-            <PlanDetailList v-for="index in planCreateInfo.period" :key="index" :nth="index" />
+            <PlanDetailList
+              v-for="index in planCreateInfo.period"
+              :key="index"
+              :nth="index"
+            />
           </div>
         </div>
       </div>
-      <div class="d3" :style="{ left: leftWidth }" @mousedown="onMouseDown"></div>
+      <div
+        class="d3"
+        :style="{ left: leftWidth }"
+        @mousedown="onMouseDown"
+      ></div>
       <div class="modal">
         <Transition v-if="showModal">
           <WishlistDetail @click="toggleModal" :attraction="attraction" />

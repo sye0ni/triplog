@@ -4,13 +4,13 @@
 
 <mapper namespace="com.ssafy.trip.user.model.mapper.UserMapper">
 	
-	<resultMap type="User" id="user">
+	<resultMap type="UserDto" id="user">
 		<result column="user_id" property="userId"/>
 		<result column="user_name" property="userName"/>
 		<result column="user_pwd" property="userPwd"/>
 		<result column="user_email" property="userEmail"/>
 		<result column="platform_type" property="platformType"/>
-		<result column="access_token" property="accessToken"/>
+		<result column="refresh_token" property="refreshToken"/>
 		<result column="salt" property="salt"/>
 	</resultMap>
 	
@@ -22,9 +22,9 @@
 		</where>
 	</select>
 	
-	<insert id="join" parameterType="User">
-		insert into user (user_id,user_name,user_pwd,user_email,platform_type,access_token,salt)
-		values (#{userId},#{userName},#{userPwd},#{userEmail},#{platformType},#{accessToken},#{salt})
+	<insert id="join" parameterType="UserDto">
+		insert into user (user_id,user_name,user_pwd,user_email,platform_type,refresh_token,salt)
+		values (#{userId},#{userName},#{userPwd},#{userEmail},#{platformType},#{refreshToken},#{salt})
 	</insert>
 	
 	<select id="login" parameterType="String" resultMap="user">
@@ -61,5 +61,70 @@
 		update user set random_token=#{randomToken}
 		where user_id=#{userId}
 	</update>
+	
+	<!--  -->
+	<select id="findByRandomToken" parameterType="string" resultType="string">
+		select user_id
+		from user
+		where random_token = #{randomToken}
+	</select>
+	
+	<update id="deleteRandomToken" parameterType="string">
+		update user set random_token=''
+		where user_id=#{userId}
+	</update>
+	
+	<!-- jwt -->
+	<select id="userInfo" parameterType="string" resultMap="user">
+		select user_name, user_id, user_email, platform_type
+		from user
+		where user_id = #{userId}
+	</select>
+	
+	<update id="saveRefreshToken" parameterType="map">
+		update user
+		set refresh_token = #{refreshToken}
+		where user_id = #{userId}
+	</update>
+	
+	<select id="getRefreshToken" parameterType="string" resultType="string">
+		select token
+		from user
+		where user_id = #{userId}
+	</select>
+	
+	<update id="deleteRefreshToken" parameterType="map">
+		update user
+		set refresh_token = #{refreshToken, jdbcType=VARCHAR}
+		where user_id = #{userId}
+	</update>
+	
+	<select id="getPhotos" parameterType="String" resultType="userPhotoDto">
+		    SELECT 
+				    b.board_photo_id AS boardPhotoId,
+				    b.like AS `like`,
+				    CONCAT(t.save_folder, '/', t.save_file) AS thumbnail,
+				    (
+				        SELECT COUNT(*)
+				        FROM comment c
+				        WHERE c.board_id = b.board_photo_id
+				    ) AS commentCnt,
+				    SUBSTRING(b.register_time, 1, 10) AS registerTime,
+				   concat(s.sigun_name, b.place) location
+				FROM
+				    board_photo b
+				INNER JOIN
+				    thumbnail t ON b.thumbnail_id = t.thumbnail_id
+				LEFT JOIN
+				    sigun s ON b.sido_code = s.sido_code 
+				          AND COALESCE(b.gugun_code, 0) = COALESCE(s.gugun_code, 0) 
+				WHERE
+    		b.user_id = #{userId};
+	</select>
+	
+	<update id='deleteLike' parameterType="string">
+		update board_photo set `like`=`like`-1 where user_id=#{userId};
+	</update>
+
 	
 </mapper>

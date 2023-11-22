@@ -32,7 +32,8 @@
 		<result column="plan_id" property="planId"/>
 		<result column="user_id" property="userId"/>
 		<result column="user_plan_nth" property="userPlanNth"/>
-		<result column="location" property="location" />
+		<result column="sido_code" property="sidoCode"/>
+		<result column="gugun_code" property="gugunCode"/>
 		<result column="start_date" property="startDate"/>
 		<result column="end_date" property="endDate"/>
 		<result column="plan_name" property="planName"/>
@@ -49,23 +50,66 @@
 		<result column="plan_nth_id" property="planNthId" />
 	</resultMap>
 
-	<resultMap type="PlanListDto" id="planListDto">
+	<resultMap type="PlanListDetailDto" id="planListDetail">
 		<result column="plan_id" property="planId" />
 		<result column="plan_nth_id" property="planNthId" />
+		<result column="user_plan_nth" property="userPlanNth"/>
 		<result column="content_id" property="contentId" />
 		<result column="content_type_name" property="contentTypeName" />
 		<result column="first_image" property="firstImage" />
 	</resultMap>	
+	
+	<resultMap type="PlanListDto" id="planList">
+		<result column="plan_id" property="planId"/>
+		<result column="user_plan_nth" property="userPlanNth" />
+		<result column="sido_code" property="sidoCode"/>
+		<result column="gugun_code" property="gugunCode"/>
+		<result column="start_date" property="startDate"/>
+		<result column="end_date" property="endDate"/>
+		<result column="plan_name" property="planName"/>
+	</resultMap>
 
-    <select id="attractionList" parameterType="map" resultMap="attraction">
+	<resultMap type="SidoGugunNameDto" id="sidoGugunName">
+		<result column="sido_name" property="sidoName"/>
+		<result column="gugun_name" property="gugunName"/>
+	</resultMap>
+     
+<!--     <select id="attractionList" parameterType="map" resultMap="attraction">
         select * 
         from attraction_info natural join attraction_description
-        where sido_code=#{sidoCode} and gugun_code=#{gugunCode}
-        <if test="contentTypeId != null">
-            and content_type_id = #{contentTypeId}
+        where
+        <if test="sidoCode != null">
+        	sido_code=#{sidoCode} and 
         </if>
-    </select>
+        <if test="gugunCode != null">
+        	gugun_code=#{gugunCode} and 
+        </if>
+        <if test="contentTypeId != null">
+        	content_type_id=#{contentTypeId} and 
+        </if>
+		(title like CONCAT('%', #{keyword}, '%') or addr1 like CONCAT('%', #{keyword}, '%') or addr2 like CONCAT('%', #{keyword}, '%'))
+    </select> -->
     
+    
+ 	<select id="attractionList" parameterType="map" resultMap="attraction">
+	    SELECT * 
+	    FROM attraction_info AS ai
+	    JOIN attraction_description AS ad ON ai.content_id = ad.content_id
+	    WHERE (ai.title LIKE CONCAT('%', #{keyword}, '%') OR ai.addr1 LIKE CONCAT('%', #{keyword}, '%') OR ai.addr2 LIKE CONCAT('%', #{keyword}, '%'))
+	    <if test='sidoCode != null'>
+	        AND ai.sido_code = #{sidoCode}  
+	    </if>
+	    <if test='gugunCode != null'>
+	        AND ai.gugun_code = #{gugunCode}
+	    </if>
+	    <if test='contentTypeId != null'>
+	        AND ai.content_type_id = #{contentTypeId}
+	    </if> 
+	</select>
+
+	
+
+   
     <select id="getAttraction" parameterType="int" resultMap="attraction">
     	select * 
         from attraction_info natural join attraction_description
@@ -76,9 +120,15 @@
         select * from gugun
         where sido_code=#{sidoCode}
     </select>
+    
+    <select id="sidoGugunName" parameterType="int" resultMap="sidoGugunName">
+    	select s.sido_name, g.gugun_name
+		from sido s inner join gugun g using(sido_code)
+		where gugun_code = #{gugunCode} and sido_code = #{sidoCode}
+    </select>
 
-	<select id="getPlan" parameterType="map" resultMap="planListDto">
-		select p.plan_id, n.plan_nth_id, d.order, d.content_id, c.content_type_name, a.title, a.addr1, a.addr2, a.first_image
+	<select id="getPlan" parameterType="map" resultMap="planListDetail">
+		select p.plan_id, n.plan_nth_id, n.user_plan_nth, d.order, d.content_id, c.content_type_name, a.title, a.addr1, a.addr2, a.first_image
 		from plan p inner join plan_nth n on p.plan_id = n.plan_id 
 			inner join plan_nth_detail d on n.plan_nth_id = d.plan_nth_id
 			inner join attraction_info a on d.content_id = a.content_id
@@ -88,8 +138,8 @@
 	</select>
     
 	<insert id="registPlan" parameterType="planDto">
-    	insert into plan (user_id, user_plan_nth, location, start_date, end_date)
-		select #{userId}, IFNULL(MAX(user_plan_nth), 0) + 1, #{location}, #{startDate}, #{endDate}
+    	insert into plan (user_id, user_plan_nth, sido_code, gugun_code, start_date, end_date)
+		select #{userId}, IFNULL(MAX(user_plan_nth), 0) + 1, #{sidoCode}, #{gugunCode}, #{startDate}, #{endDate}
 		from plan
 		where user_id = #{userId}
 		<selectKey resultType="int" keyProperty="planId" order="AFTER">
@@ -108,21 +158,83 @@
     	values (#{period}, #{planId})
     </insert>
     
-    <select id="planList" parameterType="string" resultMap="planListDto">
-		select p.plan_id, n.plan_nth_id, d.order, d.content_id, c.content_type_name, a.title, a.addr1, a.addr2, a.first_image
-		from plan p inner join plan_nth n on p.plan_id = n.plan_id 
-			inner join plan_nth_detail d on n.plan_nth_id = d.plan_nth_id
-			inner join attraction_info a on d.content_id = a.content_id
-			inner join content_type c on c.content_type_id = a.content_type_id
-		where p.user_id = #{userId}
-		order by p.plan_id desc, n.plan_nth_id, d.order;
+    <insert id="registPlanNthDetail" parameterType="PlanNthDetailRegistDto">
+	    INSERT INTO plan_nth_detail (plan_nth_id, `order`, content_id)
+	    SELECT p.plan_nth_id, #{order}, #{contentId}
+	    FROM plan_nth p
+	    WHERE p.plan_id = #{planId} AND p.user_plan_nth = #{userPlanNth}
+	</insert>
+    
+    <select id="planList" parameterType="string" resultMap="planList">
+    	select plan_id, user_plan_nth, sido_code, gugun_code, start_date, end_date, plan_name
+		from plan 
+		where user_id = #{userId}
+		order by plan_id desc
     </select>
     
+    <update id="modifyPlanName" parameterType="string">
+    	update plan
+		set plan_name = #{planName}
+		where plan_id = #{planId};	
+    </update>
+    
+    <update id="modifyPlanDate" parameterType="string">
+    	update plan
+		set start_date = #{startDate}, end_date = #{endDate}
+		where plan_id = #{planId}
+    </update>
+    
+    <select id="getInsertPoint" parameterType="map" resultType="map">
+    	select user_plan_nth as userPlanNth, COALESCE(MAX(`order`)+1, 1) as `order`
+		from plan_nth left outer join plan_nth_detail 
+		using(plan_nth_id) 
+		where plan_id = #{planId} and user_plan_nth = #{nextPeriod}
+		group by plan_nth_id;
+    </select>
+    
+    <select id="getInsertPlanNthDetail" parameterType="int" resultType="int">
+		select content_id
+		from plan_nth join plan_nth_detail 
+		using(plan_nth_id) 
+		where plan_id = #{planId} and user_plan_nth > #{nextPeriod}
+		order by plan_nth_id;    
+    </select>
+
+	<delete id="deletePlan" parameterType="int">
+		delete from plan
+		where plan_id = #{planId}
+	</delete>
+	
+	<delete id="deletePlanNth" parameterType="int">
+		delete from plan_nth
+		where plan_id = #{planId} and user_plan_nth = #{userPlanNth}
+	</delete>
+	
+	<delete id="deletePlanNthDetail" parameterType="int">
+		delete plan_nth_detail
+		from plan_nth_detail join plan_nth 
+		using(plan_nth_id)
+		where plan_nth.plan_id = #{planId}
+	</delete>
+
+	<!-- wish -->    
     <select id="wishlist" parameterType="string" resultMap="attractionInfo">
     	select a.content_id, content_type_id, title, addr1, addr2, zipcode, tel, first_image, first_image2, readcount, sido_code, gugun_code, latitude, longitude, mlevel
 		from wishlist w, attraction_info a
 		where w.content_id = a.content_id and w.user_id = #{userId};
     </select>
-    
+	
+	<delete id="deleteWishlist" parameterType="string" >
+		delete from wishlist
+		where user_id = #{userId}
+	</delete>    
+	
+	<insert id="registWishlist" parameterType="list">
+		insert into wishlist (user_id, content_id)
+		values
+		<foreach collection="list" item="item" separator=",">
+			(#{item.userId}, #{item.contentId})
+		</foreach>
+	</insert>
 
 </mapper>
