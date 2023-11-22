@@ -31,10 +31,15 @@ public interface PlanMapper {
 	int registPlanNthDetail(PlanNthDetailRegistDto registDto); // ??
 	
 	List<PlanListDetailDto> getPlan(Map<String, String> map); // int planId, String userId
-	List<PlanListDto> planList(String userId); // .. PlanDto에 다 담아
+	List<PlanListDto> planList(String userId); 
 
 	int modifyPlanName(String planName, String planId);
 	int modifyPlanDate(Map<String, String> map);
+	Map<String, Integer> getInsertPoint(Map<String, Integer> map);	// planId, userPlanNth
+	List<Integer> getInsertPlanNthDetail(int planId, int nextPeriod);
+	
+	int deletePlanNth(int planId, int userPlanNth);
+	int deletePlanNthDetail();
 	int deletePlan(int planId);
 	int deletePlanNthDetail(int planId);
 	

@@ -135,6 +135,22 @@ const goPlanEdit = function () {
     params: { planId: route.params.planId },
   });
 };
+
+// --- temp
+const tmplist = ref([
+  {
+    text: "일",
+    value: "1",
+  },
+  {
+    text: "이",
+    value: "2",
+  },
+  {
+    text: "삼",
+    value: "",
+  },
+]);
 </script>
 
 <template>
@@ -145,6 +161,12 @@ const goPlanEdit = function () {
       </div>
       <div class="d1" :style="{ width: leftWidth }">
         <!--  -->
+        <select>
+          <option value="1">일</option>
+          <option value="2">이</option>
+          <option value="3" :selected="true">삼</option>
+        </select>
+
         <div class="subContainer">
           <button @click="goPlanList">목록으로</button>
           <button @click="goPlanEdit">수정하기</button>
