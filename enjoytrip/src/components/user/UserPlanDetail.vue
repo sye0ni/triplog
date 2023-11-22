@@ -144,7 +144,6 @@ const goPlanEdit = function () {
         <VKakaoMap />
       </div>
       <div class="d1" :style="{ width: leftWidth }">
-        <!--  -->
         <div class="subContainer">
           <button @click="goPlanList">목록으로</button>
           <button @click="goPlanEdit">수정하기</button>

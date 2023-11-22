@@ -183,10 +183,31 @@
 		set start_date = #{startDate}, end_date = #{endDate}
 		where plan_id = #{planId}
     </update>
+    
+    <select id="getInsertPoint" parameterType="map" resultType="map">
+    	select user_plan_nth as userPlanNth, COALESCE(MAX(`order`)+1, 1) as `order`
+		from plan_nth left outer join plan_nth_detail 
+		using(plan_nth_id) 
+		where plan_id = #{planId} and user_plan_nth = #{nextPeriod}
+		group by plan_nth_id;
+    </select>
+    
+    <select id="getInsertPlanNthDetail" parameterType="int" resultType="int">
+		select content_id
+		from plan_nth join plan_nth_detail 
+		using(plan_nth_id) 
+		where plan_id = #{planId} and user_plan_nth > #{nextPeriod}
+		order by plan_nth_id;    
+    </select>
 
 	<delete id="deletePlan" parameterType="int">
 		delete from plan
 		where plan_id = #{planId}
+	</delete>
+	
+	<delete id="deletePlanNth" parameterType="int">
+		delete from plan_nth
+		where plan_id = #{planId} and user_plan_nth = #{userPlanNth}
 	</delete>
 	
 	<delete id="deletePlanNthDetail" parameterType="int">
