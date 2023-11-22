@@ -284,7 +284,7 @@ public class UserController {
 	
 	// 회원 탈퇴 
 	@DeleteMapping("/{userId}")
-	public ResponseEntity<?> delete(@PathVariable String userId){
+	public ResponseEntity<?> delete(@PathVariable String userId) throws Exception{
 		
 		int tmp = userService.delete(userId);
 		if(tmp == 0) {

@@ -35,4 +35,5 @@ public interface UserMapper {
 	// mypage
 	List<UserPhotoDto> getPhotos(String userId) throws SQLException;
 	List<String> getPhotoPaths(int photoId) throws SQLException;
+	void deleteLike(String userId) throws SQLException;
 }

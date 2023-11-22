@@ -5,10 +5,7 @@ import TheHeadingNavbar from "/src/components/layout/TheHeadingNavbar.vue";
 
 <template>
   <TheHeadingNavbar />
-
   <RouterView />
-
-  
 </template>
 
 <style scoped>

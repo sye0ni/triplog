@@ -27,9 +27,12 @@ const param = ref({
   sidoCode: "",
   gugunCode: "",
   contentTypeId: "",
+  keyword: "",
 });
 
 const gugunCode = ref("0");
+
+const searchText = ref("");
 
 const changeKey = (val) => {
   console.log("시/도 선택한 조건 : " + val);
@@ -147,6 +150,41 @@ const changeRadio = function (val) {
   // 좋아요 여부 포함
 };
 
+// 검색어 입력시 
+const searchAttrs = function () {
+  if (searchText.value == '') {
+    alert("검색어를 입력하세요!");
+  }
+  else {
+    // console.log("검색어!!!!", searchText.value);
+    // console.log("선택1 시/도: ", param.value.sidoCode);
+    // console.log("선택2 구/군: ", param.value.gugunCode);
+    // console.log("선택3 타입: ", param.value.contentTypeId);
+
+    param.value.keyword = searchText.value; 
+    getAttractionList(param.value,
+      ({ data }) => {
+        attractionList.value = [];
+        sendAttrList.value.length = 0;
+        for (let i = 0; i < data.length; i++) {
+          for (let j = 0; j < wishlist.value.length; j++) {
+            if (data[i].contentId == wishlist.value[j].contentId) {
+              data[i].isLike = true;
+              console.log("like!!", data[i]);
+            }
+          }
+          data[i].idx = i;
+          attractionList.value.push(data[i]);
+          sendAttrList.value.push(data[i]);
+        }
+        emits("sendAttrlist", sendAttrList.value);
+      }
+    )
+    
+    
+  }
+}
+
 onMounted(() => {
   // console.log("planSearch!!", attractionType);
 });
@@ -207,9 +245,16 @@ const moveMap = function (arg) {
         찜 버튼을 눌러 여행 장소를 주머니에 담고 <br />
         만들기 버튼을 눌러주세요
       </div>
+
       <div class="select">
-        <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
-        <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" />
+        <div class='selectSelect'>
+          <div>
+            <input class='searchInput' type='text' placeholder='검색어를 입력하세요' v-model='searchText'/>
+            <i class="searchBtn fa-solid fa-magnifying-glass" @click="searchAttrs"></i>
+          </div>
+          <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
+          <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" />
+        </div>
       </div>
 
       <div class="pt-2">
@@ -276,9 +321,33 @@ const moveMap = function (arg) {
   align-items: center;
 }
 
-.select > * {
+/* .select > * {
   width: 250px;
   margin: 10px 0px;
+} */
+
+.selectInput{
+  display:flex;
+  /* justify-content: space-between; */
+  align-items: center;
+}
+
+.searchInput{
+  border: 2px solid;
+  border-radius: 10px;
+  height:35px;
+  padding: 5px 5px;
+  width:230px;
+}
+
+.searchInput:focus{
+  border-color: #d20000;
+  outline: none;
+}
+
+.searchBtn{
+  cursor:pointer;
+  margin-left:1%;
 }
 
 .title {
@@ -295,6 +364,17 @@ const moveMap = function (arg) {
 .search {
   width: 100%;
   /* min-width: 400px; */
+}
+
+.selectSelect{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.selectSelect > * {
+  width:250px;
+   margin: 10px 0px;
 }
 
 .scroll {

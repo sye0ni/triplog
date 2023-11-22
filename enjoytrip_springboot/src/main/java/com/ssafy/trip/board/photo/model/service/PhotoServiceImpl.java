@@ -67,16 +67,12 @@ public class PhotoServiceImpl implements PhotoService{
 
 
 					if(map.get("order").equals("latest") || map.get("order").equals("")) { // 최신 정렬 ->> 기본 값 
-						System.out.println("기본정렬111");
-						
 						return photoMapper.getList(map);
 					}
 					else if(map.get("order").equals("oldest")) { // 오래된 순 정렬 
-						System.out.println("오래된순정렬111");
 						return photoMapper.getListByTimeAsc(map);
 					}
 					else { // 조회수 정렬 
-						System.out.println("조회수정렬11");
 						return photoMapper.getListByLike(map);
 					}
 				}
@@ -89,15 +85,12 @@ public class PhotoServiceImpl implements PhotoService{
 					map.replace("guguncode", gugun);
 					
 					if(map.get("order").equals("latest")) { // 최신 정렬 
-						System.out.println("최신정렬22");
 						return photoMapper.getListByTimeDesc(map);
 					}
 					else if(map.get("order").equals("oldest")) { // 오래된 순 정렬 
-						System.out.println("오래된순정렬22");
 						return photoMapper.getListByTimeAsc(map);
 					}
 					else { // 조회수 정렬 
-						System.out.println("조회수정렬22");
 						return photoMapper.getListByLike(map);
 					}
 				}
@@ -111,12 +104,10 @@ public class PhotoServiceImpl implements PhotoService{
 					map.replace("sidocode", sido);
 					int gugun=Integer.parseInt((String) map.get("guguncode"));
 					map.replace("guguncode", gugun);
-					
-					System.out.println("지역정렬33");
+
 					return photoMapper.getListByArea(map);
 				}
 				else { // 지역 검색도 없음 
-					System.out.println("기본정렬33");
 					return photoMapper.getList(map); 
 				}
 			}
@@ -189,7 +180,6 @@ public class PhotoServiceImpl implements PhotoService{
 		// 썸네일 삭제
 		photoMapper.deleteThumbnail(thumbnailId);
 	
-		
 		
 	}
 

@@ -48,7 +48,6 @@ const logout = async () => {
   padding: 10px 5%;
   background-color: white;
   z-index:1030;
-
 }
 
 .fixed-top {

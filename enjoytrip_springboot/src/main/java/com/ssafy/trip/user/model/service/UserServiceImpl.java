@@ -10,6 +10,7 @@ import javax.mail.MessagingException;
 
 import org.springframework.stereotype.Service;
 
+import com.ssafy.trip.board.photo.model.mapper.PhotoMapper;
 import com.ssafy.trip.user.model.UserDto;
 import com.ssafy.trip.user.model.UserPhotoDto;
 import com.ssafy.trip.user.model.mapper.UserMapper;
@@ -21,8 +22,9 @@ public class UserServiceImpl implements UserService{
 
 	private final UserMapper userMapper;
 	private EmailService emailService;
+	
 
-	public UserServiceImpl(UserMapper userMapper, EmailService emailService) {
+	public UserServiceImpl( UserMapper userMapper, EmailService emailService) {
 		super();
 		this.userMapper = userMapper;
 		this.emailService = emailService;
@@ -127,15 +129,10 @@ public class UserServiceImpl implements UserService{
 		return result;	
 	}
 
-	// 회원 탈퇴 -> 여행 계획, 찜 목록만 삭제 해야함??
+	// 회원 탈퇴 -> 여행 계획, 찜 목록, 좋아하는 게시글 삭제 
 	@Override
-	public int delete(String userId) {
-		
-		// TODO : 여행 계획 삭제 
-		
-		// TODO : 찜 목록 삭제 
-	
-		
+	public int delete(String userId) throws SQLException {
+		userMapper.deleteLike(userId);
 		return userMapper.delete(userId);
 	}
 
