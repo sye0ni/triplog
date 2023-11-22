@@ -4,6 +4,7 @@ import router from "./router";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { draggable } from "vuedraggable";
+import '@/assets/css/fonts.css';
 
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import "bootstrap";

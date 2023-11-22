@@ -38,7 +38,7 @@ const changeKey = (val) => {
   console.log("시/도 선택한 조건 : " + val);
   param.value.sidoCode = val;
   param.value.gugunCode = "";
-  selectOptionGugun.value = [{ text: "구/군", value: ""}];
+  selectOptionGugun.value = [{ text: "구/군", value: "" }];
   // gugunCode.value = "";
   searchText.value = "";
   console.log(param.value);
@@ -68,13 +68,12 @@ const changeKey = (val) => {
 const changeKey2 = (val) => {
   console.log("구/군 선택" + val);
   param.value.gugunCode = val;
-  console.log(param.value);
   searchText.value = "";
-  param.value.keyword = searchText.value;
+  param.value.keyword = searchText.value; // 검색어 초기화 
 
-  if (val == "") {
-    param.value.contentTypeId = null;
-  }
+  // if (val == "") {
+  //   param.value.contentTypeId = null;
+  // }
 
   if (
     param.value.sidoCode == "" ||
@@ -116,8 +115,10 @@ const type = ref("");
 const changeRadio = function (val) {
   console.log("change!!", val);
   param.value.contentTypeId = val;
+  searchText.value = "";
+  param.value.keyword = searchText.value; // 검색어 초기화 
 
-  if (val == "") {
+  if (val == "") { // '전체' 선택 
     param.value.contentTypeId = null;
   }
   if (
@@ -131,10 +132,9 @@ const changeRadio = function (val) {
   getAttractionList(
     param.value,
     ({ data }) => {
-      // console.log(data.length + "get attractionList ,", data);
       attractionList.value.length = 0;
       sendAttrList.value.length = 0;
-      console.log(wishlist.value.length + "?????");
+      // console.log(wishlist.value.length + "?????");
       for (let i = 0; i < data.length; i++) {
         data[i].idx = i;
         for (let j = 0; j < wishlist.value.length; j++) {
@@ -169,7 +169,7 @@ const searchAttrs = function () {
     // console.log("선택2 구/군: ", param.value.gugunCode);
     // console.log("선택3 타입: ", param.value.contentTypeId);
 
-    param.value.keyword = searchText.value; 
+    param.value.keyword = searchText.value;
 
     console.log("검색어 입력: ", param.value);
 
@@ -191,8 +191,8 @@ const searchAttrs = function () {
         emits("sendAttrlist", sendAttrList.value);
       }
     )
-    
-    
+
+
   }
 }
 
@@ -259,8 +259,8 @@ const moveMap = function (arg) {
 
       <div class="select">
         <div class='selectSelect'>
-          <div>
-            <input class='searchInput' type='text' placeholder='검색어를 입력하세요' v-model='searchText'/>
+          <div class="searchInputWrapper">
+            <input class='searchInput' type='text' placeholder='검색어를 입력하세요' v-model='searchText' />
             <i class="searchBtn fa-solid fa-magnifying-glass" @click="searchAttrs"></i>
           </div>
           <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
@@ -270,13 +270,8 @@ const moveMap = function (arg) {
 
       <div class="pt-2">
         <div class="radio">
-          <VRadio
-            v-for="attraction in attractionType"
-            :key="attraction.title"
-            :item="attraction"
-            v-model="type"
-            @changeValue="changeRadio"
-          />
+          <VRadio v-for="attraction in attractionType" :key="attraction.title" :item="attraction" v-model="type"
+            @changeValue="changeRadio" />
         </div>
         <!--  -->
       </div>
@@ -295,14 +290,8 @@ const moveMap = function (arg) {
             </tr>
           </thead>
           <tbody>
-            <PlanSearchItem2
-              v-for="item in attractionList"
-              :key="item.contentId"
-              :item="item"
-              @like-change="likeChange"
-              @show-detail="showDetail"
-              @select-attr="moveMap"
-            />
+            <PlanSearchItem2 v-for="item in attractionList" :key="item.contentId" :item="item" @like-change="likeChange"
+              @show-detail="showDetail" @select-attr="moveMap" />
           </tbody>
         </table>
       </div>
@@ -332,33 +321,35 @@ const moveMap = function (arg) {
   align-items: center;
 }
 
-/* .select > * {
-  width: 250px;
-  margin: 10px 0px;
-} */
-
-.selectInput{
-  display:flex;
-  /* justify-content: space-between; */
+.searchInputWrapper {
+  display: flex;
   align-items: center;
-}
-
-.searchInput{
+  width: 250px;
+  /* 필요에 따라 조정 */
   border: 2px solid;
   border-radius: 10px;
-  height:35px;
+  overflow: hidden;
+  height: 35px;
   padding: 5px 5px;
-  width:230px;
 }
 
-.searchInput:focus{
+.searchInputWrapper:focus {
   border-color: #d20000;
-  outline: none;
 }
 
-.searchBtn{
-  cursor:pointer;
-  margin-left:1%;
+.searchInput {
+  flex: 1;
+  padding: 5px;
+  border: none;
+  outline: none;
+  /* display: flex; */
+  /* justify-content: space-between; */
+  /* align-items: center; */
+}
+
+
+.searchBtn {
+  cursor: pointer;
 }
 
 .title {
@@ -377,15 +368,15 @@ const moveMap = function (arg) {
   /* min-width: 400px; */
 }
 
-.selectSelect{
-  display:flex;
+.selectSelect {
+  display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.selectSelect > * {
-  width:250px;
-   margin: 10px 0px;
+.selectSelect>* {
+  width: 250px;
+  margin: 10px 0px;
 }
 
 .scroll {
@@ -402,6 +393,7 @@ const moveMap = function (arg) {
   /* display: flex; */
   /* justify-content: center; */
 }
+
 .wish {
   width: 40px;
 }
@@ -418,6 +410,7 @@ table {
   table-layout: fixed;
   width: 100%;
 }
+
 .custom-table th {
   border-bottom: 2px solid #333;
   text-align: center;

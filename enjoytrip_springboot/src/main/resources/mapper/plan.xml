@@ -74,42 +74,24 @@
 		<result column="gugun_name" property="gugunName"/>
 	</resultMap>
      
-<!--     <select id="attractionList" parameterType="map" resultMap="attraction">
-        select * 
-        from attraction_info natural join attraction_description
-        where
-        <if test="sidoCode != null">
-        	sido_code=#{sidoCode} and 
-        </if>
-        <if test="gugunCode != null">
-        	gugun_code=#{gugunCode} and 
-        </if>
-        <if test="contentTypeId != null">
-        	content_type_id=#{contentTypeId} and 
-        </if>
-		(title like CONCAT('%', #{keyword}, '%') or addr1 like CONCAT('%', #{keyword}, '%') or addr2 like CONCAT('%', #{keyword}, '%'))
-    </select> -->
-    
-    
+         
  	<select id="attractionList" parameterType="map" resultMap="attraction">
 	    SELECT * 
 	    FROM attraction_info AS ai
 	    JOIN attraction_description AS ad ON ai.content_id = ad.content_id
 	    WHERE (ai.title LIKE CONCAT('%', #{keyword}, '%') OR ai.addr1 LIKE CONCAT('%', #{keyword}, '%') OR ai.addr2 LIKE CONCAT('%', #{keyword}, '%'))
-	    <if test='sidoCode != null'>
+	    <if test='sidoCode != ""'>
 	        AND ai.sido_code = #{sidoCode}  
 	    </if>
-	    <if test='gugunCode != null'>
+	    <if test='gugunCode != ""'>
 	        AND ai.gugun_code = #{gugunCode}
 	    </if>
-	    <if test='contentTypeId != null'>
+	    <if test='contentTypeId != ""'>
 	        AND ai.content_type_id = #{contentTypeId}
 	    </if> 
 	</select>
 
-	
 
-   
     <select id="getAttraction" parameterType="int" resultMap="attraction">
     	select * 
         from attraction_info natural join attraction_description
