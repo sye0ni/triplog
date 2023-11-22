@@ -3,7 +3,9 @@ import { ref } from "vue";
 import { writeQuestion } from "@/api/boardQnA";
 import { useRouter } from "vue-router";
 
-const userId = ref("ssafy"); // session ? 에서 꺼내오는걸로 수정
+import { jwtDecode } from "jwt-decode";
+
+const userId = ref(""); // session ? 에서 꺼내오는걸로 수정
 const titleValue = ref("");
 const contentValue = ref("");
 const router = useRouter();
@@ -14,11 +16,16 @@ const writeQuestions = function () {
   if (titleValue.value === "" || contentValue.value === "") {
     alert("내용을 작성해주세요!");
   } else {
+    let token = sessionStorage.getItem("accessToken");
+    let decodeToken = jwtDecode(token);
+
+    userId.value = decodeToken.userId;
     let articleJson = {
       userId: userId.value,
       title: titleValue.value,
       content: contentValue.value,
     };
+    console.log("글작성중 ", articleJson);
 
     writeQuestion(
       articleJson,
