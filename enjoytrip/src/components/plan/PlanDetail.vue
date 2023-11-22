@@ -81,6 +81,13 @@ const showDetail = function (arg) {
   toggleModal();
 };
 
+const selectAttr = ref({});
+const moveMap = function (arg) {
+  console.log("선택한 요소!!!");
+  // console.log(arg);
+  selectAttr.value = arg;
+}
+
 // --- planCreateInfo
 
 const param = ref({
@@ -129,7 +136,7 @@ const goMakePlanDetail = function () {
   <div>
     <div class="borderContainer">
       <div class="d2 mapContainer" :style="{ width: rightWidth }">
-        <VKakaoMap />
+        <VKakaoMap :attractionList='attractionList' :attraction='selectAttr' />
       </div>
       <div class="d1" :style="{ width: leftWidth }">
         <!--  -->

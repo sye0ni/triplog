@@ -52,6 +52,7 @@ public interface PlanMapper {
 //	</delete>    
 	void deleteWishlist(String userId);
 	void registWishlist(List<Wishlist> list);
+	AttractionInfoDto attractionListById(int contentId);
 	
 	
 }

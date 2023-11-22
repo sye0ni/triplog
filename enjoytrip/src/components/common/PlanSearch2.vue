@@ -333,6 +333,9 @@ const moveMap = function (arg) {
   padding: 5px 5px;
 }
 
+.searchInputWrapper:hover {
+  border: 2px solid #c62f2f;
+}
 
 .searchInput {
   flex: 1;

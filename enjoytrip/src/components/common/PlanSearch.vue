@@ -18,7 +18,7 @@ const router = useRouter();
 // -- 구군 얻어오기 시작
 const { sidoCode, attractionType, planCreateInfo } = storeToRefs(planStore);
 
-const emits = defineEmits(["sendAttrlist", "moveMap"]);
+const emits = defineEmits(["showDetail", "sendAttrlist", "moveMap"]);
 
 const selectOptionSido = sidoCode;
 let selectOptionGugun = ref([{ text: "구/군", value: "" }]);
@@ -63,10 +63,14 @@ const changeKey = (val) => {
     }
   );
 };
+// 여행지 목록 가져오기
+const attractionList = ref([]);
+const sendAttrList = ref([]);
 
 const changeKey2 = (val) => {
   console.log("구/군 선택" + val);
   param.value.gugunCode = val;
+  gugunCode.value = val;
   searchText.value = "";
   param.value.keyword = searchText.value; // 검색어 초기화
 
@@ -74,13 +78,13 @@ const changeKey2 = (val) => {
   //   param.value.contentTypeId = null;
   // }
 
-  if (
-    param.value.sidoCode == "" ||
-    param.value.gugunCode == "" ||
-    param.value.contentTypeId == ""
-  ) {
-    return;
-  }
+  // if (
+  //   param.value.sidoCode == "" ||
+  //   param.value.gugunCode == "" ||
+  //   param.value.contentTypeId == ""
+  // ) {
+  //   return;
+  // }
 
   getAttractionList(param.value, ({ data }) => {
     console.log(data.length + "get attractionList ,", data);
@@ -97,12 +101,10 @@ const changeKey2 = (val) => {
     };
 };
 
-// 여행지 목록 가져오기
-const attractionList = ref([]);
+
 
 const type = ref("");
 
-const sendAttrList = ref([]);
 
 const changeRadio = function (val) {
   console.log("change!!", val);
@@ -110,16 +112,16 @@ const changeRadio = function (val) {
   searchText.value = "";
   param.value.keyword = searchText.value; // 검색어 초기화
 
-  if (val == "") {
-    param.value.contentTypeId = null;
-  }
-  if (
-    param.value.sidoCode == "" ||
-    param.value.gugunCode == "" ||
-    param.value.contentTypeId == ""
-  ) {
-    return;
-  }
+  // if (val == "") {
+  //   param.value.contentTypeId = null;
+  // }
+  // if (
+  //   param.value.sidoCode == "" ||
+  //   param.value.gugunCode == "" ||
+  //   param.value.contentTypeId == ""
+  // ) {
+  //   return;
+  // }
 
   getAttractionList(
     param.value,
@@ -215,33 +217,20 @@ onBeforeMount(() => {
     <!--  -->
     <div class="subItem search">
       <div class="select">
-        <!-- <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
-        <VSelect
-          :selectOption="selectOptionGugun"
-          @onKeySelect="changeKey2"
-          :index="gugunCode"
-        /> -->
-        <SidoSelect
-          :selectOption="selectOptionSido"
-          @onKeySelect="changeKey"
-          :index="planSidoCode"
-        />
-        <GugunSelect
-          :selectOption="selectOptionGugun"
-          @onKeySelect="changeKey2"
-          :index="gugunCode"
-        />
+        <div class='selectSelect'>
+          <div class="searchInputWrapper">
+            <input class='searchInput' type='text' placeholder='검색어를 입력하세요' v-model='searchText' />
+            <i class="searchBtn fa-solid fa-magnifying-glass" @click="searchAttrs"></i>
+          </div>
+          <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
+          <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" />
+        </div>
       </div>
 
       <div class="pt-2">
         <div class="radio">
-          <VRadio
-            v-for="attraction in attractionType"
-            :key="attraction.title"
-            :item="attraction"
-            v-model="type"
-            @changeValue="changeRadio"
-          />
+          <VRadio v-for="attraction in attractionType" :key="attraction.title" :item="attraction" v-model="type"
+            @changeValue="changeRadio" />
         </div>
         <!--  -->
       </div>
@@ -261,13 +250,8 @@ onBeforeMount(() => {
             </tr>
           </thead>
           <tbody>
-            <PlanSearchItem
-              v-for="item in attractionList"
-              :key="item.contentId"
-              :item="item"
-              @select-attr="moveMap"
-              @show-detail="showDetail"
-            />
+            <PlanSearchItem v-for="item in attractionList" :key="item.contentId" :item="item" @select-attr="moveMap"
+              @show-detail="showDetail" />
           </tbody>
         </table>
       </div>
@@ -320,6 +304,10 @@ onBeforeMount(() => {
   padding: 5px 5px;
 }
 
+.searchInputWrapper:hover {
+  border: 2px solid #c62f2f;
+}
+
 .searchInput {
   flex: 1;
   padding: 5px;
@@ -336,7 +324,7 @@ onBeforeMount(() => {
   align-items: center;
 }
 
-.selectSelect > * {
+.selectSelect>* {
   width: 250px;
   margin: 10px 0px;
 }

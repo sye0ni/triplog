@@ -273,8 +273,8 @@ const updateIsLike = function () {
                                 </div>
                             </div>
                             <div class="box2-2">
-                                <span style="font-size:x-small">{{ photo.detailPlace }}</span>
-                                <span style="font-size:x-small">{{ photo.registerTime }}</span>
+                                <span style="font-size:small">{{ photo.detailPlace }}</span>
+                                <span style="font-size:small">{{ photo.registerTime }}</span>
                             </div>
                         </div>
                         <div class="box3">

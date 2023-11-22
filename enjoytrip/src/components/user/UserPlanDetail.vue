@@ -9,6 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import { useRouter, useRoute } from "vue-router";
 import UserPlanDetailList from "@/components/user/UserPlanDetailList.vue";
 import WishlistDetail from "@/components/plan/WishlistDetail.vue";
+import { getAttractionListById } from "@/api/plan";
 
 const planStore = usePlanStore();
 const router = useRouter();
@@ -134,33 +135,64 @@ const goPlanEdit = function () {
     name: "plan-modify",
     params: { planId: route.params.planId },
   });
+
+
 };
+
+// 지도 띄우러 
+const attractionList = ref([]); // 관광지 목록
+const contentId = ref([]);
+const showMap = function (arg) {
+  console.log(arg);
+
+  // console.log(planDetailBox.value[0].length);
+  // console.log("그래서?????");
+  // console.log(planDetailBox.value[0][0].contentId);
+  contentId.value.length = 0; // 배열 초기화 
+
+  // arg 일 차 계획들의 위치를 맵으로 전달하기
+  for (let i = 0; i < planDetailBox.value[arg - 1].length; i++) {
+    // console.log(i);
+    // console.log(planDetailBox.value[arg]);
+    let param = { "contentId": planDetailBox.value[arg - 1][i].contentId };
+
+    getAttractionListById(
+      param,
+      ({ data }) => {
+        console.log("조회결과!!!!");
+        console.log(data);
+        attractionList.value.push(data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
+
+
+  }
+
+
+
+}
+
 </script>
 
 <template>
   <div>
     <div class="borderContainer">
       <div class="d2 mapContainer" :style="{ width: rightWidth }">
-        <VKakaoMap />
+        <VKakaoMap :attractionList="attractionList" />
       </div>
       <div class="d1" :style="{ width: leftWidth }">
         <div class="subContainer">
           <button @click="goPlanList">목록으로</button>
           <button @click="goPlanEdit">수정하기</button>
           <div class="subItem plan">
-            <UserPlanDetailList
-              v-for="index in period"
-              :key="index"
-              :nth="index"
-            />
+            <UserPlanDetailList v-for="index in period" :key="index" :nth="index" @show-map="showMap" />
           </div>
         </div>
       </div>
-      <div
-        class="d3"
-        :style="{ left: leftWidth }"
-        @mousedown="onMouseDown"
-      ></div>
+      <div class="d3" :style="{ left: leftWidth }" @mousedown="onMouseDown"></div>
       <div class="modal">
         <Transition v-if="showModal">
           <WishlistDetail @click="toggleModal" :attraction="attraction" />

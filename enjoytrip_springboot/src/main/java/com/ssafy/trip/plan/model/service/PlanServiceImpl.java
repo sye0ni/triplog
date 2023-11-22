@@ -180,4 +180,9 @@ public class PlanServiceImpl implements PlanService {
 		planMapper.registWishlist(wishlistModifyDto.getWishlist());
 	}
 
+	@Override
+	public AttractionInfoDto attractionListById(int contentId) {
+		return planMapper.attractionListById(contentId);
+	}
+
 }

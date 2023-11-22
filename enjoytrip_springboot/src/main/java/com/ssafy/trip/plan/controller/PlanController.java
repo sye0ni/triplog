@@ -62,6 +62,19 @@ public class PlanController {
 		return new ResponseEntity<List>(Collections.EMPTY_LIST, HttpStatus.OK);
 	}
 
+	// query string으로 contentId list 받음
+	@GetMapping(value = "/attractionList")
+	private ResponseEntity<?> attractionListById(@RequestParam Map<String,String> map) {
+		logger.debug("attraction list call : {}", map);
+
+		AttractionInfoDto dto = planService.attractionListById(Integer.parseInt(map.get("contentId")));
+		if (dto != null) {
+			return ResponseEntity.status(HttpStatus.OK).body(dto);
+		}
+			
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 	@GetMapping(value = "/detail/attraction/gugun")
 	private ResponseEntity<?> gugun(@RequestParam int sidoCode) {
 		logger.debug("gugun sidoCode : {}", sidoCode);

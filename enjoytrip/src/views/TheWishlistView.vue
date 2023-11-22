@@ -60,7 +60,7 @@ const toggleModal = () => {
 }
 
 const attraction = ref({});
-const showDetail=function(arg){
+const showDetail = function (arg) {
   // console.log(arg); // 받아온 여행지를 wishlistdetail 로 넘겨야함 
   attraction.value = arg;
   // console.log(attraction.value);
@@ -91,19 +91,19 @@ const moveMap = function (arg) {
   <div class="bigContainer">
     <div class="borderContainer">
       <div class="d2 mapContainer" :style="{ width: rightWidth }">
-        <VKakaoMap :attractionList='attractionList' :attraction='selectAttr'/>
+        <VKakaoMap :attractionList='attractionList' :attraction='selectAttr' />
       </div>
       <div class="d1" :style="{ width: leftWidth }">
         <!--  -->
         <div class="subItem search">
-          <PlanSearch2 @show-detail='showDetail' @send-attrlist='startMap' @move-map='moveMap'/>
+          <PlanSearch2 @show-detail='showDetail' @send-attrlist='startMap' @move-map='moveMap' />
         </div>
       </div>
       <div class="d3" :style="{ left: leftWidth }" @mousedown="onMouseDown">
       </div>
       <div class='modal'>
         <Transition v-if="showModal">
-          <WishlistDetail @click='toggleModal' :attraction='attraction'/>
+          <WishlistDetail @click='toggleModal' :attraction='attraction' />
         </Transition>
       </div>
     </div>
@@ -112,16 +112,15 @@ const moveMap = function (arg) {
 </template>
 
 <style scoped>
-
 * {
   box-sizing: border-box;
 }
 
-.modal{
+.modal {
   /* position:relative; */
-  position:fixed;
-  top:20%;
-  right:20%;
+  position: fixed;
+  top: 20%;
+  right: 20%;
   /* background-color: gray; */
   z-index: 3;
 }

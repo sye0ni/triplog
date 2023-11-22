@@ -55,7 +55,6 @@ const router = createRouter({
         {
           path: "idsearch",
           name: "user-id-search",
-          beforeEnter: onlyAuthUser,
           component: () => import("@/components/user/AccountIdSearch.vue"),
         },
         {
@@ -67,13 +66,11 @@ const router = createRouter({
         {
           path: "pwdmodify",
           name: "user-pwd-modify",
-          beforeEnter: onlyAuthUser,
           component: () => import("@/components/user/AccountPwdModify.vue"),
         },
         {
           path: "pwdsearch",
           name: "user-pwd-search",
-          beforeEnter: onlyAuthUser,
           component: () => import("@/components/user/AccountPwdSearch.vue"),
         },
       ],

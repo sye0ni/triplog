@@ -88,8 +88,8 @@ const modifyQuestions = function () {
 };
 
 const modifyComments = function (args) {
-  // console.log("댓글 수정");
-  // console.log(args.commentId);
+  console.log("댓글 수정");
+  console.log(args.commentId);
 
   modifyComment(
     articleno,
@@ -106,11 +106,14 @@ const modifyComments = function (args) {
 
 const writeComments = function (...args) {
   // articleno, commentcontent
-  // console.log("댓글 작성");
+  console.log("댓글 작성");
+  console.log(args[0]);
+  console.log(args[1]);
+  console.log(currUserId);
 
   let commentJson = {
     content: args[1],
-    userId: currUserId
+    userId: currUserId.value
   };
 
   writeComment(

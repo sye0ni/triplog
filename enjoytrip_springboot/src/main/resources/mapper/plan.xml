@@ -219,5 +219,10 @@
 			(#{item.userId}, #{item.contentId})
 		</foreach>
 	</insert>
+	
+	<select id="attractionListById" parameterType="int" resultMap="attractionInfo">
+		select * from attraction_info where 
+		content_id=#{contentId}
+	</select>
 
 </mapper>

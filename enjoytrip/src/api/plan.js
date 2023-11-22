@@ -51,6 +51,10 @@ function modifyPlan(planId, param, success, fail) {
   local.put(`${url}/${planId}`, param).then(success).catch(fail);
 }
 
+function getAttractionListById(param, success, fail) {
+  local.get(`${url}/attractionList`, { params: param }).then(success).catch(fail);
+}
+
 export {
   gugun,
   registPlan,
@@ -63,4 +67,5 @@ export {
   getSidoGugunName,
   deletePlan,
   modifyPlan,
+  getAttractionListById
 };

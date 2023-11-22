@@ -40,6 +40,7 @@ public interface PlanService {
 	// wishlist
 	List<AttractionInfoDto> wishlist(String userId);
 	void makeWishlist(WishlistModifyDto wishlistModifyDto);
+	AttractionInfoDto attractionListById(int contentId);
 	
 //	void deleteWishlist(String userId);
 //	void registWishlist(List<Wishlist> list);

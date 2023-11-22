@@ -61,19 +61,10 @@ const login = async () => {
       <div class="form-container">
         <form action="" method="post">
           <label for="user-id">아이디</label><br />
-          <input
-            type="text"
-            v-model="loginUser.userId"
-            id="user-id"
-            autofocus
-          /><br />
+          <input type="text" v-model="loginUser.userId" id="user-id" autofocus /><br />
           <hr />
           <label for="user-pwd">비밀번호</label><br />
-          <input
-            type="password"
-            v-model="loginUser.userPwd"
-            id="user-pwd"
-          /><br />
+          <input type="password" v-model="loginUser.userPwd" id="user-pwd" /><br />
           <hr />
           <div class="message">{{ message }}</div>
           <div class="button">
@@ -81,11 +72,8 @@ const login = async () => {
           </div>
         </form>
         <div class="user">
-          <router-link :to="{ name: 'user-id-search' }">아이디 찾기</router-link
-          >&nbsp;&nbsp;|&nbsp;&nbsp;
-          <router-link :to="{ name: 'user-pwd-search' }"
-            >비밀번호 찾기</router-link
-          >&nbsp;&nbsp;|&nbsp;&nbsp;
+          <router-link :to="{ name: 'user-id-search' }">아이디 찾기</router-link> &nbsp;&nbsp;| &nbsp;&nbsp;
+          <router-link :to="{ name: 'user-pwd-search' }">비밀번호 찾기</router-link>&nbsp;&nbsp; | &nbsp;&nbsp;
           <router-link :to="{ name: 'user-join' }">회원가입</router-link>
         </div>
         <div class="social">
@@ -107,6 +95,7 @@ a {
   text-decoration: none;
   color: black;
 }
+
 .container {
   display: flex;
   flex-direction: column;
@@ -115,14 +104,17 @@ a {
   padding: 40px;
   height: 100%;
 }
+
 .title {
   font-size: 2rem;
   padding-bottom: 90px;
 }
+
 .form-container {
   display: flex;
   flex-direction: column;
 }
+
 input {
   border: 0px;
   width: 500px;
@@ -132,18 +124,22 @@ input {
   margin: 0px;
   margin-top: 20px;
 }
+
 hr {
   margin-top: 0px;
   margin-bottom: 20px;
 }
+
 .button {
   margin: 50px 0px;
 }
+
 .user {
   display: flex;
   justify-content: center;
   margin-bottom: 50px;
 }
+
 .social {
   margin-top: 20px;
 }

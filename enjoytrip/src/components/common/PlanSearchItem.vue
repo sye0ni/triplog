@@ -8,7 +8,7 @@ const planStore = usePlanStore();
 const { storeBox } = storeToRefs(planStore);
 
 const props = defineProps({ item: Object });
-const emits = defineEmits(["selectAttr"]);
+const emits = defineEmits(["selectAttr", "showDetail"]);
 
 const addEvent = function () {
   console.log("add");
@@ -61,9 +61,12 @@ a {
 td {
   border-bottom: 1px solid #afa9a9;
   padding: 10px 10px;
-  white-space: nowrap; /* 텍스트를 한 줄로 표시 */
-  overflow: hidden; /* 넘치는 부분을 숨김 */
-  text-overflow: ellipsis; /* 넘치는 부분에 ...을 표시 */
+  white-space: nowrap;
+  /* 텍스트를 한 줄로 표시 */
+  overflow: hidden;
+  /* 넘치는 부분을 숨김 */
+  text-overflow: ellipsis;
+  /* 넘치는 부분에 ...을 표시 */
 }
 
 tr:hover {
@@ -81,5 +84,4 @@ img {
 .line {
   cursor: pointer;
 }
-
 </style>
