@@ -158,7 +158,15 @@ const goDelete = function () {
   <div class="PlanListItemTopContainer">
     <div class="container">
       <div class="left">
-        <img src="@/assets/image.png" alt="" />
+        <!-- <img src="@/assets/image.png" alt="" /> -->
+        <!-- <i
+          class="fa-regular fa-folder-open"
+          style="color: #5c5c5c; padding-right: 5px"
+        ></i> -->
+        <i
+          class="fa-solid fa-location-dot"
+          style="color: #9a0e0e; padding-right: 5px"
+        ></i>
         <div>
           <div>
             <span v-if="item.planName == null" class="title"
@@ -205,8 +213,19 @@ const goDelete = function () {
       </div>
       <div class="edit" v-show="isPlanPeriodEdit">
         <span>시작일</span
-        ><input class="plandate" v-model="startDate" type="date" :max="endDate" />
-        <span>종료일</span><input class="plandate" v-model="endDate" type="date" :min="startDate" />
+        ><input
+          class="plandate"
+          v-model="startDate"
+          type="date"
+          :max="endDate"
+        />
+        <span>종료일</span
+        ><input
+          class="plandate"
+          v-model="endDate"
+          type="date"
+          :min="startDate"
+        />
         <button class="modifyBtn" @click="goPlanDateEdit">수정하기</button>
       </div>
     </div>

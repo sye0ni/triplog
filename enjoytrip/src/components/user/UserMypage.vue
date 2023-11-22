@@ -180,7 +180,12 @@ const goWhishlist = function () {
           {{ userInfo.userId }}({{ userInfo.userName }})님
           <button @click="nameModify">수정하기</button>
           <div v-show="isNameModifying" class="nameEdit">
-            <input id="nameEdit" type="text" v-model="nameRef" ref="nameInput" />
+            <input
+              id="nameEdit"
+              type="text"
+              v-model="nameRef"
+              ref="nameInput"
+            />
             <hr style="width: 200px" />
           </div>
         </div>
@@ -236,7 +241,9 @@ input {
 }
 
 .infoText {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  display: block;
+  max-width: 300px;
 }
 
 input:hover {
@@ -329,12 +336,15 @@ input:hover {
 }
 
 button {
-  background-color: #ffffff00;
+  background-color: #ca0f0f;
   border-radius: 10px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
+  border: none;
   font-size: 0.7rem;
   height: 33px;
   width: 76px;
+  min-width: 76px;
+  color: white;
 }
 
 button:hover {

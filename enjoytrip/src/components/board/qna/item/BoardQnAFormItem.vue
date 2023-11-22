@@ -22,8 +22,7 @@ onMounted(() => {
     let decodeToken = jwtDecode(token);
     currUserId.value = decodeToken.userId;
   }
-})
-
+});
 
 // 댓글 작성 펼치기 기능
 const toggleCommentState = ref(false);
@@ -52,18 +51,16 @@ const toggleChange = function (event) {
   if (!toggleContentState.value) {
     if (props.type === "question") {
       // 제목 지정
-      if (textArea1.value == '') {
-        alert('제목을 입력하세요!');
-      }
-      else {
+      if (textArea1.value == "") {
+        alert("제목을 입력하세요!");
+      } else {
         props.article.title = textArea1.value;
       }
     }
 
-    if (textArea2.value == '') {
+    if (textArea2.value == "") {
       alert("내용을 입력하세요!");
-    }
-    else {
+    } else {
       if (confirm("정말로 수정하시겠습니까?")) {
         props.article.content = textArea2.value;
         emit("modifyEvent", props.article);
@@ -123,37 +120,45 @@ const deleteArticle = function (event) {
 
 <template>
   <div class="container">
-
     <!-- 답글 등록이 아닌 경우 -->
     <template v-if="type != 'write'">
       <div class="box">
         <div class="box1-1">
-          <textarea id="textArea1" :value="
-            type === 'question'
-              ? article.title
-              : type === 'comment'
+          <textarea
+            id="textArea1"
+            :value="
+              type === 'question'
+                ? article.title
+                : type === 'comment'
                 ? '답변'
                 : ''
-          " :readOnly="toggleTitleState"></textarea>
+            "
+            :readOnly="toggleTitleState"
+          ></textarea>
         </div>
 
         <div class="box1-2">
           <template v-if="currUserId === article.userId">
             <!-- 작성자한테만 보이게 => 나중에 수정하기 -->
-            <button class='noBorderBtn' @click="toggleChange">수정</button>
-            <button class='noBorderBtn' @click="deleteArticle">삭제</button>
+            <button class="noBorderBtn" @click="toggleChange">수정</button>
+            <button class="noBorderBtn" @click="deleteArticle">삭제</button>
           </template>
           <!-- </template> -->
-          <span>{{ article.userId }}
-            <span id="date">{{ article.registerTime }}</span></span>
+          <span
+            >{{ article.userId }}
+            <span id="date">{{ article.registerTime }}</span></span
+          >
         </div>
       </div>
 
       <div class="box2">
-        <textarea id="textArea2" :value=article.content :readOnly="toggleContentState" ref="contentInput"></textarea>
+        <textarea
+          id="textArea2"
+          :value="article.content"
+          :readOnly="toggleContentState"
+          ref="contentInput"
+        ></textarea>
       </div>
-
-
     </template>
 
     <!-- 답글 등록 -->
@@ -172,7 +177,6 @@ const deleteArticle = function (event) {
           </div>
         </template>
       </template>
-
     </template>
   </div>
 </template>
@@ -189,13 +193,11 @@ const deleteArticle = function (event) {
   /* margin: 0% 5%; */
   padding: 1% 1%;
   /* 요소들을 가로로 배치 */
-
 }
 
 .box1-1 {
   width: 70%;
 }
-
 
 .box2 {
   background-color: rgb(247, 247, 247);
@@ -203,6 +205,8 @@ const deleteArticle = function (event) {
   padding: 1% 1%;
   border-top: 1px solid lightgray;
   border-bottom: 1px solid lightgray;
+  height: 30vh;
+  min-height: 200px;
 }
 
 .box3 {
@@ -243,6 +247,10 @@ button:hover {
 }
 
 textarea {
+  height: 100%;
+}
+
+textarea {
   border-width: 0;
   resize: none;
   width: 100%;
@@ -254,6 +262,11 @@ textarea {
   /* title 부분 */
   font-weight: bold;
   background-color: white;
+}
+
+#textArea2 {
+  height: 100%;
+  /* min-height: 300px; */
 }
 
 textarea:focus {
