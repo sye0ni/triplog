@@ -49,10 +49,10 @@ public class PlanController {
 		this.planService = planService;
 	}
 
-	// query string으로 sidoCode, gugunCode, contentType 받음
+	// query string으로 sidoCode, gugunCode, contentType, search 받음
 	@GetMapping(value = "/detail/attraction")
 	private ResponseEntity<?> attractionList(@RequestParam Map<String, String> map) {
-		logger.debug("attraction list call");
+		logger.debug("attraction list call : {}", map);
 
 		List<AttractionDto> list = planService.attractionList(map);
 		if (list != null && !list.isEmpty()) {

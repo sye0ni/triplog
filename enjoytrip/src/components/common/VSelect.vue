@@ -1,10 +1,26 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 const props = defineProps({
   selectOption: Array,
-  index: Object,
+  index: String,
 });
+
+// onMounted(() => {
+//   console.log("들어옴!!");
+//   console.log(props.index);
+
+//   console.log("key:", typeof key.value);
+//   // key.value = props.index;
+//   console.log("key.value", typeof key.value);
+
+//   setInterval(100);
+//   // key.value = props.index;
+//   console.log("key.value", key.value);
+
+    
+// });
+
 
 const emit = defineEmits(["onKeySelect"]);
 
@@ -17,15 +33,15 @@ const onSelect = () => {
 };
 </script>
 
-<template>
+
+<template>  
   <select v-model="key" @change="onSelect">
     <option
       v-for="option in selectOption"
       :key="option.value"
       :value="option.value"
       :disabled="option.value === '' ? true : false"
-      :selected="option.value == index"
-    >
+      >
       {{ option.text }}
     </option>
   </select>

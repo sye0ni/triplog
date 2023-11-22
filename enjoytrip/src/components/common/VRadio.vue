@@ -18,7 +18,6 @@ const emitItem = function () {
       class="form-check-input"
       name="checks"
       type="radio"
-      :checked="item.checked"
       :value="item.value"
       @change="emitItem"
     />

@@ -30,7 +30,7 @@ const param = ref({
   keyword: "",
 });
 
-const gugunCode = ref("0");
+const gugunCode = ref("3");
 
 const searchText = ref("");
 
@@ -38,21 +38,26 @@ const changeKey = (val) => {
   console.log("시/도 선택한 조건 : " + val);
   param.value.sidoCode = val;
   param.value.gugunCode = "";
-  gugunCode.value = "1";
-  selectOptionGugun.value = [{ text: "구/군", value: "" }];
+  selectOptionGugun.value = [{ text: "구/군", value: ""}];
+  // gugunCode.value = "";
+  searchText.value = "";
+  console.log(param.value);
+  param.value.keyword = searchText.value;
+
   gugun(
     param.value,
     ({ data }) => {
       for (let i = 0; i < data.length; i++) {
         const tmp = {
           text: "",
-          value: "",
+          value: ""
         };
-
         tmp.text = data[i].gugunName;
         tmp.value = data[i].gugunCode;
         selectOptionGugun.value.push(tmp);
       }
+      // gugunCode.value = "5"; // 1번 selectbox 가 바뀌면 구군코드 초기화 
+      console.log(gugunCode.value);
     },
     (error) => {
       console.log("시도 선택 error ", error);
@@ -64,6 +69,8 @@ const changeKey2 = (val) => {
   console.log("구/군 선택" + val);
   param.value.gugunCode = val;
   console.log(param.value);
+  searchText.value = "";
+  param.value.keyword = searchText.value;
 
   if (val == "") {
     param.value.contentTypeId = null;
@@ -78,6 +85,7 @@ const changeKey2 = (val) => {
   }
 
   getAttractionList(param.value, ({ data }) => {
+    console.log("select2 변화!!!!!!!!!!!");
     // console.log(data.length + "get attractionList ,", data);
     attractionList.value = [];
     sendAttrList.value.length = 0;
@@ -162,6 +170,9 @@ const searchAttrs = function () {
     // console.log("선택3 타입: ", param.value.contentTypeId);
 
     param.value.keyword = searchText.value; 
+
+    console.log("검색어 입력: ", param.value);
+
     getAttractionList(param.value,
       ({ data }) => {
         attractionList.value = [];
