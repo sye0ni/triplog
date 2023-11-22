@@ -41,7 +41,9 @@ watch(
         attraction.longitude
       );
       obj.title = attraction.title;
-
+      obj.address = attraction.addr1;
+      obj.image = attraction.first_image;
+      obj.zipcode = attraction.zipcode;
       positions.value.push(obj);
     });
 
@@ -98,48 +100,51 @@ const loadMarkers = () => {
       position: position.latlng, // 마커를 표시할 위치
       title: position.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됨.
       clickable: true, // // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
-      // image: markerImage, // 마커의 이미지
+      address: position.addr1,
+      image: position.first_image,
+      zipcode: position.zipcode
     });
     markers.value.push(marker);
 
-    // kakao.maps.event.addListener(marker, "click", function () {
-    //   console.log("클릭!!!");
-    //   // 커스텀 오버레이에 표시할 컨텐츠 입니다
-    //   // 커스텀 오버레이는 아래와 같이 사용자가 자유롭게 컨텐츠를 구성하고 이벤트를 제어할 수 있기 때문에
-    //   // 별도의 이벤트 메소드를 제공하지 않습니다
-    //   var content =
-    //     '<div class="wrap">' +
-    //     '    <div class="info">' +
-    //     '        <div class="title">' +
-    //     "            카카오 스페이스닷원" +
-    //     '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
-    //     "        </div>" +
-    //     '        <div class="body">' +
-    //     '            <div class="img">' +
-    //     '                <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">' +
-    //     "           </div>" +
-    //     '            <div class="desc">' +
-    //     '                <div class="ellipsis">제주특별자치도 제주시 첨단로 242</div>' +
-    //     '                <div class="jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>' +
-    //     '                <div><a href="https://www.kakaocorp.com/main" target="_blank" class="link">홈페이지</a></div>' +
-    //     "            </div>" +
-    //     "        </div>" +
-    //     "    </div>" +
-    //     "</div>";
+    kakao.maps.event.addListener(marker, "click", function () {
+      console.log("클릭!!!");
+      console.log(marker);
+      // 커스텀 오버레이에 표시할 컨텐츠 입니다
+      // 커스텀 오버레이는 아래와 같이 사용자가 자유롭게 컨텐츠를 구성하고 이벤트를 제어할 수 있기 때문에
+      // 별도의 이벤트 메소드를 제공하지 않습니다
+      var content =
+        '<div class="wrap">' +
+        '    <div class="info">' +
+        '        <div class="title">' +
+        `${marker.title}` +
+        '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
+        "        </div>" +
+        '        <div class="body">' +
+        '            <div class="img">' +
+        '                <img src="' + marker.image + '" width="73" height="70">' +
+        "           </div>" +
+        '            <div class="desc">' +
+        '                <div class="ellipsis">' + marker.address + '</div>' +
+        '                <div class="jibun ellipsis">(우) ' + marker.zipcode + '</div>'
+      "            </div>" +
+        "        </div>" +
+        "    </div>" +
+        "</div>";
 
-    //   // 마커 위에 커스텀오버레이를 표시합니다
-    //   // 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
-    //   var overlay = new kakao.maps.CustomOverlay({
-    //     content: content,
-    //     map: map,
-    //     position: marker.getPosition(),
-    //   });
 
-    // 커스텀 오버레이를 닫기 위해 호출되는 함수입니다
-    // function closeOverlay() {
-    //   overlay.setMap(null);
-    // }
-    // });
+      // // 마커 위에 커스텀오버레이를 표시합니다
+      // // 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
+      var overlay = new kakao.maps.CustomOverlay({
+        content: content,
+        map: map,
+        position: marker.getPosition(),
+      });
+
+      //커스텀 오버레이를 닫기 위해 호출되는 함수입니다
+      function closeOverlay() {
+        overlay.setMap(null);
+      }
+    });
   });
 
   // 4. 지도를 이동시켜주기

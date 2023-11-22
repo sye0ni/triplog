@@ -75,13 +75,13 @@ const changeKey2 = (val) => {
   //   param.value.contentTypeId = null;
   // }
 
-  if (
-    param.value.sidoCode == "" ||
-    param.value.gugunCode == "" ||
-    param.value.contentTypeId == ""
-  ) {
-    return;
-  }
+  // if (
+  //   param.value.sidoCode == "" ||
+  //   param.value.gugunCode == "" ||
+  //   param.value.contentTypeId == ""
+  // ) {
+  //   return;
+  // }
 
   getAttractionList(param.value, ({ data }) => {
     console.log("select2 변화!!!!!!!!!!!");
@@ -117,17 +117,17 @@ const changeRadio = function (val) {
   param.value.contentTypeId = val;
   searchText.value = "";
   param.value.keyword = searchText.value; // 검색어 초기화 
+  console.log(param.value);
 
-  if (val == "") { // '전체' 선택 
-    param.value.contentTypeId = null;
-  }
-  if (
-    param.value.sidoCode == "" ||
-    param.value.gugunCode == "" ||
-    param.value.contentTypeId == ""
-  ) {
-    return;
-  } // 선택되지 않은 값이 있으면 x
+  // if (val == "") { // '전체' 선택 
+  //   param.value.contentTypeId = "";
+  // }
+  // if (
+  //   param.value.sidoCode == "" ||
+  //   param.value.gugunCode == ""
+  // ) {
+  //   return;
+  // } // 선택되지 않은 값이 있으면 x
 
   getAttractionList(
     param.value,
@@ -333,9 +333,6 @@ const moveMap = function (arg) {
   padding: 5px 5px;
 }
 
-.searchInputWrapper:focus {
-  border-color: #d20000;
-}
 
 .searchInput {
   flex: 1;
