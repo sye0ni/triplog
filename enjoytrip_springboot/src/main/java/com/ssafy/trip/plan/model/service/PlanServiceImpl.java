@@ -40,12 +40,12 @@ public class PlanServiceImpl implements PlanService {
 	public AttractionDto getAttraction(int contentId) {
 		return planMapper.getAttraction(contentId);
 	}
-	
+
 	@Override
 	public String sidoGugunName(int sidoCode, int gugunCode) {
-		SidoGugunNameDto dto =planMapper.sidoGugunName(sidoCode, gugunCode);
-		
-		return dto.getSidoName() + " " + dto.getGugunName(); 
+		SidoGugunNameDto dto = planMapper.sidoGugunName(sidoCode, gugunCode);
+
+		return dto.getSidoName() + " " + dto.getGugunName();
 	}
 
 	// plan
@@ -73,7 +73,6 @@ public class PlanServiceImpl implements PlanService {
 	public int registPlanNthDetail(PlanNthDetailRegistDto registDto) {
 		return planMapper.registPlanNthDetail(registDto);
 	}
-	
 
 	@Override
 	public List<PlanListDetailDto> getPlan(Map<String, String> map) {
@@ -84,20 +83,25 @@ public class PlanServiceImpl implements PlanService {
 	public List<PlanListDto> planList(String userId) {
 		return planMapper.planList(userId);
 	}
-	
+
 	@Override
-	public int modifyPlanName(String planName, int planId) {
-		return planMapper.modifyPlanName(planName, planId);
+	public int modifyPlan(Map<String, String> map) {
+		
+		if (map.get("type").equals("planName")) {
+			return planMapper.modifyPlanName(map.get("planName"), map.get("planId"));
+		} else {
+			return planMapper.modifyPlanDate(map);
+		}
 	}
-	
+
 	@Override
-	public int modifyPlanDate(Map<String, String> map) {
-		return planMapper.modifyPlanDate(map);
+	public int detelePlan(int planId) {
+		return planMapper.deletePlan(planId);
 	}
-	
+
 	@Override
-	public int detelePlan(String planId) {
-		return planMapper.detelePlan(planId);
+	public int deletePlanNthDetail(int planId) {
+		return planMapper.deletePlanNthDetail(planId);
 	}
 
 	@Override

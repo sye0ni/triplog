@@ -41,6 +41,16 @@ function getSidoGugunName(param, success, fail) {
   local.get(`${url}/location/name`, { params: param }).then(success).catch(fail);
 }
 
+function deletePlan(planId, success, fail) {
+  console.log("delete : ", planId);
+  local.delete(`${url}/${planId}`).then(success).catch(fail);
+}
+
+function modifyPlan(planId, param, success, fail) {
+  console.log("modify : ", planId, param);
+  local.put(`${url}/${planId}`, param).then(success).catch(fail);
+}
+
 export {
   gugun,
   registPlan,
@@ -51,4 +61,6 @@ export {
   getPlan,
   getPlanList,
   getSidoGugunName,
+  deletePlan,
+  modifyPlan,
 };

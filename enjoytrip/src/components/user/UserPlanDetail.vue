@@ -14,7 +14,7 @@ const planStore = usePlanStore();
 const router = useRouter();
 const route = useRoute();
 
-const { planDetailBox } = storeToRefs(planStore);
+const { planDetailBox, planBox } = storeToRefs(planStore);
 
 const startpos = ref(0);
 const diffpos = ref(0);
@@ -74,7 +74,6 @@ onMounted(() => {
     param.value,
     ({ data }) => {
       console.log("plan data", data);
-      //   planList.value = [];
       planDetailBox.value = [];
       period.value = data[0].period;
       console.log("period", period.value);
@@ -94,6 +93,48 @@ onMounted(() => {
     }
   );
 });
+
+const goPlanList = function () {
+  router.push({ name: "plan-list" });
+};
+
+const goPlanEdit = function () {
+  let token = sessionStorage.getItem("accessToken");
+  let decodeToken = jwtDecode(token);
+  console.log("route ", route.params);
+
+  param.value.userId = decodeToken.userId;
+  console.log("userId", decodeToken.userId);
+  getPlan(
+    route.params.planId,
+    param.value,
+    ({ data }) => {
+      console.log("plan data", data);
+      //   planList.value = [];
+      planBox.value = [];
+      period.value = data[0].period;
+      console.log("period", period.value);
+      for (let i = 0; i < period.value; i++) {
+        planBox.value.push([]);
+      }
+
+      for (let i = 0; i < data.length; i++) {
+        console.log(data[i].userPlanNth - 1);
+        planBox.value[data[i].userPlanNth - 1].push(data[i]);
+      }
+
+      console.log("planBox", planBox.value);
+    },
+    (error) => {
+      console.log("데이터 못가져옴", error);
+    }
+  );
+
+  router.push({
+    name: "plan-modify",
+    params: { planId: route.params.planId },
+  });
+};
 </script>
 
 <template>
@@ -105,7 +146,8 @@ onMounted(() => {
       <div class="d1" :style="{ width: leftWidth }">
         <!--  -->
         <div class="subContainer">
-          <!-- <div class="subTitle">여행계획</div> -->
+          <button @click="goPlanList">목록으로</button>
+          <button @click="goPlanEdit">수정하기</button>
           <div class="subItem plan">
             <UserPlanDetailList v-for="index in period" :key="index" :nth="index" />
           </div>
@@ -126,6 +168,18 @@ onMounted(() => {
   box-sizing: border-box;
 }
 
+button {
+  margin-left: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  height: 30px;
+  width: 70px;
+  background-color: #d20000;
+  color: white;
+  /* font-weight: bold; */
+}
+
 .modal {
   /* position:relative; */
   position: fixed;
@@ -136,11 +190,6 @@ onMounted(() => {
 }
 
 .makeBtn {
-  /* position: absolute; */
-  /* z-index: 10; */
-  /* right: 0; */
-  /* margin: 30px 50px; */
-  /* margin-bottom: 10vh; */
   background-color: #d20000;
   border: none;
   color: white;
@@ -149,10 +198,6 @@ onMounted(() => {
   padding: 10px;
   border-radius: 10px;
   width: 90px;
-  /* background-color: aqua; */
-  /* top: 20; */
-  /* left: 0; */
-  /* float: right; */
 }
 
 .borderContainer {
@@ -162,20 +207,12 @@ onMounted(() => {
   padding: 20px;
 }
 
-.subContainer {
-  /* display: flex; */
-}
-
 .subItem {
   /* border-right: 2px solid #b8b8b8; */
   height: 80vh;
   /* height: 100%; */
   width: 100%;
   display: flex;
-  /* flex-direction: column; */
-  /* justify-content: center; */
-  /* align-items: center; */
-  /* margin-bottom: 20px; */
 }
 
 .d1 {
@@ -201,12 +238,10 @@ onMounted(() => {
   float: left;
   width: 5px;
   height: 100%;
-  /* background-color: #888888; */
   cursor: col-resize;
   position: absolute;
   z-index: 1;
   margin: 0px;
-  /* border: 2px solid salmon; */
   border-left: 2px solid #b8b8b8;
 }
 

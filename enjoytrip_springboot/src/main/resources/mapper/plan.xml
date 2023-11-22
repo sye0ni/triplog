@@ -146,16 +146,27 @@
     </select>
     
     <update id="modifyPlanName" parameterType="string">
-    
+    	update plan
+		set plan_name = #{planName}
+		where plan_id = #{planId};	
     </update>
     
     <update id="modifyPlanDate" parameterType="string">
-    
+    	update plan
+		set start_date = #{startDate}, end_date = #{endDate}
+		where plan_id = #{planId}
     </update>
 
-	<delete id="deletePlan" parameterType="string">
+	<delete id="deletePlan" parameterType="int">
 		delete from plan
-		where plan_id = #{planId};
+		where plan_id = #{planId}
+	</delete>
+	
+	<delete id="deletePlanNthDetail" parameterType="int">
+		delete plan_nth_detail
+		from plan_nth_detail join plan_nth 
+		using(plan_nth_id)
+		where plan_nth.plan_id = #{planId}
 	</delete>
 
 	<!-- wish -->    
