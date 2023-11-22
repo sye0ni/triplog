@@ -68,7 +68,7 @@ const changeKey2 = (val) => {
   console.log("구/군 선택" + val);
   param.value.gugunCode = val;
   searchText.value = "";
-  param.value.keyword = searchText.value; // 검색어 초기화 
+  param.value.keyword = searchText.value; // 검색어 초기화
 
   // if (val == "") {
   //   param.value.contentTypeId = null;
@@ -108,7 +108,7 @@ const changeRadio = function (val) {
   console.log("change!!", val);
   param.value.contentTypeId = val;
   searchText.value = "";
-  param.value.keyword = searchText.value; // 검색어 초기화 
+  param.value.keyword = searchText.value; // 검색어 초기화
 
   if (val == "") {
     param.value.contentTypeId = null;
@@ -140,13 +140,11 @@ const changeRadio = function (val) {
   );
 };
 
-
-// 검색어 입력시 
+// 검색어 입력시
 const searchAttrs = function () {
-  if (searchText.value == '') {
+  if (searchText.value == "") {
     alert("검색어를 입력하세요!");
-  }
-  else {
+  } else {
     // console.log("검색어!!!!", searchText.value);
     // console.log("선택1 시/도: ", param.value.sidoCode);
     // console.log("선택2 구/군: ", param.value.gugunCode);
@@ -170,9 +168,9 @@ const searchAttrs = function () {
       (error) => {
         console.log(error);
       }
-    )
+    );
   }
-}
+};
 
 const moveMap = function (arg) {
   emits("moveMap", arg);
@@ -217,14 +215,33 @@ onBeforeMount(() => {
     <!--  -->
     <div class="subItem search">
       <div class="select">
-        <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
-        <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" />
+        <!-- <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
+        <VSelect
+          :selectOption="selectOptionGugun"
+          @onKeySelect="changeKey2"
+          :index="gugunCode"
+        /> -->
+        <SidoSelect
+          :selectOption="selectOptionSido"
+          @onKeySelect="changeKey"
+          :index="planSidoCode"
+        />
+        <GugunSelect
+          :selectOption="selectOptionGugun"
+          @onKeySelect="changeKey2"
+          :index="gugunCode"
+        />
       </div>
 
       <div class="pt-2">
         <div class="radio">
-          <VRadio v-for="attraction in attractionType" :key="attraction.title" :item="attraction" v-model="type"
-            @changeValue="changeRadio" />
+          <VRadio
+            v-for="attraction in attractionType"
+            :key="attraction.title"
+            :item="attraction"
+            v-model="type"
+            @changeValue="changeRadio"
+          />
         </div>
         <!--  -->
       </div>
@@ -244,8 +261,13 @@ onBeforeMount(() => {
             </tr>
           </thead>
           <tbody>
-            <PlanSearchItem v-for="item in attractionList" :key="item.contentId" :item="item" @select-attr="moveMap"
-              @show-detail="showDetail" />
+            <PlanSearchItem
+              v-for="item in attractionList"
+              :key="item.contentId"
+              :item="item"
+              @select-attr="moveMap"
+              @show-detail="showDetail"
+            />
           </tbody>
         </table>
       </div>
@@ -298,7 +320,6 @@ onBeforeMount(() => {
   padding: 5px 5px;
 }
 
-
 .searchInput {
   flex: 1;
   padding: 5px;
@@ -315,7 +336,7 @@ onBeforeMount(() => {
   align-items: center;
 }
 
-.selectSelect>* {
+.selectSelect > * {
   width: 250px;
   margin: 10px 0px;
 }
