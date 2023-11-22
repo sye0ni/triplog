@@ -28,13 +28,15 @@ const param = ref({
   period: "",
 });
 
-const gugunCode = ref("0");
+const gugunCode = ref("");
 
 const changeKey = (val) => {
   console.log("시/도 선택한 조건 : " + val);
   param.value.sidoCode = val;
   param.value.gugunCode = "";
-  gugunCode.value = "1";
+  gugunCode.value = "156";
+  setInterval(100);
+  console.log("gugunCode ", gugunCode.value);
   selectOptionGugun.value = [{ text: "구/군", value: "" }];
   gugun(
     param.value,
@@ -48,6 +50,7 @@ const changeKey = (val) => {
         tmp.text = data[i].gugunName;
         tmp.value = data[i].gugunCode;
         selectOptionGugun.value.push(tmp);
+        gugunCode.value = "156";
       }
     },
     (error) => {
