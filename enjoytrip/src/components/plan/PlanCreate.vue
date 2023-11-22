@@ -6,6 +6,8 @@ import { usePlanStore } from "@/stores/plan";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
 import { gugun, registPlan } from "@/api/plan";
+import SidoSelect from "./item/SidoSelect.vue";
+import GugunSelect from "./item/GugunSelect.vue";
 
 const planStore = usePlanStore();
 const { planBox } = storeToRefs(planStore);
@@ -16,8 +18,6 @@ const { sidoCode, planCreateInfo } = storeToRefs(planStore);
 
 const selectOptionSido = sidoCode;
 let selectOptionGugun = ref([{ text: "구/군", value: "" }]);
-
-// const emits = defineEmits(["periodChange"]);
 
 const param = ref({
   userId: "",
@@ -30,14 +30,15 @@ const param = ref({
 
 const gugunCode = ref("");
 
-const changeKey = (val) => {
+const changeKey = async (val) => {
   console.log("시/도 선택한 조건 : " + val);
   param.value.sidoCode = val;
   param.value.gugunCode = "";
-  gugunCode.value = "156";
-  setInterval(100);
+  gugunCode.value = "";
   console.log("gugunCode ", gugunCode.value);
+
   selectOptionGugun.value = [{ text: "구/군", value: "" }];
+
   gugun(
     param.value,
     ({ data }) => {
@@ -50,7 +51,6 @@ const changeKey = (val) => {
         tmp.text = data[i].gugunName;
         tmp.value = data[i].gugunCode;
         selectOptionGugun.value.push(tmp);
-        gugunCode.value = "156";
       }
     },
     (error) => {
@@ -62,6 +62,7 @@ const changeKey = (val) => {
 const changeKey2 = (val) => {
   console.log("구/군 선택" + val);
   param.value.gugunCode = val;
+  gugunCode.value = val;
 
   console.log(param.value);
 };
@@ -94,7 +95,6 @@ const createPlan = function () {
     param.value,
     ({ data }) => {
       console.log("createPlan data", data);
-      // emits("periodChange", data);
       // 피니아에 정보 저장!!
       planCreateInfo.value.period = data.period;
       planCreateInfo.value.sidoCode = data.planDto.sidoCode;
@@ -125,8 +125,14 @@ const createPlan = function () {
       <div class="title">여행을 시작해보세요!</div>
       <div class="line1">
         <div class="subTitle">여행지</div>
-        <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
-        <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" />
+        <!-- <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
+        <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" /> -->
+        <SidoSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
+        <GugunSelect
+          :selectOption="selectOptionGugun"
+          @onKeySelect="changeKey2"
+          :index="gugunCode"
+        />
       </div>
       <hr />
       <div class="line2">

@@ -148,11 +148,19 @@ const goPlanEdit = function () {
           <button @click="goPlanList">목록으로</button>
           <button @click="goPlanEdit">수정하기</button>
           <div class="subItem plan">
-            <UserPlanDetailList v-for="index in period" :key="index" :nth="index" />
+            <UserPlanDetailList
+              v-for="index in period"
+              :key="index"
+              :nth="index"
+            />
           </div>
         </div>
       </div>
-      <div class="d3" :style="{ left: leftWidth }" @mousedown="onMouseDown"></div>
+      <div
+        class="d3"
+        :style="{ left: leftWidth }"
+        @mousedown="onMouseDown"
+      ></div>
       <div class="modal">
         <Transition v-if="showModal">
           <WishlistDetail @click="toggleModal" :attraction="attraction" />
@@ -170,10 +178,11 @@ const goPlanEdit = function () {
 button {
   margin-left: 10px;
   margin-bottom: 10px;
+  padding: 5px;
   border: none;
   border-radius: 5px;
-  height: 30px;
-  width: 70px;
+  height: 35px;
+  width: 85px;
   background-color: #d20000;
   color: white;
   /* font-weight: bold; */
