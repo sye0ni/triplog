@@ -90,7 +90,6 @@ const router = createRouter({
         {
           path: "myphoto",
           name: "user-myphoto",
-          beforeEnter: onlyAuthUser,
           component: () => import("@/components/user/UserMyphoto.vue"),
         },
         {
