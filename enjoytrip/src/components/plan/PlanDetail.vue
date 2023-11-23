@@ -266,6 +266,10 @@ const planFold = function () {
   padding: 10px;
   border-radius: 5px;
   width: 90px;
+
+  position: absolute;
+  right: 0px;
+  z-index: 10;
 }
 
 .borderContainer {
@@ -342,12 +346,6 @@ const planFold = function () {
 
 button {
   cursor: pointer;
-}
-
-.makeBtn {
-  position: absolute;
-  right: 0px;
-  z-index: 10;
 }
 
 /* toggle */

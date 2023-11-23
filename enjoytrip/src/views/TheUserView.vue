@@ -11,7 +11,7 @@
 
 <style scoped>
 .container {
-  min-height: 1000px;
+  /* min-height: 500px; */
   height: 100%;
 }
 </style>
