@@ -45,7 +45,7 @@ const goDeleteWish = function () {
       </div>
       <i
         class="fa-regular fa-trash-can"
-        style="color: #9a0e0e"
+        style="color: #9a0e0e; cursor: pointer"
         @click="goDeleteWish"
         title="찜 삭제"
       ></i>
