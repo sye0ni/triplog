@@ -42,6 +42,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   display: inline-block;
+  width: 250px;
 }
 
 img {

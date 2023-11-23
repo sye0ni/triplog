@@ -56,6 +56,7 @@ public class PhotoServiceImpl implements PhotoService{
 	public List<BoardPhotoItemDto> listPhoto(Map<String,Object> map) throws Exception {
 		// page: 1, word: "", // 단어 검색  order: "", // 정렬  sidocode: "", guguncode: "", userId: ""
 		System.out.println("리스트서비스!!!!!!!!!!!");
+		System.out.println(map);
 
 		int pg=(Integer.parseInt((String) map.get("page"))-1)*4;
 		map.replace("page", pg);
@@ -65,14 +66,16 @@ public class PhotoServiceImpl implements PhotoService{
 				
 				if(((String)map.get("sidocode")).length() ==0) { // 정렬만 
 
-
 					if(map.get("order").equals("latest") || map.get("order").equals("")) { // 최신 정렬 ->> 기본 값 
+						System.out.println("최신정렬1");
 						return photoMapper.getList(map);
 					}
 					else if(map.get("order").equals("oldest")) { // 오래된 순 정렬 
+						System.out.println("오래된 순 정렬1");
 						return photoMapper.getListByTimeAsc(map);
 					}
 					else { // 조회수 정렬 
+						System.out.println("조회수 1");
 						return photoMapper.getListByLike(map);
 					}
 				}
@@ -85,12 +88,15 @@ public class PhotoServiceImpl implements PhotoService{
 					map.replace("guguncode", gugun);
 					
 					if(map.get("order").equals("latest")) { // 최신 정렬 
+						System.out.println("최신순 정렬2");
 						return photoMapper.getListByTimeDesc(map);
 					}
 					else if(map.get("order").equals("oldest")) { // 오래된 순 정렬 
+						System.out.println("오래된순 정렬2");
 						return photoMapper.getListByTimeAsc(map);
 					}
 					else { // 조회수 정렬 
+						System.out.println("조회수 정렬2");
 						return photoMapper.getListByLike(map);
 					}
 				}

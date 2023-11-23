@@ -76,7 +76,6 @@ const getComment = () => {
   getComments(
     props.photoEmit.boardPhotoId,
     ({ data }) => {
-      // console.log("comments:" + data);
       comments.value = data;
       commentsLoaded.value = true; // comments 데이터 로드 완료
     },
@@ -96,7 +95,7 @@ const modifyContent = () => {
     } else if (confirm("정말로 수정하시겠습니까?")) {
       console.log(photo.value.content); // 입력한 내용
 
-      // 수정하러 가! (boardPhotoId, content만 들고가면 됨)
+
       modifyPhoto(
         photo.value.boardPhotoId,
         photo.value,
@@ -118,8 +117,6 @@ const modifyContent = () => {
 };
 
 const writeComments = () => {
-  // console.log("입력한 댓글:", comment.value);
-  // console.log("현재 유저:", userInfo.value.userId);
 
   if (currUserId.value == null) {
     alert("로그인 하세요!");
@@ -151,7 +148,6 @@ const deletePhotos = () => {
   if (confirm("정말로 삭제하시겠습니까?")) {
     deletePhoto(photo.value.boardPhotoId, () => {
       console.log("삭제 성공");
-      // router.push({ name: "board-photo-list" });
       emit("deleteDetail");
     });
   }
@@ -229,39 +225,20 @@ const updateIsLike = function () {
 
 <template>
   <transition name="modal" appear>
-    <div
-      v-if="photoLoaded && commentsLoaded"
-      class="modal modal-overlay"
-      @click.self="$emit('close')"
-    >
+    <div v-if="photoLoaded && commentsLoaded" class="modal modal-overlay" @click.self="$emit('close')">
       <div class="modal-window">
         <div class="modal-content">
           <div class="box1">
             <div v-if="photoLoaded && commentsLoaded" class="preview-image">
               <template v-if="photo.photoPaths.length == 1">
-                <img
-                  :src="'http://localhost:80/upload/' + photo.photoPaths[0]"
-                  style="height: 100%"
-                />
+                <img :src="'http://localhost:80/upload/' + photo.photoPaths[0]" style="height: 100%" />
               </template>
               <template v-else>
                 <span id="currPage">{{ currIdx + 1 }}/{{ photo.photoPaths.length }} </span>
-                <i
-                  v-if="currIdx > 0"
-                  id="idxMinus"
-                  class="fa-solid fa-circle-chevron-left fa-xl"
-                  @click="currIdx--"
-                ></i>
-                <img
-                  :src="'http://localhost:80/upload/' + photo.photoPaths[currIdx]"
-                  style="height: 100%"
-                />
-                <i
-                  v-if="currIdx < photo.photoPaths.length - 1"
-                  id="idxPlus"
-                  class="fa-solid fa-circle-chevron-right fa-xl"
-                  @click="currIdx++"
-                ></i>
+                <i v-if="currIdx > 0" id="idxMinus" class="fa-solid fa-circle-chevron-left fa-xl" @click="currIdx--"></i>
+                <img :src="'http://localhost:80/upload/' + photo.photoPaths[currIdx]" style="height: 100%" />
+                <i v-if="currIdx < photo.photoPaths.length - 1" id="idxPlus"
+                  class="fa-solid fa-circle-chevron-right fa-xl" @click="currIdx++"></i>
               </template>
             </div>
           </div>
@@ -285,40 +262,16 @@ const updateIsLike = function () {
               </div>
             </div>
             <div class="box3">
-              <textarea
-                :readOnly="toggleContentState"
-                v-model="photo.content"
-                ref="contentInput"
-              ></textarea>
+              <textarea :readOnly="toggleContentState" v-model="photo.content" ref="contentInput"></textarea>
             </div>
             <div class="box4">
-              <BoardPhotoCommentItem
-                v-for="cmt in comments"
-                :comment="cmt"
-                :key="cmt.commentId"
-                @modify-comment="modifyComments"
-                @delete-comment="deleteComments"
-              />
+              <BoardPhotoCommentItem v-for="cmt in comments" :comment="cmt" :key="cmt.commentId"
+                @modify-comment="modifyComments" @delete-comment="deleteComments" />
             </div>
             <div class="box5">
-              <i
-                v-if="isLikeState == 1"
-                class="fa-solid fa-heart"
-                style="color: #db0000"
-                @click="updateIsLike"
-              ></i>
-              <i
-                v-else
-                class="fa-regular fa-heart"
-                style="color: #db0000"
-                @click="updateIsLike"
-              ></i>
-              <input
-                type="text"
-                placeholder="댓글을 남겨보세요 !"
-                v-model="comment"
-                @click.prevent="alertComment"
-              />
+              <i v-if="isLikeState == 1" class="fa-solid fa-heart" style="color: #db0000" @click="updateIsLike"></i>
+              <i v-else class="fa-regular fa-heart" style="color: #db0000" @click="updateIsLike"></i>
+              <input type="text" placeholder="댓글을 남겨보세요 !" v-model="comment" @click.prevent="alertComment" />
               <button @click.prevent="writeComments">등록</button>
             </div>
           </div>

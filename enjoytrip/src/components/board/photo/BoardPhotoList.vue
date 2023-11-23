@@ -216,21 +216,18 @@ const getIdentifier = ref(0);
     </div>
 
     <div class="listContainer">
-      <div class='listContainer2'>
-
-        <div class="listItem">
-          <BoardPhotoListItem v-for="photo in photos" :key="photo.boardPhotoId" :photo="photo"
+      <div class="listItem">
+        <BoardPhotoListItem v-for="photo in photos" :key="photo.boardPhotoId" :photo="photo"
           @show-detail="isDetailModalOpen">
         </BoardPhotoListItem>
       </div>
-      
+
       <infinite-loading spinner="waveDots" @infinite="infiniteHandler" :identifier="getIdentifier">
       </infinite-loading>
-      
+
       <Transition v-if="detailModal">
         <BoardPhotoDetail :photoEmit="photoEmit" @cancel-detail="isDetailModalOpen" @delete-detail="isReload" />
       </Transition>
-    </div>
     </div>
   </div>
 </template>
@@ -289,27 +286,22 @@ input:focus {
 }
 
 .listItem {
-  display: flex;
-  /* justify-content: space-between; */
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+  place-items: center;
+  /* display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
-  /* align-items: center; */
-  align-items: flex-start;
+  align-items: center; */
 }
 
 .listContainer {
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
-  align-items: center;
-  /* justify-content: space-between; */
-}
-
-.listContainer2 {
-  background-color: antiquewhite;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* dis */
+  justify-content: space-between;
 }
 
 .spinner {
