@@ -201,11 +201,7 @@ const getIdentifier = ref(0);
           <span>정렬 </span>
           <VSelect :selectOption="selectSortOption" @on-key-select="sort" v-model="selectedSort" />
           <span>지역 </span>
-          <VSelect
-            :selectOption="selectAreaOption"
-            @on-key-select="searchArea"
-            v-model="selectedArea"
-          />
+          <VSelect :selectOption="selectAreaOption" @on-key-select="searchArea" v-model="selectedArea" />
         </div>
         <div>
           <!-- 로그인해야 보임 -->
@@ -220,26 +216,21 @@ const getIdentifier = ref(0);
     </div>
 
     <div class="listContainer">
-      <div class="listItem">
-        <BoardPhotoListItem
-          v-for="photo in photos"
-          :key="photo.boardPhotoId"
-          :photo="photo"
-          @show-detail="isDetailModalOpen"
-        >
+      <div class='listContainer2'>
+
+        <div class="listItem">
+          <BoardPhotoListItem v-for="photo in photos" :key="photo.boardPhotoId" :photo="photo"
+          @show-detail="isDetailModalOpen">
         </BoardPhotoListItem>
       </div>
-
+      
       <infinite-loading spinner="waveDots" @infinite="infiniteHandler" :identifier="getIdentifier">
       </infinite-loading>
-
+      
       <Transition v-if="detailModal">
-        <BoardPhotoDetail
-          :photoEmit="photoEmit"
-          @cancel-detail="isDetailModalOpen"
-          @delete-detail="isReload"
-        />
+        <BoardPhotoDetail :photoEmit="photoEmit" @cancel-detail="isDetailModalOpen" @delete-detail="isReload" />
       </Transition>
+    </div>
     </div>
   </div>
 </template>
@@ -299,16 +290,26 @@ input:focus {
 
 .listItem {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   flex-wrap: wrap;
-  align-items: center;
+  /* align-items: center; */
+  align-items: flex-start;
 }
 
 .listContainer {
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
-  justify-content: space-between;
+  align-items: center;
+  /* justify-content: space-between; */
+}
+
+.listContainer2 {
+  background-color: antiquewhite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* dis */
 }
 
 .spinner {

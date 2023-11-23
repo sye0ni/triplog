@@ -179,8 +179,8 @@ const writePhotos = async () => {
 
           <div class="rightBox">
             <div class="box2">
-              <button @click.prevent="writePhotos">등록</button>
-              <button @click.prevent="$emit('cancelWrite')">취소</button>
+              <button @click.prevent="writePhotos">등록</button>&nbsp;
+              <button @click.prevent="$emit('cancelWrite')">취소</button>&nbsp;
             </div>
             <div class="box3">
               <textarea placeholder="글을 입력하세요." v-model="content"></textarea>
@@ -342,7 +342,8 @@ button {
 
 button:hover {
   cursor: pointer;
-  border-color: #d20000;
+  border: 2px solid #d20000;
+  /* border-color: #d20000; */
 }
 
 .btn-upload {
@@ -360,7 +361,8 @@ button:hover {
 }
 
 .btn-upload:hover {
-  border-color: #d20000;
+   border: 2px solid #d20000;
+  /* border-color: #d20000; */
 }
 
 span {

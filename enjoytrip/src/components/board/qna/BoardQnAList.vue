@@ -179,7 +179,7 @@ button {
 
 button:hover {
   cursor: pointer;
-  border-color: #d20000;
+  border: 2px solid #d20000;
 }
 
 .three {

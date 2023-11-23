@@ -130,7 +130,7 @@ const deleteArticle = function (event) {
         <div class="box1-2">
           <template v-if="currUserId === article.userId">
             <!-- 작성자한테만 보이게 => 나중에 수정하기 -->
-            <button class="noBorderBtn" @click="toggleChange">수정</button>
+            <button class="noBorderBtn" @click="toggleChange">수정</button> &nbsp;
             <button class="noBorderBtn" @click="deleteArticle">삭제</button>
           </template>
           <!-- </template> -->
@@ -216,11 +216,14 @@ button {
   border-radius: 5px;
   background-color: white;
   font-weight: bold;
+  border:none;
+  border: 2px solid #000;
 }
 
 button:hover {
   cursor: pointer;
-  border-color: red;
+  border: 2px red solid;
+  /* border-color: red; */
 }
 
 .noBorderBtn {
@@ -231,7 +234,9 @@ button:hover {
 }
 
 .noBorderBtn:hover {
-  color: red;
+  /* color: red; */
+  
+  border: 2px red solid;
   font-weight: bold;
 }
 

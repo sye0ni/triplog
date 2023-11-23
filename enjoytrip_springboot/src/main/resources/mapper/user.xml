@@ -110,7 +110,7 @@
 				        WHERE c.board_id = b.board_photo_id
 				    ) AS commentCnt,
 				    SUBSTRING(b.register_time, 1, 10) AS registerTime,
-				   concat(s.sigun_name, b.place) location
+				   concat(s.sigun_name," ", b.place) location
 				FROM
 				    board_photo b
 				INNER JOIN

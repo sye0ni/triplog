@@ -21,10 +21,9 @@ const emit = defineEmits(['showDetail']);
                 </div>
                 <div class="text2">
 
-                    <i class="fa-solid fa-comment" style="color: #000000;"></i>
-                    <span id="cmt">{{ props.photo.commentCnt }}</span>
-                    <i class="fa-solid fa-heart" style="color: #db0000;"></i>
-
+                    <i class="fa-solid fa-comment" style="color: #000000;"></i>&nbsp;
+                    <span id="cmt">{{ props.photo.commentCnt }}</span>&nbsp;
+                    <i class="fa-solid fa-heart" style="color: #db0000;"></i>&nbsp;
                     <span id="like">{{ props.photo.like }}</span>
                 </div>
             </div>
