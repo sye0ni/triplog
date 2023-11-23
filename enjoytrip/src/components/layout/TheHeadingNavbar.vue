@@ -19,7 +19,8 @@ const logout = async () => {
 <template>
   <nav class="navbar fixed-top">
     <div class="sitename">
-      <router-link :to="{ name: 'main' }">Enjoy Trip</router-link>
+      <!-- <router-link :to="{ name: 'main' }">Enjoy Trip</router-link> -->
+      <router-link :to="{ name: 'main' }"><img src="/public/TripLog2.png" alt="" /></router-link>
     </div>
     <div class="list">
       <router-link :to="{ name: 'main' }">홈</router-link>
@@ -47,7 +48,8 @@ const logout = async () => {
   align-items: center;
   padding: 10px 5%;
   background-color: white;
-  z-index:1030;
+  z-index: 1030;
+  box-shadow: 0px 10px 10px -8px lightgray;
 }
 
 .fixed-top {
@@ -56,7 +58,7 @@ const logout = async () => {
   top: 0;
   right: 0;
   left: 0;
-  z-index: 1030; 
+  z-index: 1030;
 }
 
 .sitename {
@@ -78,5 +80,9 @@ a {
 
 .user {
   color: gray;
+}
+
+img {
+  width: 150px;
 }
 </style>

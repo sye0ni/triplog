@@ -201,6 +201,7 @@ const makeWishlist = function () {
     ({ data }) => {
       console.log("modify wish=>", data);
       alert("찜주머니가 만들어졌습니다!!");
+      router.push({ name: "user-wishlist" });
     },
     (error) => {
       console.log("modify wish error ->", error);

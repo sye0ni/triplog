@@ -60,8 +60,8 @@ const onMouseMove = (event) => {
       if (!tempFoldToggle.value) {
         tmp -= 280;
       }
-      // newWidth = Math.max(MIN_WIDTH, Math.min(newWidth, MAX_WIDTH)); // Ensure it stays within the limits
 
+      // newWidth = Math.max(MIN_WIDTH, Math.min(newWidth, MAX_WIDTH)); // Ensure it stays within the limits
       newWidth = Math.max(item3minWidth + tmp, Math.min(newWidth, MAX_WIDTH));
       leftWidth.value = newWidth + "px";
       // leftWidth.value = width - diffpos.value + "px";
