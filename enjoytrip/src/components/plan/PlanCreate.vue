@@ -127,11 +127,7 @@ const createPlan = function () {
         <div class="subTitle">여행지</div>
         <!-- <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
         <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" /> -->
-        <SidoSelect
-          :selectOption="selectOptionSido"
-          @onKeySelect="changeKey"
-          index=""
-        />
+        <SidoSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" index="" />
         <GugunSelect
           :selectOption="selectOptionGugun"
           @onKeySelect="changeKey2"
@@ -165,7 +161,7 @@ const createPlan = function () {
   justify-content: center;
   align-items: center;
   border: 2px solid rgb(187, 187, 187);
-  border-radius: 10px;
+  border-radius: 5px;
   padding: 50px;
   min-width: 600px;
   margin-top: 30px;
@@ -211,7 +207,9 @@ input[type="date"] {
   width: 200px;
   height: 40px;
   font-size: 1.2rem;
-  border-radius: 10px;
+  border: none;
+  /* border: 1px solid; */
+  border-radius: 5px;
   margin: 0px 10px;
   border-color: #d20000;
   text-align: center;
@@ -227,7 +225,7 @@ button {
   height: 50px;
   font-size: 1rem;
   margin-top: 60px;
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: #c62f2f;
   border: 0px;
   color: white;

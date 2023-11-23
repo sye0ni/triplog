@@ -166,6 +166,7 @@ const goPhotoList = function () {
 
 const goWhishlist = function () {
   console.log("찜 목록 바로가기");
+  router.push({ name: "user-wishlist" });
 };
 </script>
 
@@ -185,6 +186,7 @@ const goWhishlist = function () {
               type="text"
               v-model="nameRef"
               ref="nameInput"
+              @keyup.enter="nameModify"
             />
             <hr style="width: 200px" />
           </div>
@@ -198,6 +200,7 @@ const goWhishlist = function () {
             :readonly="emailReadOnly"
             ref="emailInput"
             id="userEmail"
+            @keyup.enter="emailModify"
           />
           <button @click="emailModify">수정하기</button>
         </div>
@@ -209,14 +212,14 @@ const goWhishlist = function () {
         <div class="delete" @click="userDelete">회원탈퇴</div>
       </div>
       <div>
-        <div class="listBox">
-          <div @click="goPlanList">여행 계획 목록</div>
+        <div class="listBox" @click="goPlanList">
+          <div>여행 계획 목록</div>
         </div>
-        <div class="listBox">
-          <div @click="goPhotoList">내 글 목록 바로가기</div>
+        <div class="listBox" @click="goPhotoList">
+          <div>내 글 목록 바로가기</div>
         </div>
-        <div class="listBox">
-          <div @click="goWhishlist">찜 목록 바로가기</div>
+        <div class="listBox" @click="goWhishlist">
+          <div>찜 목록 바로가기</div>
         </div>
       </div>
     </div>

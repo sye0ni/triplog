@@ -206,6 +206,11 @@
 		from wishlist w, attraction_info a
 		where w.content_id = a.content_id and w.user_id = #{userId};
     </select>
+    
+	<delete id="deleteWish" parameterType="wishlist">
+		delete from wishlist
+		where user_id = #{userId} and content_id = #{contentId}
+	</delete>    
 	
 	<delete id="deleteWishlist" parameterType="string" >
 		delete from wishlist

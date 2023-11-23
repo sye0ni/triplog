@@ -53,11 +53,7 @@ const list = function () {
         <span>제목</span>
       </div>
       <div>
-        <textarea
-          id="Title"
-          placeholder="제목을 입력하세요."
-          v-model="titleValue"
-        ></textarea>
+        <textarea id="Title" placeholder="제목을 입력하세요." v-model="titleValue"></textarea>
       </div>
     </div>
 
@@ -67,11 +63,7 @@ const list = function () {
         <span>내용</span>
       </div>
       <div>
-        <textarea
-          id="content"
-          placeholder="내용을 입력하세요."
-          v-model="contentValue"
-        ></textarea>
+        <textarea id="content" placeholder="내용을 입력하세요." v-model="contentValue"></textarea>
       </div>
     </div>
 
@@ -118,7 +110,7 @@ span {
 button {
   padding: 5px 15px;
   margin: 0px 5px;
-  border-radius: 20px;
+  border-radius: 5px;
   background-color: white;
   font-weight: bold;
 }

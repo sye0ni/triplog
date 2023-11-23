@@ -97,7 +97,13 @@ const messageDelete = function () {
         <input type="password" v-model="userPwd" id="user-pwd" class="shortInput" autofocus />
         <hr />
         <label for="user-pwd-new">비밀번호 확인</label>
-        <input type="password" v-model="userPwdConfirm" id="user-pwd-new" class="shortInput" />
+        <input
+          type="password"
+          v-model="userPwdConfirm"
+          id="user-pwd-new"
+          class="shortInput"
+          @keyup.enter="modifyPassword"
+        />
         <hr />
         <div class="message">{{ message }}</div>
         <div class="button">

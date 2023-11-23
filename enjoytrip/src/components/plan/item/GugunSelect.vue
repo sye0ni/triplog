@@ -44,7 +44,7 @@ onMounted(() => {
 <style scoped>
 select {
   border: 2px solid;
-  border-radius: 10px;
+  border-radius: 5px;
   height: 35px;
   padding: 5px 5px;
   margin-right: 10px;

@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.trip.plan.model.AttractionDto;
@@ -31,6 +30,7 @@ import com.ssafy.trip.plan.model.PlanListDetailDto;
 import com.ssafy.trip.plan.model.PlanListDto;
 import com.ssafy.trip.plan.model.PlanNthDetailMakeDto;
 import com.ssafy.trip.plan.model.PlanNthDetailRegistDto;
+import com.ssafy.trip.plan.model.Wishlist;
 import com.ssafy.trip.plan.model.WishlistModifyDto;
 import com.ssafy.trip.plan.model.service.PlanService;
 
@@ -207,8 +207,8 @@ public class PlanController {
 	@GetMapping(value = "/wishlist/{userId}")
 	private ResponseEntity<?> wishlist(@PathVariable String userId) {
 		List<AttractionInfoDto> attractionInfoDto = planService.wishlist(userId);
-		System.out.println("userid " + userId);
-		System.out.println("wishlist " + attractionInfoDto);
+//		System.out.println("userid " + userId);
+//		System.out.println("wishlist " + attractionInfoDto);
 
 		return ResponseEntity.status(HttpStatus.OK).body(attractionInfoDto);
 	}
@@ -216,7 +216,7 @@ public class PlanController {
 	@PutMapping(value = "/wishlist")
 	@Transactional
 	private ResponseEntity<?> modifyWishlist(@RequestBody WishlistModifyDto wishlistModifyDto) {
-		System.out.println("wishlist modify!! " + wishlistModifyDto);
+//		System.out.println("wishlist modify!! " + wishlistModifyDto);
 
 		for (int i = 0; i < wishlistModifyDto.getWishlist().size(); i++) {
 			wishlistModifyDto.getWishlist().get(i).setUserId(wishlistModifyDto.getUserId());
@@ -226,5 +226,15 @@ public class PlanController {
 
 		// 에러처리??
 		return ResponseEntity.status(HttpStatus.OK).body("찜목록 추가 완료");
+	}
+	
+	@DeleteMapping(value = "/wishlist")
+	private  ResponseEntity<?> deleteWish(@RequestBody Wishlist wishlist) {
+		logger.debug("wish delete start!- > wishlist: {}", wishlist);
+		
+		planService.deleteWish(wishlist);
+		
+		
+		return ResponseEntity.status(HttpStatus.OK).body(null);
 	}
 }

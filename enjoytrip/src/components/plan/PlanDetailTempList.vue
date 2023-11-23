@@ -31,6 +31,7 @@ const dragEnd = function () {
           @start="drag = true"
           @end="drag = true"
           item-key="contentId"
+          style="height: 100%"
         >
           <template #item="{ element }">
             <PlanDetailTempListItem :item="element" />

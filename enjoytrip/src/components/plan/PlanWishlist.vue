@@ -73,14 +73,7 @@ const checkBoxEvent = function (param) {
 </script>
 
 <template>
-  <div
-    style="
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-    "
-  >
+  <div style="display: flex; align-items: center; justify-content: center; height: 100%">
     <div class="container">
       <div class="title">찜 주머니</div>
       <div class="subTitle">찜한 장소를 계획에 추가해보세요!!</div>
@@ -127,7 +120,7 @@ input[type="date"] {
   width: 200px;
   height: 40px;
   font-size: 1.2rem;
-  border-radius: 10px;
+  border-radius: 5px;
   margin: 0px 10px;
   border-color: #d20000;
   text-align: center;
@@ -144,7 +137,7 @@ button {
   font-size: 1.1rem;
   font-weight: bold;
   margin-top: 30px;
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: #c62f2f;
   border: 0px;
   color: white;

@@ -45,11 +45,7 @@ public interface PlanMapper {
 	
 	// wishlist
 	List<AttractionInfoDto> wishlist(String userId);
-//	void deleteWish(String contentId);
-//	<delete id="deleteWish" parameterType="map" >
-//		delete from wishlist
-//		where user_id = #{userId} and content_id = #{content_id}
-//	</delete>    
+	int deleteWish(Wishlist wishlist);
 	void deleteWishlist(String userId);
 	void registWishlist(List<Wishlist> list);
 	AttractionInfoDto attractionListById(int contentId);

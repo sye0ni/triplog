@@ -1,7 +1,7 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
-import VSelect from "@/components/common/VSelect.vue";
-import VKakaoMap from "@/components/common/VKakaoMap.vue";
+import { ref, onMounted, onBeforeMount } from "vue";
+import SidoSelect from "@/components/plan/item/SidoSelect.vue";
+import GugunSelect from "@/components/plan/item/GugunSelect.vue";
 import { gugun, getAttractionList, modifyWishlist } from "@/api/plan";
 import { storeToRefs } from "pinia";
 import { usePlanStore } from "@/stores/plan";
@@ -30,8 +30,7 @@ const param = ref({
   keyword: "",
 });
 
-const gugunCode = ref("3");
-
+const gugunCode = ref("");
 const searchText = ref("");
 
 const changeKey = (val) => {
@@ -39,7 +38,7 @@ const changeKey = (val) => {
   param.value.sidoCode = val;
   param.value.gugunCode = "";
   selectOptionGugun.value = [{ text: "구/군", value: "" }];
-  // gugunCode.value = "";
+  gugunCode.value = "";
   searchText.value = "";
   console.log(param.value);
   param.value.keyword = searchText.value;
@@ -50,13 +49,12 @@ const changeKey = (val) => {
       for (let i = 0; i < data.length; i++) {
         const tmp = {
           text: "",
-          value: ""
+          value: "",
         };
         tmp.text = data[i].gugunName;
         tmp.value = data[i].gugunCode;
         selectOptionGugun.value.push(tmp);
       }
-      // gugunCode.value = "5"; // 1번 selectbox 가 바뀌면 구군코드 초기화 
       console.log(gugunCode.value);
     },
     (error) => {
@@ -68,20 +66,9 @@ const changeKey = (val) => {
 const changeKey2 = (val) => {
   console.log("구/군 선택" + val);
   param.value.gugunCode = val;
+  gugunCode.value = val;
   searchText.value = "";
-  param.value.keyword = searchText.value; // 검색어 초기화 
-
-  // if (val == "") {
-  //   param.value.contentTypeId = null;
-  // }
-
-  // if (
-  //   param.value.sidoCode == "" ||
-  //   param.value.gugunCode == "" ||
-  //   param.value.contentTypeId == ""
-  // ) {
-  //   return;
-  // }
+  param.value.keyword = searchText.value; // 검색어 초기화
 
   getAttractionList(param.value, ({ data }) => {
     console.log("select2 변화!!!!!!!!!!!");
@@ -116,25 +103,14 @@ const changeRadio = function (val) {
   console.log("change!!", val);
   param.value.contentTypeId = val;
   searchText.value = "";
-  param.value.keyword = searchText.value; // 검색어 초기화 
+  param.value.keyword = searchText.value; // 검색어 초기화
   console.log(param.value);
-
-  // if (val == "") { // '전체' 선택 
-  //   param.value.contentTypeId = "";
-  // }
-  // if (
-  //   param.value.sidoCode == "" ||
-  //   param.value.gugunCode == ""
-  // ) {
-  //   return;
-  // } // 선택되지 않은 값이 있으면 x
 
   getAttractionList(
     param.value,
     ({ data }) => {
       attractionList.value.length = 0;
       sendAttrList.value.length = 0;
-      // console.log(wishlist.value.length + "?????");
       for (let i = 0; i < data.length; i++) {
         data[i].idx = i;
         for (let j = 0; j < wishlist.value.length; j++) {
@@ -158,12 +134,11 @@ const changeRadio = function (val) {
   // 좋아요 여부 포함
 };
 
-// 검색어 입력시 
+// 검색어 입력시
 const searchAttrs = function () {
-  if (searchText.value == '') {
+  if (searchText.value == "") {
     alert("검색어를 입력하세요!");
-  }
-  else {
+  } else {
     // console.log("검색어!!!!", searchText.value);
     // console.log("선택1 시/도: ", param.value.sidoCode);
     // console.log("선택2 구/군: ", param.value.gugunCode);
@@ -173,28 +148,24 @@ const searchAttrs = function () {
 
     console.log("검색어 입력: ", param.value);
 
-    getAttractionList(param.value,
-      ({ data }) => {
-        attractionList.value = [];
-        sendAttrList.value.length = 0;
-        for (let i = 0; i < data.length; i++) {
-          for (let j = 0; j < wishlist.value.length; j++) {
-            if (data[i].contentId == wishlist.value[j].contentId) {
-              data[i].isLike = true;
-              console.log("like!!", data[i]);
-            }
+    getAttractionList(param.value, ({ data }) => {
+      attractionList.value = [];
+      sendAttrList.value.length = 0;
+      for (let i = 0; i < data.length; i++) {
+        for (let j = 0; j < wishlist.value.length; j++) {
+          if (data[i].contentId == wishlist.value[j].contentId) {
+            data[i].isLike = true;
+            console.log("like!!", data[i]);
           }
-          data[i].idx = i;
-          attractionList.value.push(data[i]);
-          sendAttrList.value.push(data[i]);
         }
-        emits("sendAttrlist", sendAttrList.value);
+        data[i].idx = i;
+        attractionList.value.push(data[i]);
+        sendAttrList.value.push(data[i]);
       }
-    )
-
-
+      emits("sendAttrlist", sendAttrList.value);
+    });
   }
-}
+};
 
 onMounted(() => {
   // console.log("planSearch!!", attractionType);
@@ -258,20 +229,34 @@ const moveMap = function (arg) {
       </div>
 
       <div class="select">
-        <div class='selectSelect'>
+        <div class="selectSelect">
           <div class="searchInputWrapper">
-            <input class='searchInput' type='text' placeholder='검색어를 입력하세요' v-model='searchText' />
+            <input
+              class="searchInput"
+              type="text"
+              placeholder="검색어를 입력하세요"
+              v-model="searchText"
+            />
             <i class="searchBtn fa-solid fa-magnifying-glass" @click="searchAttrs"></i>
           </div>
-          <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
-          <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" />
+          <SidoSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" index="" />
+          <GugunSelect
+            :selectOption="selectOptionGugun"
+            @onKeySelect="changeKey2"
+            :index="gugunCode"
+          />
         </div>
       </div>
 
       <div class="pt-2">
         <div class="radio">
-          <VRadio v-for="attraction in attractionType" :key="attraction.title" :item="attraction" v-model="type"
-            @changeValue="changeRadio" />
+          <VRadio
+            v-for="attraction in attractionType"
+            :key="attraction.title"
+            :item="attraction"
+            v-model="type"
+            @changeValue="changeRadio"
+          />
         </div>
         <!--  -->
       </div>
@@ -290,8 +275,14 @@ const moveMap = function (arg) {
             </tr>
           </thead>
           <tbody>
-            <PlanSearchItem2 v-for="item in attractionList" :key="item.contentId" :item="item" @like-change="likeChange"
-              @show-detail="showDetail" @select-attr="moveMap" />
+            <PlanSearchItem2
+              v-for="item in attractionList"
+              :key="item.contentId"
+              :item="item"
+              @like-change="likeChange"
+              @show-detail="showDetail"
+              @select-attr="moveMap"
+            />
           </tbody>
         </table>
       </div>
@@ -327,7 +318,7 @@ const moveMap = function (arg) {
   width: 250px;
   /* 필요에 따라 조정 */
   border: 2px solid;
-  border-radius: 10px;
+  border-radius: 5px;
   overflow: hidden;
   height: 35px;
   padding: 5px 5px;
@@ -346,7 +337,6 @@ const moveMap = function (arg) {
   /* justify-content: space-between; */
   /* align-items: center; */
 }
-
 
 .searchBtn {
   cursor: pointer;
@@ -374,7 +364,7 @@ const moveMap = function (arg) {
   align-items: center;
 }
 
-.selectSelect>* {
+.selectSelect > * {
   width: 250px;
   margin: 10px 0px;
 }
@@ -428,7 +418,7 @@ thead {
   height: 40px;
   font-size: 1rem;
   font-weight: bold;
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: #c62f2f;
   border: none;
   color: white;

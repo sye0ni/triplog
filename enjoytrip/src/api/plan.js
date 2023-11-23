@@ -51,6 +51,11 @@ function modifyPlan(planId, param, success, fail) {
   local.put(`${url}/${planId}`, param).then(success).catch(fail);
 }
 
+function deleteWish(param, success, fail) {
+  console.log("delete wish: ", param);
+  local.delete(`${url}/wishlist`, { data: param }).then(success).catch(fail);
+}
+
 function getAttractionListById(param, success, fail) {
   local.get(`${url}/attractionList`, { params: param }).then(success).catch(fail);
 }
@@ -67,5 +72,6 @@ export {
   getSidoGugunName,
   deletePlan,
   modifyPlan,
-  getAttractionListById
+  deleteWish,
+  getAttractionListById,
 };

@@ -97,19 +97,25 @@ const router = createRouter({
           path: "plan/list",
           name: "plan-list",
           beforeEnter: onlyAuthUser,
-          component: () => import("@/components/user/userPlanList.vue"),
+          component: () => import("@/components/user/UserPlanList.vue"),
         },
         {
           path: "plan/list/:planId",
           name: "plan-list-detail",
           beforeEnter: onlyAuthUser,
-          component: () => import("@/components/user/userPlanDetail.vue"),
+          component: () => import("@/components/user/UserPlanDetail.vue"),
         },
         {
           path: "plan/modify/:planId",
           name: "plan-modify",
           beforeEnter: onlyAuthUser,
-          component: () => import("@/components/user/userPlanModify.vue"),
+          component: () => import("@/components/user/UserPlanModify.vue"),
+        },
+        {
+          path: "wishlist",
+          name: "user-wishlist",
+          beforeEnter: onlyAuthUser,
+          component: () => import("@/components/user/UserWishlist.vue"),
         },
       ],
     },
@@ -154,8 +160,7 @@ const router = createRouter({
         {
           path: "",
           name: "board-photo-list",
-          component: () =>
-            import("@/components/board/photo/BoardPhotoList.vue"),
+          component: () => import("@/components/board/photo/BoardPhotoList.vue"),
         },
       ],
     },

@@ -1,18 +1,36 @@
 <script setup>
 import { ref } from "vue";
+import { deleteWish } from "@/api/plan";
+import { jwtDecode } from "jwt-decode";
+
 const props = defineProps({
   wish: Object,
 });
 
-const emit = defineEmits(["checkBoxEvent"]);
+const param = ref({
+  userId: "",
+  contentId: "",
+});
 
-const isChecked = ref(false);
-const checkBoxEvent = function () {
-  console.log("checkbox click!");
+const goDeleteWish = function () {
+  console.log("go deleteWish!!!");
 
-  // if (!isChecked.value) {
-  emit("checkBoxEvent", props.wish);
-  // }
+  console.log("item ", props.wish);
+  let token = sessionStorage.getItem("accessToken");
+  let decodeToken = jwtDecode(token);
+
+  param.value.userId = decodeToken.userId;
+  param.value.contentId = props.wish.contentId;
+  deleteWish(
+    param.value,
+    ({ data }) => {
+      console.log("data");
+      location.reload(true);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
 };
 </script>
 
@@ -25,23 +43,27 @@ const checkBoxEvent = function () {
         <b class="name">{{ wish.title }}</b>
         <span>{{ wish.addr1 }}</span>
       </div>
-      <!-- <div class="menu">
-        <i class="fa-solid fa-ellipsis-vertical" style="color: #d20000"></i>
-      </div> -->
+      <i
+        class="fa-regular fa-trash-can"
+        style="color: #9a0e0e"
+        @click="goDeleteWish"
+        title="찜 삭제"
+      ></i>
+      <!-- <i class="fa-regular fa-square-minus" style="color: #830c0c"></i> -->
     </div>
-    <input type="checkbox" @click="checkBoxEvent" v-model="isChecked" />
   </div>
 </template>
 
 <style scoped>
 img {
-  height: 50px;
-  border-radius: 5px;
+  height: 35px;
+
+  border-radius: 10px;
   margin-right: 10px;
 }
 
 .empty {
-  width: 75px;
+  width: 50px;
 }
 
 .out {
@@ -58,11 +80,12 @@ img {
   border: 1px solid black;
   padding: 10px;
   margin: 10px 0px;
-  border-radius: 5px;
+  border-radius: 10px;
   width: 90%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 35px;
 }
 .contents {
   display: flex;
@@ -81,5 +104,8 @@ input[type="checkbox"] {
   margin: 10px;
   transform: scale(2);
   /* border: 2px solid #2196f3; */
+}
+
+.deleteBtn {
 }
 </style>

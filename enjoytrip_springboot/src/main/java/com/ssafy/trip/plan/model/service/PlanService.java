@@ -11,6 +11,7 @@ import com.ssafy.trip.plan.model.PlanListDetailDto;
 import com.ssafy.trip.plan.model.PlanListDto;
 import com.ssafy.trip.plan.model.PlanNthDetailRegistDto;
 import com.ssafy.trip.plan.model.SidoGugunNameDto;
+import com.ssafy.trip.plan.model.Wishlist;
 import com.ssafy.trip.plan.model.WishlistModifyDto;
 
 public interface PlanService {
@@ -39,6 +40,7 @@ public interface PlanService {
 	
 	// wishlist
 	List<AttractionInfoDto> wishlist(String userId);
+	int deleteWish(Wishlist wishlist);
 	void makeWishlist(WishlistModifyDto wishlistModifyDto);
 	AttractionInfoDto attractionListById(int contentId);
 	

@@ -1,10 +1,10 @@
 <script setup>
-defineProps({ text: String, color: String });
+defineProps({ text: String, bgcolor: String, color: String, border: String });
 </script>
 
 <template>
   <div>
-    <button :style="{ backgroundColor: color }">{{ text }}</button>
+    <button :style="{ backgroundColor: bgcolor, color: color, border: border }">{{ text }}</button>
   </div>
 </template>
 
@@ -17,24 +17,12 @@ button {
   width: 500px;
   height: 65px;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 5px;
   font-size: 1.3rem;
 }
 
 button:hover {
-  border-color: #ca0f0f;
+  border: none;
+  border: 2px solid #ca0f0f;
 }
-
-/* Rectangle 28 */
-
-/* box-sizing: border-box; */
-
-/* position: absolute;
-width: 473px;
-height: 76px;
-left: 482px;
-top: 459px;
-
-border: 1px solid #CA0F0F;
-border-radius: 10px; */
 </style>

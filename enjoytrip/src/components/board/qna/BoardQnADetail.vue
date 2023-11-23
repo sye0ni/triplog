@@ -37,7 +37,7 @@ onMounted(() => {
   let token = sessionStorage.getItem("accessToken");
   if (token != null) {
     let decodeToken = jwtDecode(token);
-    currUserId.value = decodeToken.userId; // 현재 로그인한 유저 저장 
+    currUserId.value = decodeToken.userId; // 현재 로그인한 유저 저장
   }
 
   // console.log("로그인한 유저:", currUserId.value);
@@ -113,7 +113,7 @@ const writeComments = function (...args) {
 
   let commentJson = {
     content: args[1],
-    userId: currUserId.value
+    userId: currUserId.value,
   };
 
   writeComment(
@@ -175,14 +175,22 @@ const list = function () {
     </div>
     <!-- 질문 영역 -->
     <div>
-      <BoardQnAFormItem :article="article" type="question" @modify-event="modifyQuestions"
-        @delete-article="deleteQuestions" />
+      <BoardQnAFormItem
+        :article="article"
+        type="question"
+        @modify-event="modifyQuestions"
+        @delete-article="deleteQuestions"
+      />
     </div>
 
     <!-- (답변이 있다면) 답변 보이기 -->
     <div v-for="comment in comments" :key="comment.commentId">
-      <BoardQnAFormItem :article="comment" type="comment" @modify-event="modifyComments"
-        @delete-article="deleteComments" />
+      <BoardQnAFormItem
+        :article="comment"
+        type="comment"
+        @modify-event="modifyComments"
+        @delete-article="deleteComments"
+      />
     </div>
 
     <!-- (관리자라면) 답변 등록 -->
@@ -220,7 +228,7 @@ hr {
 button {
   padding: 5px 15px;
   margin: 0px 5px;
-  border-radius: 20px;
+  border-radius: 5px;
   background-color: white;
   font-weight: bold;
 }

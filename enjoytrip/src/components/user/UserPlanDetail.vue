@@ -21,11 +21,11 @@ const startpos = ref(0);
 const diffpos = ref(0);
 const isEnable = ref(false);
 const range = 50;
-const leftWidth = ref("50%");
+const leftWidth = ref("30%");
 const rightWidth = ref("100%");
 const separatorWidth = ref("3px");
 
-const MIN_WIDTH = 800; // 최소 허용 너비
+const MIN_WIDTH = 100; // 최소 허용 너비
 const MAX_WIDTH = window.innerWidth; // 최대 허용 너비 (현재 창 너비에서 100px 제외)
 
 const onMouseMove = (event) => {
@@ -135,11 +135,9 @@ const goPlanEdit = function () {
     name: "plan-modify",
     params: { planId: route.params.planId },
   });
-
-
 };
 
-// 지도 띄우러 
+// 지도 띄우러
 const attractionList = ref([]); // 관광지 목록
 const contentId = ref([]);
 const showMap = function (arg) {
@@ -148,13 +146,13 @@ const showMap = function (arg) {
   // console.log(planDetailBox.value[0].length);
   // console.log("그래서?????");
   // console.log(planDetailBox.value[0][0].contentId);
-  contentId.value.length = 0; // 배열 초기화 
+  contentId.value.length = 0; // 배열 초기화
 
   // arg 일 차 계획들의 위치를 맵으로 전달하기
   for (let i = 0; i < planDetailBox.value[arg - 1].length; i++) {
     // console.log(i);
     // console.log(planDetailBox.value[arg]);
-    let param = { "contentId": planDetailBox.value[arg - 1][i].contentId };
+    let param = { contentId: planDetailBox.value[arg - 1][i].contentId };
 
     getAttractionListById(
       param,
@@ -166,15 +164,9 @@ const showMap = function (arg) {
       (error) => {
         console.log(error);
       }
-    )
-
-
+    );
   }
-
-
-
-}
-
+};
 </script>
 
 <template>
@@ -188,7 +180,12 @@ const showMap = function (arg) {
           <button @click="goPlanList">목록으로</button>
           <button @click="goPlanEdit">수정하기</button>
           <div class="subItem plan">
-            <UserPlanDetailList v-for="index in period" :key="index" :nth="index" @show-map="showMap" />
+            <UserPlanDetailList
+              v-for="index in period"
+              :key="index"
+              :nth="index"
+              @show-map="showMap"
+            />
           </div>
         </div>
       </div>

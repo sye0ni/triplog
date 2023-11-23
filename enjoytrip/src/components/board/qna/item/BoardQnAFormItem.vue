@@ -78,10 +78,7 @@ const toggleChange = function (event) {
       // 글 수정
       toggleTitleState.value = !toggleTitleState.value;
       textArea1.focus(); // 제목에 focus 주기
-      textArea1.setSelectionRange(
-        textArea1.value.length,
-        textArea1.value.length
-      );
+      textArea1.setSelectionRange(textArea1.value.length, textArea1.value.length);
     } else {
       // 댓글 수정
       contentInput.value.focus();
@@ -91,8 +88,7 @@ const toggleChange = function (event) {
 
 // 댓글 작성 처리
 const writeComments = function (event) {
-  const commentContent =
-    event.target.parentNode.parentNode.children[1].children[0].value;
+  const commentContent = event.target.parentNode.parentNode.children[1].children[0].value;
 
   if (commentContent === "") {
     alert("내용을 작성하세요.");
@@ -126,13 +122,7 @@ const deleteArticle = function (event) {
         <div class="box1-1">
           <textarea
             id="textArea1"
-            :value="
-              type === 'question'
-                ? article.title
-                : type === 'comment'
-                ? '답변'
-                : ''
-            "
+            :value="type === 'question' ? article.title : type === 'comment' ? '답변' : ''"
             :readOnly="toggleTitleState"
           ></textarea>
         </div>
@@ -145,8 +135,7 @@ const deleteArticle = function (event) {
           </template>
           <!-- </template> -->
           <span
-            >{{ article.userId }}
-            <span id="date">{{ article.registerTime }}</span></span
+            >{{ article.userId }} <span id="date">{{ article.registerTime }}</span></span
           >
         </div>
       </div>
@@ -224,7 +213,7 @@ const deleteArticle = function (event) {
 button {
   padding: 5px 15px;
   margin: 0px 5px;
-  border-radius: 20px;
+  border-radius: 5px;
   background-color: white;
   font-weight: bold;
 }

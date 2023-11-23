@@ -70,7 +70,12 @@ const moveWrite = () => {
     <div class="button">
       <div class="find">
         <VSelect :selectOption="selectOption" @onKeySelect="changeKey" />
-        <input type="text" v-model="param.word" placeholder="검색어..." @keyup.enter="getArticleList" />
+        <input
+          type="text"
+          v-model="param.word"
+          placeholder="검색어..."
+          @keyup.enter="getArticleList"
+        />
         <button id="findButton" @click="getArticleList">
           <i class="fa-solid fa-magnifying-glass" style="color: #000000"></i>
         </button>
@@ -92,13 +97,21 @@ const moveWrite = () => {
         </tr>
       </thead>
       <tbody>
-        <BoardQnaListItem v-for="article in articles" :key="article.boardQnaId" :article="article"></BoardQnaListItem>
+        <BoardQnaListItem
+          v-for="article in articles"
+          :key="article.boardQnaId"
+          :article="article"
+        ></BoardQnaListItem>
       </tbody>
     </table>
   </div>
 
   <div class="pgnv">
-    <PageNavigation :current-page="currentPage" :total-page="totalPage" @pageChange="onPageChange"></PageNavigation>
+    <PageNavigation
+      :current-page="currentPage"
+      :total-page="totalPage"
+      @pageChange="onPageChange"
+    ></PageNavigation>
   </div>
 </template>
 
@@ -152,7 +165,7 @@ button {
   padding: 5px 10px;
   margin: 5px;
   margin-bottom: 10px;
-  border-radius: 13px;
+  border-radius: 5px;
   background-color: white;
   font-weight: 700;
   font-size: 0.9rem;
@@ -174,7 +187,7 @@ button:hover {
 
 input {
   border: 2px solid;
-  border-radius: 13px;
+  border-radius: 5px;
   height: 30px;
   padding: 0px 5px;
   margin: 5px;

@@ -23,9 +23,14 @@ const isEnable = ref(false);
 const range = 50;
 const leftWidth = ref("70%");
 const rightWidth = ref("100%");
-const separatorWidth = ref("3px");
+// const separatorWidth = ref("3px");
 
-const MIN_WIDTH = 1100; // 최소 허용 너비
+const attrRef = ref();
+const planRef = ref();
+const tempRef = ref();
+
+let item3minWidth = 1000;
+const MIN_WIDTH = 900; // 최소 허용 너비
 const MAX_WIDTH = window.innerWidth; // 최대 허용 너비 (현재 창 너비에서 100px 제외)
 
 const onMouseMove = (event) => {
@@ -34,11 +39,30 @@ const onMouseMove = (event) => {
     diffpos.value = startpos.value - pos;
     const width = window.innerWidth / 2;
 
+    const currMin =
+      parseFloat(window.getComputedStyle(attrRef.value).width) +
+      parseFloat(window.getComputedStyle(planRef.value).width) +
+      parseFloat(window.getComputedStyle(tempRef.value).width);
+
+    console.log(currMin);
+    // MIN_WIDTH = currMin;
+    // console.log("attrRef", attrRef.value.style.width);
+    // console.log("planRef", planRef.value);
+    // console.log("tempRef", tempRef.value);
+
     if (diffpos.value > -(width - range) && diffpos.value < width - range) {
       console.log("move ", diffpos.value, width, range);
       let newWidth = width - diffpos.value;
-      newWidth = Math.max(MIN_WIDTH, Math.min(newWidth, MAX_WIDTH)); // Ensure it stays within the limits
+      let tmp = 0;
+      if (!planFoldToggle.value) {
+        tmp -= 300;
+      }
+      if (!tempFoldToggle.value) {
+        tmp -= 280;
+      }
+      // newWidth = Math.max(MIN_WIDTH, Math.min(newWidth, MAX_WIDTH)); // Ensure it stays within the limits
 
+      newWidth = Math.max(item3minWidth + tmp, Math.min(newWidth, MAX_WIDTH));
       leftWidth.value = newWidth + "px";
       // leftWidth.value = width - diffpos.value + "px";
     }
@@ -86,7 +110,7 @@ const moveMap = function (arg) {
   console.log("선택한 요소!!!");
   // console.log(arg);
   selectAttr.value = arg;
-}
+};
 
 // --- planCreateInfo
 
@@ -130,28 +154,68 @@ const goMakePlanDetail = function () {
     params: { planId: planCreateInfo.value.planId },
   });
 };
+
+const tempFoldToggle = ref(true);
+const tempFold = function () {
+  tempFoldToggle.value = !tempFoldToggle.value;
+  console.log("toggle: ", tempFoldToggle.value);
+
+  if (tempFoldToggle.value && planFoldToggle.value) {
+    leftWidth.value = 1000 + "px";
+  } else if (tempFoldToggle.value) {
+    leftWidth.value = 800 + "px";
+  }
+};
+const planFoldToggle = ref(true);
+const planFold = function () {
+  planFoldToggle.value = !planFoldToggle.value;
+  console.log("toggle: ", planFoldToggle.value);
+
+  if (tempFoldToggle.value && planFoldToggle.value) {
+    leftWidth.value = 1000 + "px";
+  } else if (planFoldToggle.value) {
+    leftWidth.value = 700 + "px";
+  }
+};
 </script>
 
 <template>
   <div>
     <div class="borderContainer">
+      <div class="foldToggle">
+        <div>
+          <label>
+            <input role="switch" type="checkbox" checked @click="tempFold" />
+            <span>보관함</span>
+          </label>
+        </div>
+        <div>
+          <label>
+            <input role="switch" type="checkbox" checked @click="planFold" />
+            <span>계획</span>
+          </label>
+        </div>
+      </div>
       <div class="d2 mapContainer" :style="{ width: rightWidth }">
-        <VKakaoMap :attractionList='attractionList' :attraction='selectAttr' />
+        <VKakaoMap :attractionList="attractionList" :attraction="selectAttr" />
       </div>
       <div class="d1" :style="{ width: leftWidth }">
         <!--  -->
         <div class="subContainer">
-          <div class="subItem search">
-            검색
+          <div class="subItem search" ref="attrRef">
+            <div>
+              <span>검색</span>
+            </div>
+
             <PlanSearch @send-attrlist="startMap" @move-map="moveMap" @show-detail="showDetail" />
             <button class="makeBtn" @click="goMakePlanDetail">만들기</button>
           </div>
 
-          <div class="subItem tempBox">
+          <div class="subItem tempBox" ref="tempRef" v-show="tempFoldToggle">
             보관함
             <PlanDetailTempList />
           </div>
-          <div class="subItem plan">
+          <div class="subItem plan" ref="planRef" v-show="planFoldToggle">
             <div class="subTitle">여행계획</div>
             <PlanDetailList v-for="index in planCreateInfo.period" :key="index" :nth="index" />
           </div>
@@ -182,23 +246,14 @@ const goMakePlanDetail = function () {
 }
 
 .makeBtn {
-  /* position: absolute; */
-  /* z-index: 10; */
-  /* right: 0; */
-  /* margin: 30px 50px; */
-  /* margin-bottom: 10vh; */
   background-color: #d20000;
   border: none;
   color: white;
   font-size: 1rem;
   font-weight: bold;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 5px;
   width: 90px;
-  /* background-color: aqua; */
-  /* top: 20; */
-  /* left: 0; */
-  /* float: right; */
 }
 
 .borderContainer {
@@ -233,7 +288,6 @@ const goMakePlanDetail = function () {
   margin-right: -1px;
   background-color: white;
   z-index: 2;
-  /* border: 1px solid #b8b8b8; */
 }
 
 .d2 {
@@ -245,18 +299,16 @@ const goMakePlanDetail = function () {
   float: left;
   width: 5px;
   height: 100%;
-  /* background-color: #888888; */
   cursor: col-resize;
   position: absolute;
   z-index: 1;
   margin: 0px;
-  /* border: 2px solid salmon; */
   border-left: 2px solid #b8b8b8;
 }
 
 .search {
   min-width: 400px;
-  max-width: 550px;
+  /* max-width: 550px; */
 }
 
 .tempBox {
@@ -266,10 +318,7 @@ const goMakePlanDetail = function () {
 
 .plan {
   min-width: 200px;
-  /* width: 200px; */
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
+  max-width: 350px;
   padding: 10px;
   padding-top: 0px;
   overflow-y: auto;
@@ -281,5 +330,96 @@ const goMakePlanDetail = function () {
 
 button {
   cursor: pointer;
+}
+
+/* toggle */
+label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+[type="checkbox"] {
+  appearance: none;
+  position: relative;
+  border: max(2px, 0.1em) solid gray;
+  border-radius: 1.25em;
+  width: 2.25em;
+  height: 1.25em;
+}
+
+[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  transform: scale(0.8);
+  background-color: gray;
+  transition: left 250ms linear;
+}
+
+[type="checkbox"]:checked {
+  background-color: #d20000;
+  border-color: #d20000;
+}
+
+[type="checkbox"]:checked::before {
+  background-color: white;
+  left: 1em;
+}
+
+[type="checkbox"]:disabled {
+  border-color: lightgray;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+[type="checkbox"]:disabled:before {
+  background-color: lightgray;
+}
+
+[type="checkbox"]:disabled + span {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+[type="checkbox"]:focus-visible {
+  outline-offset: max(2px, 0.1em);
+  outline: max(2px, 0.1em) solid #d20000;
+}
+
+[type="checkbox"]:enabled:hover {
+  box-shadow: 0 0 0 max(4px, 0.2em) lightgray;
+}
+
+/* Global CSS */
+body {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+fieldset {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.foldToggle {
+  position: absolute;
+  top: 0;
+  /* right: 0; */
+  z-index: 100;
 }
 </style>

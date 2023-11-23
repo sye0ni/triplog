@@ -31,7 +31,7 @@ const param = ref({
   keyword: "",
 });
 
-const gugunCode = ref("0");
+const gugunCode = ref("");
 const searchText = ref("");
 
 const changeKey = (val) => {
@@ -101,10 +101,7 @@ const changeKey2 = (val) => {
     };
 };
 
-
-
 const type = ref("");
-
 
 const changeRadio = function (val) {
   console.log("change!!", val);
@@ -217,20 +214,45 @@ onBeforeMount(() => {
     <!--  -->
     <div class="subItem search">
       <div class="select">
-        <div class='selectSelect'>
+        <div class="selectSelect">
           <div class="searchInputWrapper">
-            <input class='searchInput' type='text' placeholder='검색어를 입력하세요' v-model='searchText' />
+            <input
+              class="searchInput"
+              type="text"
+              placeholder="검색어를 입력하세요"
+              v-model="searchText"
+              @keyup.enter="searchAttrs"
+            />
             <i class="searchBtn fa-solid fa-magnifying-glass" @click="searchAttrs"></i>
           </div>
-          <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
-          <VSelect :selectOption="selectOptionGugun" @onKeySelect="changeKey2" :index="gugunCode" />
+          <!-- <VSelect :selectOption="selectOptionSido" @onKeySelect="changeKey" />
+          <VSelect
+            :selectOption="selectOptionGugun"
+            @onKeySelect="changeKey2"
+            :index="gugunCode"
+          /> -->
+          <SidoSelect
+            :selectOption="selectOptionSido"
+            @onKeySelect="changeKey"
+            :index="planSidoCode"
+          />
+          <GugunSelect
+            :selectOption="selectOptionGugun"
+            @onKeySelect="changeKey2"
+            :index="gugunCode"
+          />
         </div>
       </div>
 
       <div class="pt-2">
         <div class="radio">
-          <VRadio v-for="attraction in attractionType" :key="attraction.title" :item="attraction" v-model="type"
-            @changeValue="changeRadio" />
+          <VRadio
+            v-for="attraction in attractionType"
+            :key="attraction.title"
+            :item="attraction"
+            v-model="type"
+            @changeValue="changeRadio"
+          />
         </div>
         <!--  -->
       </div>
@@ -250,8 +272,13 @@ onBeforeMount(() => {
             </tr>
           </thead>
           <tbody>
-            <PlanSearchItem v-for="item in attractionList" :key="item.contentId" :item="item" @select-attr="moveMap"
-              @show-detail="showDetail" />
+            <PlanSearchItem
+              v-for="item in attractionList"
+              :key="item.contentId"
+              :item="item"
+              @select-attr="moveMap"
+              @show-detail="showDetail"
+            />
           </tbody>
         </table>
       </div>
@@ -298,7 +325,7 @@ onBeforeMount(() => {
   width: 250px;
   /* 필요에 따라 조정 */
   border: 2px solid;
-  border-radius: 10px;
+  border-radius: 5px;
   overflow: hidden;
   height: 35px;
   padding: 5px 5px;
@@ -324,7 +351,7 @@ onBeforeMount(() => {
   align-items: center;
 }
 
-.selectSelect>* {
+.selectSelect > * {
   width: 250px;
   margin: 10px 0px;
 }

@@ -26,6 +26,7 @@ onMounted(() => {});
           @start="drag = true"
           @end="drag = true"
           item-key="contentId"
+          style="width: 100%; min-height: 100px"
         >
           <template #item="{ element, index }">
             <PlanDetailListItem :item="element" :order="index" />

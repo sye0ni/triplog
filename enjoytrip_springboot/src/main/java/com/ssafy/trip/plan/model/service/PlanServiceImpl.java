@@ -16,6 +16,7 @@ import com.ssafy.trip.plan.model.PlanListDetailDto;
 import com.ssafy.trip.plan.model.PlanListDto;
 import com.ssafy.trip.plan.model.PlanNthDetailRegistDto;
 import com.ssafy.trip.plan.model.SidoGugunNameDto;
+import com.ssafy.trip.plan.model.Wishlist;
 import com.ssafy.trip.plan.model.WishlistModifyDto;
 import com.ssafy.trip.plan.model.mapper.PlanMapper;
 
@@ -178,6 +179,11 @@ public class PlanServiceImpl implements PlanService {
 	public void makeWishlist(WishlistModifyDto wishlistModifyDto) {
 		planMapper.deleteWishlist(wishlistModifyDto.getUserId());
 		planMapper.registWishlist(wishlistModifyDto.getWishlist());
+	}
+	
+	@Override
+	public int deleteWish(Wishlist wishlist) {
+		return planMapper.deleteWish(wishlist);
 	}
 
 	@Override

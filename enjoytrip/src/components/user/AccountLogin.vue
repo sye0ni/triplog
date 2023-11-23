@@ -68,23 +68,31 @@ const login = async () => {
           <hr />
           <div class="message">{{ message }}</div>
           <div class="button">
-            <VButtonLong text="로그인" @click.prevent="login" />
+            <VButtonLong
+              text="로그인"
+              @click.prevent="login"
+              bgcolor="#ca0f0f"
+              color="white"
+              border="none"
+            />
           </div>
         </form>
         <div class="user">
-          <router-link :to="{ name: 'user-id-search' }">아이디 찾기</router-link> &nbsp;&nbsp;| &nbsp;&nbsp;
-          <router-link :to="{ name: 'user-pwd-search' }">비밀번호 찾기</router-link>&nbsp;&nbsp; | &nbsp;&nbsp;
+          <router-link :to="{ name: 'user-id-search' }"> <span></span> 아이디 찾기</router-link>
+          &nbsp;&nbsp;| &nbsp;&nbsp;
+          <router-link :to="{ name: 'user-pwd-search' }">비밀번호 찾기</router-link>&nbsp;&nbsp; |
+          &nbsp;&nbsp;
           <router-link :to="{ name: 'user-join' }">회원가입</router-link>
         </div>
-        <div class="social">
-          <VButtonLong text="네이버로 로그인" color=" #43E528" />
+        <!-- <div class="social">
+          <VButtonLong text="네이버로 로그인" bgcolor=" #43E528" />
         </div>
         <div class="social">
           <VButtonLong text="구글로 로그인" />
         </div>
         <div class="social">
-          <VButtonLong text="카카오로 로그인" color="#FCF314" />
-        </div>
+          <VButtonLong text="카카오로 로그인" bgcolor="#FCF314" />
+        </div> -->
       </div>
     </div>
   </div>

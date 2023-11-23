@@ -18,9 +18,7 @@ const props = defineProps({
 //   // key.value = props.index;
 //   console.log("key.value", key.value);
 
-    
 // });
-
 
 const emit = defineEmits(["onKeySelect"]);
 
@@ -33,15 +31,14 @@ const onSelect = () => {
 };
 </script>
 
-
-<template>  
+<template>
   <select v-model="key" @change="onSelect">
     <option
       v-for="option in selectOption"
       :key="option.value"
       :value="option.value"
       :disabled="option.value === '' ? true : false"
-      >
+    >
       {{ option.text }}
     </option>
   </select>
@@ -49,8 +46,9 @@ const onSelect = () => {
 
 <style scoped>
 select {
+  border: none;
   border: 2px solid;
-  border-radius: 10px;
+  border-radius: 5px;
   height: 35px;
   padding: 5px 5px;
   margin-right: 10px;
