@@ -149,6 +149,7 @@ const showMap = function (arg) {
   // console.log("그래서?????");
   // console.log(planDetailBox.value[0][0].contentId);
   contentId.value.length = 0; // 배열 초기화 
+  attractionList.value.length = 0;
 
   // arg 일 차 계획들의 위치를 맵으로 전달하기
   for (let i = 0; i < planDetailBox.value[arg - 1].length; i++) {
@@ -215,7 +216,7 @@ button {
   border-radius: 5px;
   height: 35px;
   width: 85px;
-  background-color: #d20000;
+  background-color: #c62f2f;
   color: white;
   /* font-weight: bold; */
 }
@@ -230,7 +231,7 @@ button {
 }
 
 .makeBtn {
-  background-color: #d20000;
+  background-color: #c62f2f;
   border: none;
   color: white;
   font-size: 1rem;
