@@ -160,7 +160,7 @@ const createPlan = function () {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 2px solid rgb(187, 187, 187);
+  border: 3px solid rgb(187, 187, 187);
   border-radius: 5px;
   padding: 50px;
   min-width: 600px;
