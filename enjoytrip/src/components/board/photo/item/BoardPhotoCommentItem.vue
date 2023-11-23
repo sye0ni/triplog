@@ -132,20 +132,12 @@ textarea:focus {
 }
 
 .box2 {
-    /* height: 60%; */
-    /* height: auto; */
-    /* background-color: lightblue; */
     display: flex;
-    /* justify-content: space-between; */
-    /* align-items: center; */
     margin-top: 5px;
 }
 
 button {
     padding: 2px 2px;
-    /* margin: 5px; */
-    /* margin-bottom: 10px; */
-    /* border-radius: 10px; */
     background-color: white;
     font-weight: 700;
     font-size: 0.6rem;

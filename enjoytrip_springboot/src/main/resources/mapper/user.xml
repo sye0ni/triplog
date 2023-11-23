@@ -107,7 +107,7 @@
 				    (
 				        SELECT COUNT(*)
 				        FROM comment c
-				        WHERE c.board_id = b.board_photo_id
+				        WHERE c.board_id = b.board_photo_id and c.board_type='photo'
 				    ) AS commentCnt,
 				    SUBSTRING(b.register_time, 1, 10) AS registerTime,
 				   concat(s.sigun_name," ", b.place) location

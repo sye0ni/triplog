@@ -291,10 +291,6 @@ input:focus {
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 10px;
   place-items: center;
-  /* display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  align-items: center; */
 }
 
 .listContainer {
