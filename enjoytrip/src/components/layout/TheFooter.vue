@@ -2,7 +2,6 @@
 
 <template>
   <div>
-    <hr />
     <div class="container">
       <!-- <img src="" alt="" /> -->
       <div>ⓒTripLog ⓒSSAFY ALL RGITH RESERVED</div>
@@ -17,9 +16,6 @@
 * {
   box-sizing: border-box;
 }
-hr {
-  border: none;
-}
 
 .container {
   /* background-color: #f5f5f5; */
@@ -30,6 +26,8 @@ hr {
   padding: 10px 20px;
   margin: none;
   height: 80px;
+  /* position: sticky; */
+  /* transform: translateY(-100%); */
 }
 
 .email {

@@ -60,7 +60,6 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <!-- <div class="right dropdown" @click="dropMenu"></div> -->
     <div class="title">여행 계획 목록</div>
     <hr />
     <div class="innerContainer">
@@ -96,9 +95,7 @@ input:hover {
 .container {
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
-  /* padding: 40px; */
   height: 100%;
 }
 

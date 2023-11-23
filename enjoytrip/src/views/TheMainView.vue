@@ -22,9 +22,13 @@ const goJoin = function () {
       <div class="main1Container">
         <img src="@/assets/main/TripLogBig2.png" alt="" style="width: 300px" />
         <div class="main1Text">
-          <div class="main1TextClass">사진 한 장이 여행의 기억을 간직합니다.</div>
+          <div class="main1TextClass">
+            사진 한 장이 여행의 기억을 간직합니다.
+          </div>
           <br />
-          <div class="main1TextClass">함께 공유하며 여행의 아름다움을 느껴보세요.</div>
+          <div class="main1TextClass">
+            함께 공유하며 여행의 아름다움을 느껴보세요.
+          </div>
         </div>
         <button class="joinBtn" @click="goJoin">회원가입</button>
       </div>
@@ -32,7 +36,7 @@ const goJoin = function () {
       <div id="frame">
         <div class="video-container">
           <video muted autoplay loop class="fullpage-video">
-            <source src="../assets/main/sea.mp4" type="video/mp4" />
+            <source src="../assets/main/pink.mp4" type="video/mp4" />
           </video>
         </div>
       </div>

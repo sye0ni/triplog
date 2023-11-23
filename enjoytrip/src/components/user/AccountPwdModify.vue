@@ -94,7 +94,13 @@ const messageDelete = function () {
       <div class="title">비밀번호 확인</div>
       <div class="form-container">
         <label for="user-pwd">비밀번호</label>
-        <input type="password" v-model="userPwd" id="user-pwd" class="shortInput" autofocus />
+        <input
+          type="password"
+          v-model="userPwd"
+          id="user-pwd"
+          class="shortInput"
+          autofocus
+        />
         <hr />
         <label for="user-pwd-new">비밀번호 확인</label>
         <input
@@ -111,6 +117,7 @@ const messageDelete = function () {
             text="비밀번호 변경"
             @click.prevent="modifyPassword"
             @keyup="messageDelete"
+            @keyup.enter="modifyPassword"
           />
         </div>
       </div>

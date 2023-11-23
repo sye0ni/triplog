@@ -124,7 +124,10 @@ const goModifyPlan = function () {
   alert("계획 수정이 완료되었습니다.");
   let tmp = { planId: planCreateInfo.value.planId };
 
-  router.push({ name: "plan-list-detail", params: { planId: planCreateInfo.value.planId } });
+  router.push({
+    name: "plan-list-detail",
+    params: { planId: planCreateInfo.value.planId },
+  });
 };
 
 // --
@@ -160,6 +163,7 @@ const planFold = function () {
 <template>
   <div>
     <div class="borderContainer">
+      <button class="modifyBtn" @click="goModifyPlan">수정완료</button>
       <div class="foldToggle">
         <div>
           <label>
@@ -178,12 +182,14 @@ const planFold = function () {
         <VKakaoMap />
       </div>
       <div class="d1" :style="{ width: leftWidth }">
-        <!--  -->
         <div class="subContainer">
           <div class="subItem search">
             검색
-            <PlanSearch @send-attrlist="startMap" @move-map="moveMap" @show-detail="showDetail" />
-            <button class="modifyBtn" @click="goModifyPlan">수정완료</button>
+            <PlanSearch
+              @send-attrlist="startMap"
+              @move-map="moveMap"
+              @show-detail="showDetail"
+            />
           </div>
 
           <div class="subItem tempBox" v-show="tempFoldToggle">
@@ -196,7 +202,11 @@ const planFold = function () {
           </div>
         </div>
       </div>
-      <div class="d3" :style="{ left: leftWidth }" @mousedown="onMouseDown"></div>
+      <div
+        class="d3"
+        :style="{ left: leftWidth }"
+        @mousedown="onMouseDown"
+      ></div>
       <div class="modal">
         <Transition v-if="showModal">
           <WishlistDetail @click="toggleModal" :attraction="attraction" />
@@ -221,23 +231,18 @@ const planFold = function () {
 }
 
 .modifyBtn {
-  /* position: absolute; */
-  /* z-index: 10; */
-  /* right: 0; */
-  /* margin: 30px 50px; */
-  /* margin-bottom: 10vh; */
   background-color: #d20000;
   border: none;
   color: white;
   font-size: 1rem;
   font-weight: bold;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 5px;
   width: 90px;
-  /* background-color: aqua; */
-  /* top: 20; */
-  /* left: 0; */
-  /* float: right; */
+
+  position: absolute;
+  right: 0px;
+  z-index: 10;
 }
 
 .borderContainer {

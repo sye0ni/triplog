@@ -207,8 +207,11 @@ const planFold = function () {
               <span>검색</span>
             </div>
 
-            <PlanSearch @send-attrlist="startMap" @move-map="moveMap" @show-detail="showDetail" />
-            <button class="makeBtn" @click="goMakePlanDetail">만들기</button>
+            <PlanSearch
+              @send-attrlist="startMap"
+              @move-map="moveMap"
+              @show-detail="showDetail"
+            />
           </div>
 
           <div class="subItem tempBox" ref="tempRef" v-show="tempFoldToggle">
@@ -217,16 +220,25 @@ const planFold = function () {
           </div>
           <div class="subItem plan" ref="planRef" v-show="planFoldToggle">
             <div class="subTitle">여행계획</div>
-            <PlanDetailList v-for="index in planCreateInfo.period" :key="index" :nth="index" />
+            <PlanDetailList
+              v-for="index in planCreateInfo.period"
+              :key="index"
+              :nth="index"
+            />
           </div>
         </div>
       </div>
-      <div class="d3" :style="{ left: leftWidth }" @mousedown="onMouseDown"></div>
+      <div
+        class="d3"
+        :style="{ left: leftWidth }"
+        @mousedown="onMouseDown"
+      ></div>
       <div class="modal">
         <Transition v-if="showModal">
           <WishlistDetail @click="toggleModal" :attraction="attraction" />
         </Transition>
       </div>
+      <button class="makeBtn" @click="goMakePlanDetail">만들기</button>
     </div>
   </div>
 </template>
@@ -254,6 +266,10 @@ const planFold = function () {
   padding: 10px;
   border-radius: 5px;
   width: 90px;
+
+  position: absolute;
+  right: 0px;
+  z-index: 10;
 }
 
 .borderContainer {

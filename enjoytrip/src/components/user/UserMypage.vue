@@ -84,6 +84,7 @@ const emailModify = function () {
         emailReadOnly.value = !emailReadOnly.value;
         return;
       }
+
       dupCheck(
         param.value,
         (response) => {
@@ -96,11 +97,14 @@ const emailModify = function () {
               ({ data }) => {
                 console.log("modifyemail data:", data);
                 userInfo.value.userEmail = emailRef.value;
+                emailReadOnly.value = !emailReadOnly.value;
                 alert("이메일 수정 완료");
+                return;
               },
               (error) => {
                 console.log("modifyemail fail", error);
                 alert("이메일 수정 실패");
+                return;
               }
             );
           }
@@ -109,6 +113,7 @@ const emailModify = function () {
           console.log("사용 불가능 이메일", error);
           // message.value = "사용 불가능한 이메일입니다.";
           alert("사용 불가능한 이메일입니다.");
+          return;
         }
       );
     } else {
@@ -117,11 +122,11 @@ const emailModify = function () {
       emailInput.value.focus();
       return;
     }
-  }
-
-  emailReadOnly.value = !emailReadOnly.value;
-  if (!emailReadOnly.value) {
-    emailInput.value.focus();
+  } else {
+    emailReadOnly.value = !emailReadOnly.value;
+    if (!emailReadOnly.value) {
+      emailInput.value.focus();
+    }
   }
 };
 
@@ -217,7 +222,7 @@ const goWhishlist = function () {
       </div>
       <div>
         <div class="listBox" @click="goPlanList">
-          <div>여행 계획 목록</div>
+          <div>여행 계획 목록 바로가기</div>
         </div>
         <div class="listBox" @click="goPhotoList">
           <div>내 글 목록 바로가기</div>
