@@ -48,7 +48,7 @@ public class UserController {
 	}
 	
 	// 아이디, 이메일 중복 검사
-	@PostMapping("/dupCheck") // 임시
+	@PostMapping("/dupCheck")
 	public ResponseEntity<?> dupCheck(@RequestBody Map<String,String> map) throws Exception{
 		// map -> 1.type: id, email 2.value: 
 		System.out.println("dupCheck start");
@@ -56,7 +56,7 @@ public class UserController {
 		System.out.println(map + " 중복검사: " + result);
 		
 		if(result==0) {
-			return new ResponseEntity<String>("사용 가능한 "+map.get("type")+" 입니다.", HttpStatus.CREATED); // 201
+			return new ResponseEntity<String>("사용 가능한 "+map.get("type")+" 입니다.", HttpStatus.OK); // 200
 		}
 		else {
 			return new ResponseEntity<String>("이미 존재하는 "+map.get("type")+" 입니다.",HttpStatus.CONFLICT); // 409 

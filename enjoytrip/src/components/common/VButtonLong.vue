@@ -4,7 +4,9 @@ defineProps({ text: String, bgcolor: String, color: String, border: String });
 
 <template>
   <div>
-    <button :style="{ backgroundColor: bgcolor, color: color, border: border }">{{ text }}</button>
+    <button :style="{ backgroundColor: bgcolor, color: color, border: border }">
+      {{ text }}
+    </button>
   </div>
 </template>
 
@@ -19,6 +21,7 @@ button {
   background-color: white;
   border-radius: 5px;
   font-size: 1.3rem;
+  cursor: pointer;
 }
 
 button:hover {

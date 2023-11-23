@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/user";
 import { deleteUser, dupCheck, modifyUserInfo } from "@/api/account.js";
+import { httpStatusCode } from "@/util/http-status";
 
 const router = useRouter();
 const memberStore = useMemberStore();
@@ -85,26 +86,29 @@ const emailModify = function () {
       }
       dupCheck(
         param.value,
-        ({ data }) => {
-          console.log("사용 가능한 이메일", data);
-          console.log("이메일 변경하러 가자");
-          param.value.userId = userInfo.value.userId;
-          modifyUserInfo(
-            param.value,
-            ({ data }) => {
-              console.log("modifyemail data:", data);
-              userInfo.value.userEmail = emailRef.value;
-              alert("이메일 수정 완료");
-            },
-            (error) => {
-              console.log("modifyemail fail", error);
-              alert("이메일 수정 실패");
-            }
-          );
+        (response) => {
+          if (response.status === httpStatusCode.OK) {
+            // console.log("사용 가능한 이메일", data);
+            // console.log("이메일 변경하러 가자");
+            param.value.userId = userInfo.value.userId;
+            modifyUserInfo(
+              param.value,
+              ({ data }) => {
+                console.log("modifyemail data:", data);
+                userInfo.value.userEmail = emailRef.value;
+                alert("이메일 수정 완료");
+              },
+              (error) => {
+                console.log("modifyemail fail", error);
+                alert("이메일 수정 실패");
+              }
+            );
+          }
         },
         (error) => {
           console.log("사용 불가능 이메일", error);
-          message.value = "사용 불가능한 이메일입니다.";
+          // message.value = "사용 불가능한 이메일입니다.";
+          alert("사용 불가능한 이메일입니다.");
         }
       );
     } else {
