@@ -13,6 +13,17 @@ const props = defineProps({
 watch(
     () => props.attraction, // markers.value.push(marker);
     () => {
+
+        positions.value = [];
+        let obj = {};
+        obj.latlng = new kakao.maps.LatLng(
+            props.attraction.latitude,
+            props.attraction.longitude
+        )
+        obj.title = props.attraction.title;
+        positions.value.push(obj);
+        loadMarkers();
+
         // 이동할 위도 경도 위치를 생성합니다
         var moveLatLon = new kakao.maps.LatLng(
             props.attraction.latitude,
@@ -33,7 +44,6 @@ watch(
         console.log("지도 변화!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         console.log(props.attractionList.length);
         // console.log(props.attractionList);
-        // positions에다가 담아라
         positions.value = [];
         props.attractionList.forEach((attraction) => {
             let obj = {};
@@ -68,6 +78,7 @@ onMounted(() => {
         /* global kakao */
         script.onload = () => kakao.maps.load(() => initMap());
         document.head.appendChild(script);
+
     }
 });
 

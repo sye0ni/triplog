@@ -143,16 +143,11 @@ const contentId = ref([]);
 const showMap = function (arg) {
   console.log(arg);
 
-  // console.log(planDetailBox.value[0].length);
-  // console.log("그래서?????");
-  // console.log(planDetailBox.value[0][0].contentId);
   contentId.value.length = 0; // 배열 초기화
   attractionList.value.length = 0;
 
   // arg 일 차 계획들의 위치를 맵으로 전달하기
   for (let i = 0; i < planDetailBox.value[arg - 1].length; i++) {
-    // console.log(i);
-    // console.log(planDetailBox.value[arg]);
     let param = { contentId: planDetailBox.value[arg - 1][i].contentId };
 
     getAttractionListById(
@@ -168,13 +163,34 @@ const showMap = function (arg) {
     );
   }
 };
+
+// 여행지 상세 조회 
+const attraction = ref({});
+const showDetail = function (arg) {
+  contentId.value.length = 0;
+  // attraction.value = {};
+  let param = { contentId: arg };
+
+  getAttractionListById(
+    param,
+    ({ data }) => {
+      // console.log("조회결과!!!!");
+      console.log(data);
+      attraction.value = data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  )
+  
+}
 </script>
 
 <template>
   <div>
     <div class="borderContainer">
       <div class="d2 mapContainer" :style="{ width: rightWidth }">
-        <VKakaoMap :attractionList="attractionList" />
+        <VKakaoMap :attractionList="attractionList" :attraction="attraction" />
       </div>
       <div class="d1" :style="{ width: leftWidth }">
         <div class="subContainer">
@@ -186,16 +202,17 @@ const showMap = function (arg) {
               :key="index"
               :nth="index"
               @show-map="showMap"
+              @show-detail="showDetail"
             />
           </div>
         </div>
       </div>
       <div class="d3" :style="{ left: leftWidth }" @mousedown="onMouseDown"></div>
-      <div class="modal">
+      <!-- <div class="modal">
         <Transition v-if="showModal">
           <WishlistDetail @click="toggleModal" :attraction="attraction" />
         </Transition>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
