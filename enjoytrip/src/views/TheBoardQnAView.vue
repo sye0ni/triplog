@@ -6,7 +6,7 @@ import BoardQnAList from "../components/board/qna/BoardQnAList.vue";
 <template>
   <div class="borderContainer">
     <div class="area">
-      <div id="title">QnA 게시판</div>
+      <div id="title">Q&A 게시판</div>
       <div class="list">
         <router-view></router-view>
       </div>

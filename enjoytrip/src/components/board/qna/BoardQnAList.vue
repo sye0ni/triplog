@@ -173,6 +173,8 @@ button {
 
 #wirteButton {
   margin-right: 10%;
+  /* display: flex;
+  align-items: center; */
 }
 
 button:hover {

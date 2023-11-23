@@ -131,21 +131,21 @@ const join = function () {
           <hr />
           <div class="message">{{ emailMessage }}</div>
           <div class="button" @click.prevent="join">
-            <VButtonLong text="회원가입" />
+            <VButtonLong text="회원가입" bgcolor="#ca0f0f" color="white" border="none" />
           </div>
           <div class="message">
             {{ joinBtnMessage }}
           </div>
         </form>
-        <div class="social">
-          <VButtonLong text="네이버로 회원가입" color=" #43E528" />
+        <!-- <div class="social">
+          <VButtonLong text="네이버로 로그인" bgcolor=" #43E528" />
         </div>
         <div class="social">
-          <VButtonLong text="구글로 회원가입" />
+          <VButtonLong text="구글로 로그인" />
         </div>
         <div class="social">
-          <VButtonLong text="카카오로 회원가입" color="#FCF314" />
-        </div>
+          <VButtonLong text="카카오로 로그인" bgcolor="#FCF314" />
+        </div> -->
       </div>
     </div>
   </div>
@@ -189,7 +189,7 @@ hr {
   width: 410px;
 }
 .button {
-  margin: 20px 0px;
+  margin: 100px 0px;
 }
 .social {
   margin-top: 20px;
