@@ -103,7 +103,7 @@
 		    SELECT 
 				    b.board_photo_id AS boardPhotoId,
 				    b.like AS `like`,
-				    CONCAT(t.save_folder, '/', t.save_file) AS thumbnail,
+				    CONCAT(t.save_folder, '/', t.save_file) AS thumbnail, 
 				    (
 				        SELECT COUNT(*)
 				        FROM comment c
