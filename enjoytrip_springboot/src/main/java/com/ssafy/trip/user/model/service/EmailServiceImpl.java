@@ -28,12 +28,12 @@ public class EmailServiceImpl implements EmailService{
 	@Override
 	public void sendUserId(String userId, String email) {
 		SimpleMailMessage mailMessage=new SimpleMailMessage();
-		mailMessage.setTo(email);
-		mailMessage.setSubject("[Enjoy Trip] 아이디 찾기 이메일 입니다.");
-		mailMessage.setFrom("EnjoyTrip");
+		mailMessage.setTo(email); 
+		mailMessage.setSubject("[TripLog] 아이디 찾기 이메일 입니다.");
+		mailMessage.setFrom("TripLog");
 		
 		StringBuffer sb=new StringBuffer();
-		sb.append("안녕하세요. Enjoy Trip 입니다. \n");
+		sb.append("안녕하세요. TripLog 입니다. \n");
 		sb.append("가입하신 아이디는 [ "+userId+" ] 입니다."+"\n");
 		
 		mailMessage.setText(sb.toString());
@@ -51,25 +51,19 @@ public class EmailServiceImpl implements EmailService{
 	    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
 	    helper.setTo(user.getUserEmail());
-	    helper.setSubject("[Enjoy Trip] 비밀번호 재설정 이메일 입니다.");
-	    helper.setFrom("EnjoyTrip");
+	    helper.setSubject("[TripLog] 비밀번호 재설정 이메일 입니다.");
+	    helper.setFrom("TripLog");
 
 	    // HTML 형식의 메일 본문 작성
 	    String htmlContent = "<html><body>";
-	    htmlContent += "<p>안녕하세요. Enjoy Trip 입니다.</p>";
+	    htmlContent += "<p>안녕하세요. TripLog 입니다.</p>";
 	    htmlContent += "<p>아래 링크에 접속하여 비밀번호를 재설정 해주세요.</p>";
 	    htmlContent += "<a href=\"http://localhost:5173/user/pwdmodify?token=" + randomToken + "\">비밀번호 재설정</a>";
 	    htmlContent += "</body></html>";
 
-	    // //// 위 href 수정 필요 
-	    
 	    helper.setText(htmlContent, true);
 
 	    mailSender.send(mimeMessage);
 	}
 
-	
-	
-	
-	
 }

@@ -11,6 +11,7 @@ const props = defineProps({
   order: Number,
 });
 
+const emits = defineEmits([ 'showDetail']);
 const type = ref("");
 
 onMounted(() => {
@@ -25,11 +26,17 @@ onMounted(() => {
     }
   }
 });
+
+const showDetail = function () {
+  // console.log(props.item.contentId);
+  emits('showDetail', props.item.contentId);
+}
+
 </script>
 
 <template>
   <div>
-    <div class="container">
+    <div class="container" @click='showDetail'>
       <div class="left">
         <div class="order">{{ order + 1 }}</div>
         <div class="type">{{ type }}</div>

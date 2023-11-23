@@ -78,7 +78,7 @@ const startMap = function (arg) {
 const selectAttr = ref({});
 const moveMap = function (arg) {
   console.log("선택한 요소!!!");
-  // console.log(arg);
+  console.log(arg);
   selectAttr.value = arg;
 }
 

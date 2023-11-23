@@ -9,7 +9,7 @@ const planStore = usePlanStore();
 const { planDetailBox } = storeToRefs(planStore);
 
 const props = defineProps({ nth: Number });
-const emits = defineEmits(["showMap"])
+const emits = defineEmits(["showMap","showDetail"])
 // -- drag
 
 onMounted(() => {
@@ -18,8 +18,13 @@ onMounted(() => {
 });
 
 const showMap = function () {
-  console.log("throwthrowthrow");
+  // console.log("throwthrowthrow");
   emits("showMap", props.nth);
+}
+
+const showDetail = function (arg) {
+  // console.log("detail!!!");
+  emits("showDetail", arg);
 }
 
 
@@ -31,7 +36,7 @@ const showMap = function () {
       <div class="nth" @click="showMap">{{ nth }}일차</div>
       <div class="itemContainer" style="min-height: 100px; width: 100%">
         <PlanDetailListItem v-for="(item, index) in planDetailBox[nth - 1]" :key="item.contentId" :item="item"
-          :order="index" />
+          :order="index" @show-detail='showDetail'/>
       </div>
     </div>
   </div>
