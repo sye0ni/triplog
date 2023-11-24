@@ -245,4 +245,8 @@
 		where board_photo_id=#{photoId}
 	</update>
 	
+	
+	<delete id='deleteLikePhotos' parameterType='int'>
+		delete from like_photo where board_photo_id=#{photoId}
+	</delete>
 </mapper>

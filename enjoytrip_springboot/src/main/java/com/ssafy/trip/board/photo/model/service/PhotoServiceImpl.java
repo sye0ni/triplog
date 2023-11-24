@@ -173,15 +173,21 @@ public class PhotoServiceImpl implements PhotoService{
 
 	@Override
 	public void deletePhoto(int photoId) throws Exception {
+		
 		// 관련 댓글들 먼저 삭제
 		photoMapper.deleteAllComments(photoId);
+		
 		// 관련 파일들 삭제 
 		photoMapper.deleteAllPhotos(photoId);
 
 		int thumbnailId=getPhoto(photoId).getThumbnailId();
+
+		// delete like photo
+		photoMapper.deleteLikePhotos(photoId);
 		
 		// 글 삭제
 		photoMapper.deletePhoto(photoId);
+		
 		
 		// 썸네일 삭제
 		photoMapper.deleteThumbnail(thumbnailId);

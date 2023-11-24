@@ -64,7 +64,7 @@ public interface PhotoMapper {
 	void updateLike(Map<String, Object> map) throws SQLException;
 
 
-
+	void deleteLikePhotos(int photoId) throws SQLException;
 
 
 	
