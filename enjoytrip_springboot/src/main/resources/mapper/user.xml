@@ -123,7 +123,8 @@
 	</select>
 	
  	<update id='updateLike' parameterType="string">
-		update board_photo set `like`=`like`-1 where user_id=#{userId} and `like` >0
+		update board_photo set `like`=`like`-1
+		and board_photo_id in (select board_photo_id from like_photo where user_id=#{userId}) where `like` >0;
 	</update> 
 	<delete id='deleteLike' parameterType="string">
 		delete from like_photo where user_id=#{userId}
