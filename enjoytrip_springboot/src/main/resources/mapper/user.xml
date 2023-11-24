@@ -122,9 +122,11 @@
     		b.user_id = #{userId};
 	</select>
 	
-	<update id='deleteLike' parameterType="string">
-		update board_photo set `like`=`like`-1 where user_id=#{userId};
-	</update>
-
+ 	<update id='updateLike' parameterType="string">
+		update board_photo set `like`=`like`-1 where user_id=#{userId} and `like` >0
+	</update> 
+	<delete id='deleteLike' parameterType="string">
+		delete from like_photo where user_id=#{userId}
+	</delete>
 	
 </mapper>

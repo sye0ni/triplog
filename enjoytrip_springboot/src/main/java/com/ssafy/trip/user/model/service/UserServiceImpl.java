@@ -133,6 +133,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int delete(String userId) throws SQLException {
 		userMapper.deleteLike(userId);
+		userMapper.updateLike(userId);
 		return userMapper.delete(userId);
 	}
 
@@ -197,7 +198,6 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<UserPhotoDto> getPhotos(String userId) throws Exception {
 		List<UserPhotoDto> list=userMapper.getPhotos(userId); // 게시 사진 정보 가져오기
-		
 		
 		return list;
 		
