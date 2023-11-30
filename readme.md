@@ -2,8 +2,12 @@
 
 ## 😀 Member
 
-##### 👩👩 광주 5반 6팀 임승연, 김신영 
+#### 👩👩 임승연, 김신영 
+###### - 임승연: 회원관리 BE, Q&A게시판, 메인페이지, 사진게시판, 카카오맵API
+###### - 김신영: 회원관리 FE, Q&A게시판, 마이페이지, 여행계획, 여행지찜
+
 ---
+
 ## 실행 화면
 #### - 메인 + 사진 게시판
 https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/337e7f85-c90b-44f3-a571-5c7f13a4c494
@@ -19,3 +23,12 @@ https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/0f27639a-c8c8-
 
 #### - 마이페이지
 https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/84f50ee5-c011-4350-8c77-fa220b84e7bb
+
+---
+## ERD
+![erd](https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/cb9b74d4-0cd9-4957-9b23-ef0864911759)
+
+
+---
+### 개발 환경 및 시스템 구성도
+![image](https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/da6bdce5-628f-4823-ae4a-07283acdd8fd)
