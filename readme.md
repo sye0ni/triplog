@@ -12,6 +12,9 @@
 #### - 메인 + 사진 게시판
 https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/337e7f85-c90b-44f3-a571-5c7f13a4c494
 
+#### - 회원관리
+https://github.com/estuma/enjoytrip/assets/92361215/487cedcd-d1e4-438a-ac7b-9b4778f190bd
+
 #### - Q&A 게시판
 https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/45eb2aae-05f2-4e6a-85a3-2082be3832af
 
