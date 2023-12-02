@@ -59,7 +59,7 @@ https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/84f50ee5-c011-
 | 분야 | 사용기술 |
 | --- | --- |
 |  Front-End | Vue.js, KakaoMap API |
-| Back-End | Spring Boot, JWT  |
+| Back-End | Spring Boot, JWT, SHA256  |
 | DataBase | MySQL |
 | Tool | Notion, GitHub |
 | Design | Figma |
