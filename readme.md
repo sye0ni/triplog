@@ -1,4 +1,20 @@
-# 📕 프로젝트 수행 결과 
+# 📕 TripLog
+> SSAFY 1학기 프로젝트 (EnjoyTrip)
+
+## 🔎 주요 기능
+
+1. **여행 경로 설정**
+    
+   - 가고싶은 여행지를 선택하고 **방문 일자**와 **방문 순서**를 설정할 수 있습니다.
+   - **보관함** 을 통해 여행 계획을 좀 더 자유롭게 세울 수 있습니다.
+   - 여행지를 검색하고 가고싶은 여행지를 **찜** 할 수 있습니다.
+   
+    
+2. **사진 공유**   
+
+    - 다녀온 여행지의 사진을 공유할 수 있습니다.
+
+---
 
 ## 😀 Member
 
@@ -17,6 +33,7 @@ https://github.com/estuma/enjoytrip/assets/92361215/487cedcd-d1e4-438a-ac7b-9b47
 
 #### - Q&A 게시판
 https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/45eb2aae-05f2-4e6a-85a3-2082be3832af
+- 관리자만 답글 작성 가능
 
 #### - 여행지 찜
 https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/ac27f25d-9966-4423-82ec-d4296393c943
@@ -35,3 +52,14 @@ https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/84f50ee5-c011-
 ---
 ### 개발 환경 및 시스템 구성도
 ![image](https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/da6bdce5-628f-4823-ae4a-07283acdd8fd)
+
+---
+### 기술 스택
+
+| 분야 | 사용기술 |
+| --- | --- |
+|  Front-End | Vue.js, KakaoMap API |
+| Back-End | Spring Boot, JWT  |
+| DataBase | MySQL |
+| Tool | Notion, GitHub |
+| Design | Figma |
