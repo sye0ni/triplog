@@ -36,4 +36,5 @@
 <br>
 <br>
 
-### 미리 보기
+### 시스템 구성도 
+![system](https://github.com/sye0ni/triplog/assets/91115868/d866aef7-1227-4c4e-b846-e0bfe34c353a)
