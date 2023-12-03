@@ -1,65 +1,39 @@
-# 📕 TripLog
-> SSAFY 1학기 프로젝트 (EnjoyTrip)
-
-## 😀 Member
-
-#### 👩👩 임승연, 김신영 
-###### - 임승연: 회원관리 BE, Q&A게시판, 메인페이지, 사진게시판, 카카오맵API, 여행지검색 및 상세보기
-###### - 김신영: 회원관리 FE, Q&A게시판, 마이페이지, 여행계획, 여행지찜
-
----
-
-## 🔎 주요 기능
-
-1. **여행 경로 설정**
-    
-   - 가고싶은 여행지를 선택하고 **방문 일자**와 **방문 순서**를 설정할 수 있습니다.
-   - **보관함** 을 통해 여행 계획을 좀 더 자유롭게 세울 수 있습니다.
-   - 여행지를 검색하고 가고싶은 여행지를 **찜** 할 수 있습니다.
-   
-    
-2. **사진 공유**   
-
-    - 다녀온 여행지의 사진을 공유할 수 있습니다.
-
----
-
-## 실행 화면
-#### - 메인 + 사진 게시판
-https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/337e7f85-c90b-44f3-a571-5c7f13a4c494
-
-#### - 회원관리
-https://github.com/estuma/enjoytrip/assets/92361215/487cedcd-d1e4-438a-ac7b-9b4778f190bd
-
-#### - Q&A 게시판
-https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/45eb2aae-05f2-4e6a-85a3-2082be3832af
-- 관리자만 답글 작성 가능
-
-#### - 여행지 찜
-https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/ac27f25d-9966-4423-82ec-d4296393c943
-
-#### - 여행 계획
-https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/0f27639a-c8c8-4e54-bf42-fb4321774c23
-
-#### - 마이페이지
-https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/84f50ee5-c011-4350-8c77-fa220b84e7bb
-
----
-## ERD
-![erd](https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/cb9b74d4-0cd9-4957-9b23-ef0864911759)
+# TripLog ✈️
 
 
----
-### 개발 환경 및 시스템 구성도
-![image](https://github.com/estuma/EnjoyTrip_FINAL_PROJECT/assets/92361215/da6bdce5-628f-4823-ae4a-07283acdd8fd)
+## 프로젝트 소개 
 
----
+여행을 떠나고 싶은 사람들을 위한 사이트 입니다. <br>
+사람들의 다양한 사진 후기를 통해 정보를 얻고, 이를 바탕으로 여행 계획을 수립할 수 있습니다. 
+<br>
+<br>
+### 팀원 
+🙍🙍 임승연, 김신영 
+<br>
+<br>
+
+### 주요 기능 
+📌 '후기 공유' 게시판을 통해 사진과 함께 유용하고 생생한 후기를 공유합니다. <br>
+'사진 리뷰' 등 사진이 주는 정보력의 힘이 막강한 요즘, 사진을 통한 정보 공유는 사람들이 가장 필요로 하는 것입니다. <br>
+사진 첨부, 위치 지정이 필수이기 때문에 필요한 정보를 얻을 수 있고, 추가 정보를 원한다면 댓글을 작성할 수 있습니다. 
+
+📌 '계획 세우기' 기능을 통해 원하는 날짜와 위치를 지정하여 계획을 세울 수 있습니다. <br>
+여행지에 대한 상세 정보와 지도상 위치 등을 볼 수 있고, 이전에 '찜' 등록해두었던 여행지도 여행 계획에 포함시킬 수 있습니다. <br>
+
+📌 'Q&A' 게시판을 통해 관리자와 소통할 수 있습니다. <br> 
+<br>
+
 ### 기술 스택
+#### FrontEnd
+<img src="https://img.shields.io/badge/Vue.js-4FC08D?style=flat_square&logo=Vue.js&logoColor=white"><img src="https://img.shields.io/badge/axios-5A29E4?style=flat_square&logo=axios&logoColor=white"><img src="https://img.shields.io/badge/KakaoMapApi-FFCD00?style=flat_square&logo=KakaoMapApi&logoColor=white">
+#### BackEnd
+<img src="https://img.shields.io/badge/mybatis-4B5562?style=flat_square&logo=mybatis&logoColor=white"><img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=flat_square&logo=SpringBoot&logoColor=white"><img src="https://img.shields.io/badge/Java-001E59?style=flat_square&logo=Java&logoColor=white">
+#### Tool
+<img src="https://img.shields.io/badge/Figma-F24E1E?style=flat_square&logo=Figma&logoColor=white"><img src="https://img.shields.io/badge/GitHub-181717?style=flat_square&logo=GitHub&logoColor=white"><img src="https://img.shields.io/badge/Notion-000000?style=flat_square&logo=Notion&logoColor=white">
+#### Database
+<img src="https://img.shields.io/badge/MySQL-4479A1?style=flat_square&logo=MySQL&logoColor=white">
 
-| 분야 | 사용기술 |
-| --- | --- |
-|  Front-End | Vue.js, KakaoMap API |
-| Back-End | Spring Boot, JWT, SHA256  |
-| DataBase | MySQL |
-| Tool | Notion, GitHub |
-| Design | Figma |
+<br>
+<br>
+
+### 미리 보기
